@@ -1,0 +1,4268 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API de Integração Escalasoft",
+    "x-logo": {
+      "url": "http://www.escalasoft.com.br/images/logo.png"
+    }
+  },
+  "servers": [
+    {
+      "url": "/v1"
+    }
+  ],
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "WMS - Ordem de armazenagem"
+    },
+    {
+      "name": "ERP - Fiscal"
+    },
+    {
+      "name": "ERP - Materiais e suprimentos"
+    }
+  ],
+  "paths": {
+    "/armazem/ordem/cadastrar": {
+      "post": {
+        "tags": [
+          "WMS - Ordem de armazenagem"
+        ],
+        "summary": "Criar ordem de armazenagem",
+        "description": "Cria uma ordem de armazenagem com base nos dados informados",
+        "operationId": "postOrdemArmazenagem",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PostOrdemArmazenagem"
+        },
+        "responses": {
+          "200": {
+            "description": "Ordem de armazenagem cadastrada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetornoCadastroRegistro"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Conteúdo inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                },
+                "example": "Campo obrigatório não preenchido  O campo \"Tipo\" é  obrigatório. Preencha o campo para salvar o registro. Campo: TIPO"
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/armazem/ordem/alterar": {
+      "post": {
+        "tags": [
+          "WMS - Ordem de armazenagem"
+        ],
+        "summary": "Alterar ordem de armazenagem",
+        "description": "Altera a ordem de armazenagem com base nos dados informados",
+        "operationId": "putOrdemArmazenagem",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PutOrdemArmazenagem"
+        },
+        "parameters": [
+          {
+            "name": "idOrdem",
+            "required": true,
+            "in": "query",
+            "description": "Número da ordem de armazenagem",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ordem de armazenagem alterada com sucesso"
+          },
+          "400": {
+            "description": "Conteúdo inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                },
+                "example": "Campo obrigatório não preenchido  O campo \"Tipo\" é  obrigatório. Preencha o campo para salvar o registro. Campo: TIPO"
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/armazem/ordem/cancelar": {
+      "post": {
+        "tags": [
+          "WMS - Ordem de armazenagem"
+        ],
+        "summary": "Cancelar ordem de armazenagem",
+        "description": "Cancela a ordem de armazenagem",
+        "operationId": "deleteOrdemArmazenagem",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/DeleteOrdemArmazenagem"
+        },
+        "parameters": [
+          {
+            "name": "idOrdem",
+            "required": true,
+            "in": "query",
+            "description": "Número da ordem de armazenagem",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ordem de armazenagem cancelada com sucesso"
+          },
+          "400": {
+            "description": "Parâmetro(s) inválido(s)"
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/armazem/ordem/consultar": {
+      "get": {
+        "tags": [
+          "WMS - Ordem de armazenagem"
+        ],
+        "summary": "Consultar ordem de armazenagem",
+        "description": "Retorna todas as informações da ordem de armazenagem",
+        "operationId": "getOrdemArmazenagem",
+        "parameters": [
+          {
+            "name": "idOrdem",
+            "required": true,
+            "in": "query",
+            "description": "Número da ordem de armazenagem",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Informações da ordem de armazenagem",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetornoConsultaOrdem"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetro(s) inválido(s)"
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/armazem/ordem/item/cadastrar": {
+      "post": {
+        "tags": [
+          "WMS - Ordem de armazenagem"
+        ],
+        "summary": "Criar item",
+        "description": "Cria um item na ordem de armazenagem com base nos dados informados",
+        "operationId": "postItemOrdemArmazenagem",
+        "parameters": [
+          {
+            "name": "idOrdem",
+            "required": true,
+            "in": "query",
+            "description": "Número da ordem de armazenagem",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PostItemOrdemArmazenagem"
+        },
+        "responses": {
+          "200": {
+            "description": "Item da ordem de armazenagem cadastrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetornoCadastroRegistro"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Conteúdo inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/armazem/ordem/item/cancelar": {
+      "post": {
+        "tags": [
+          "WMS - Ordem de armazenagem"
+        ],
+        "summary": "Cancelar item",
+        "description": "Cancela a ordem de armazenagem",
+        "operationId": "deleteItemOrdemArmazenagem",
+        "parameters": [
+          {
+            "name": "idItemOrdem",
+            "required": true,
+            "in": "query",
+            "description": "ID do item da ordem de armazenagem",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Item da ordem de armazenagem cancelado com sucesso"
+          },
+          "400": {
+            "description": "Parâmetro(s) inválido(s)"
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/armazem/ordem/item/lote/cadastrar": {
+      "post": {
+        "tags": [
+          "WMS - Ordem de armazenagem"
+        ],
+        "summary": "Criar item lote",
+        "description": "Cria um item lote na ordem de armazenagem com base nos dados informados",
+        "operationId": "postItemLoteOrdemArmazenagem",
+        "parameters": [
+          {
+            "name": "idItem",
+            "required": true,
+            "in": "query",
+            "description": "ID do item da ordem de armazenagem",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PostItemLoteOrdemArmazenagem"
+        },
+        "responses": {
+          "200": {
+            "description": "Item lote da ordem de armazenagem cadastrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetornoCadastroRegistro"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Conteúdo inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/armazem/ordem/item/lote/cancelar": {
+      "post": {
+        "tags": [
+          "WMS - Ordem de armazenagem"
+        ],
+        "summary": "Cancelar item lote",
+        "description": "Cancela a ordem de armazenagem",
+        "operationId": "deleteItemLoteOrdemArmazenagem",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "description": "ID do item lote da ordem de armazenagem",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Item lote da ordem de armazenagem cancelado com sucesso"
+          },
+          "400": {
+            "description": "Parâmetro(s) inválido(s)"
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/armazem/ordem/atrelar": {
+      "post": {
+        "tags": [
+          "WMS - Ordem de armazenagem"
+        ],
+        "summary": "Atrelar ordens de armazenagem",
+        "description": "Atrela uma ordem a outra ordem de armazenagem",
+        "operationId": "postAtrelarOrdemArmazenagem",
+        "parameters": [
+          {
+            "name": "idOrdem",
+            "required": true,
+            "in": "query",
+            "description": "Número da ordem de armazenagem",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PostAtrelarOrdemArmazenagem"
+        },
+        "responses": {
+          "200": {
+            "description": "Atrelamento da ordem de armazenagem efetuado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetornoCadastroRegistro"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Conteúdo inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/armazem/ordem/programacao/cadastrar": {
+      "post": {
+        "tags": [
+          "WMS - Ordem de armazenagem"
+        ],
+        "summary": "Criar programação",
+        "description": "Cria uma programação na ordem de armazenagem com base nos dados informados",
+        "operationId": "postProgramacaoOrdemArmazenagem",
+        "parameters": [
+          {
+            "name": "idOrdem",
+            "required": true,
+            "in": "query",
+            "description": "Número da ordem de armazenagem",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PostProgramacaoOrdemArmazenagem"
+        },
+        "responses": {
+          "200": {
+            "description": "Programação da ordem de armazenagem cadastrada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetornoCadastroRegistro"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Conteúdo inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/armazem/ordem/programacao/adicionarQuantidade": {
+      "post": {
+        "tags": [
+          "WMS - Ordem de armazenagem"
+        ],
+        "summary": "Adiciona quantidades a programação",
+        "description": "Adiciona quantidades a programação da ordem de armazenagem",
+        "operationId": "postAdicionaQuantidadeProgramacaoOrdemArmazenagem",
+        "parameters": [
+          {
+            "name": "idProgramacaoOrdem",
+            "required": true,
+            "in": "query",
+            "description": "ID da programação da ordem de armazenagem",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PostAdicionarQuantidadeProgramacaoOrdemArmazenagem"
+        },
+        "responses": {
+          "200": {
+            "description": "Quantidade adicionada com sucesso na programação da ordem",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetornoCadastroRegistro"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Conteúdo inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/armazem/ordem/programacao/cancelarQuantidade": {
+      "post": {
+        "tags": [
+          "WMS - Ordem de armazenagem"
+        ],
+        "summary": "Cancela quantidades da programação",
+        "description": "Cancela quantidades da programação da ordem de armazenagem",
+        "operationId": "postCancelaQuantidadeProgramacaoOrdemArmazenagem",
+        "parameters": [
+          {
+            "name": "idProgramacaoOrdem",
+            "required": true,
+            "in": "query",
+            "description": "ID da programação ordem de armazenagem",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PostCancelarQuantidadeProgramacaoOrdemArmazenagem"
+        },
+        "responses": {
+          "200": {
+            "description": "Quantidade cancelada com sucesso na programação da ordem",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetornoCadastroRegistro"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Conteúdo inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/armazem/ordem/pedidoPendente": {
+      "get": {
+        "tags": [
+          "WMS - Ordem de armazenagem"
+        ],
+        "summary": "Consultar pedidos pendentes",
+        "description": "Retorna todos os pedidos que estão aguardando documento fiscal e que ainda não foram recebidos pelo cliente",
+        "operationId": "getPedidoPendente",
+        "responses": {
+          "200": {
+            "description": "Listagem dos pedidos pendentes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetornoConsultaPedidoPendente"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetro(s) inválido(s)"
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/armazem/ordem/removerPedidoFila": {
+      "post": {
+        "tags": [
+          "WMS - Ordem de armazenagem"
+        ],
+        "summary": "Remover pedido pendente",
+        "description": "Remove o pedido da fila de pedidos pendentes",
+        "operationId": "postRemoverPedidoFila",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PostRemoverPedidoFila"
+        },
+        "responses": {
+          "200": {
+            "description": "Pedidos removidos com sucesso da fila de pendências"
+          },
+          "400": {
+            "description": "Conteúdo inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/armazem/estoqueMercadoria/consultar": {
+      "get": {
+        "tags": [
+          "WMS - Ordem de armazenagem"
+        ],
+        "summary": "Consultar estoque de mercadoria",
+        "description": "Retorna todos o estoque de mercadoria do cliente",
+        "operationId": "getEstoqueMercadoria",
+        "responses": {
+          "200": {
+            "description": "Listagem do estoque do cliente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetornoConsultaEstoqueMercadoria"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetro(s) inválido(s)"
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/fiscal/pessoa/cadastrar": {
+      "post": {
+        "tags": [
+          "ERP - Fiscal"
+        ],
+        "summary": "Criar pessoa",
+        "description": "Cria uma pessoa com base nos dados informados",
+        "operationId": "postPessoa",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PostPessoa"
+        },
+        "responses": {
+          "200": {
+            "description": "Pessoa cadastrada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetornoCadastroRegistro"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Conteúdo inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                },
+                "example": "Campo obrigatório não preenchido  O campo \"Tipo\" é  obrigatório. Preencha o campo para salvar o registro. Campo: TIPO"
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/fiscal/pessoa/alterar": {
+      "post": {
+        "tags": [
+          "ERP - Fiscal"
+        ],
+        "summary": "Alterar pessoa",
+        "description": "Altera os dados da pessoa informada",
+        "operationId": "putPessoa",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "description": "ID da pessoa",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pessoa alterada com sucesso"
+          },
+          "400": {
+            "description": "Parâmetro(s) inválido(s)"
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/materialSuprimento/produto/cadastrar": {
+      "post": {
+        "tags": [
+          "ERP - Materiais e suprimentos"
+        ],
+        "summary": "Criar produto",
+        "description": "Cria um produto com base nos dados informados",
+        "operationId": "postProduto",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PostProduto"
+        },
+        "responses": {
+          "200": {
+            "description": "Pessoa cadastrada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetornoCadastroRegistro"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Conteúdo inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                },
+                "example": "Campo obrigatório não preenchido  O campo \"Tipo\" é  obrigatório. Preencha o campo para salvar o registro. Campo: TIPO"
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/materialSuprimento/produto/alterar": {
+      "post": {
+        "tags": [
+          "ERP - Materiais e suprimentos"
+        ],
+        "summary": "Alterar produto",
+        "description": "Altera os dados do produto informado",
+        "operationId": "putProduto",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PutProduto"
+        },
+        "parameters": [
+          {
+            "name": "idProduto",
+            "required": true,
+            "in": "query",
+            "description": "Código de referência do produto",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto alterado com sucesso"
+          },
+          "400": {
+            "description": "Parâmetro(s) inválido(s)"
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    },
+    "/materialSuprimento/produto/cancelar": {
+      "post": {
+        "tags": [
+          "ERP - Materiais e suprimentos"
+        ],
+        "summary": "Cancelar produto",
+        "description": "Cancela o produto informado",
+        "operationId": "deleteProduto",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/DeleteProduto"
+        },
+        "parameters": [
+          {
+            "name": "idProduto",
+            "required": true,
+            "in": "query",
+            "description": "Código de referência do produto",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto cancelado com sucesso"
+          },
+          "400": {
+            "description": "Parâmetro(s) inválido(s)"
+          },
+          "401": {
+            "description": "Não autorizado (Autenticação não informada ou inválida)"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "A autenticação inicial com as APIs REST da Escalasoft deve ser realizada por uma requisição GET utilizando Basic Auth.\n\nPara autenticar, você deve informar o usuário e senha fornecidos pelo cliente.\n\nEsta requisição irá retornar um token que deverá ser utilizado para autenticação nas demais rotas. \n\nEste token tem uma validade de 24 horas, e após este intervalo, deverá ser requisitado um novo token.\n"
+      },
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "A autenticação com as APIs REST da Escalasoft deve ser realizadas por token utilizando Bearer Token.\n\nPara autenticar, você deve utilizar o token recebido na rota de Login e adicioná-lo no header da requisição. \n\nO header de autenticação deve ser enviado para todos os endpoints disponíveis na API.\n"
+      }
+    },
+    "schemas": {
+      "Erro": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Descrição do erro"
+          }
+        }
+      },
+      "RetornoCadastroRegistro": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "int32",
+            "example": 468415
+          }
+        }
+      },
+      "RetornoConsultaOrdem": {
+        "$ref": "#/components/schemas/OrdemGet"
+      },
+      "RetornoConsultaPedidoPendente": {
+        "$ref": "#/components/schemas/PedidoPendenteGet"
+      },
+      "RetornoConsultaEstoqueMercadoria": {
+        "$ref": "#/components/schemas/EstoqueMercadoriaGet"
+      },
+      "Lista": {
+        "description": "Listagem de ordens de armazenagem",
+        "type": "object",
+        "properties": {
+          "Ordem": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrdemPost"
+            }
+          }
+        }
+      },
+      "ListaItem": {
+        "description": "Listagem de itens da ordem de armazenagem",
+        "type": "object",
+        "properties": {
+          "Item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemPost"
+            }
+          }
+        }
+      },
+      "ListaItemLote": {
+        "description": "Listagem de itens lote da ordem de armazenagem",
+        "type": "object",
+        "properties": {
+          "Lote": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLotePost"
+            }
+          }
+        }
+      },
+      "ListaProgramacao": {
+        "description": "Listagem de programações da ordem de armazenagem",
+        "type": "object",
+        "properties": {
+          "Programacao": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProgramacaoPost"
+            }
+          }
+        }
+      },
+      "AtrelarOrdemArmazenagem": {
+        "description": "Atrela a ordem com outra ordem de armazenagem",
+        "type": "object",
+        "properties": {
+          "TipoAtrelamento": {
+            "description": "Conforme tabela de tipos de atrelamento",
+            "type": "integer"
+          },
+          "OrdemAtrelada": {
+            "description": "Número da ordem a ser atrelada",
+            "type": "integer"
+          },
+          "Observacao": {
+            "description": "Observação",
+            "type": "string",
+            "example": "Observação do atrelamento das ordens"
+          }
+        }
+      },
+      "CancelarQuantidadeProgramacao": {
+        "description": "Cancelar quantidade da programação da ordem de armazenagem",
+        "type": "object",
+        "properties": {
+          "Tipo": {
+            "description": "Conforme tabela de tipos de ocorrência",
+            "type": "integer"
+          },
+          "Data": {
+            "description": "Data do cancelamento (dd/mm/yyyy hh:mm)",
+            "type": "string",
+            "example": "06/12/1990 13:30"
+          },
+          "Quantidade": {
+            "description": "Quantidade",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "Motivo": {
+            "description": "Motivo do cancelamento",
+            "type": "string",
+            "example": "Motivo do cancelamento"
+          }
+        }
+      },
+      "AdicionarQuantidadeProgramacao": {
+        "description": "Adicionar quantidade da programação da ordem de armazenagem",
+        "type": "object",
+        "properties": {
+          "Tipo": {
+            "description": "Conforme tabela de tipos de ocorrência",
+            "type": "integer"
+          },
+          "Data": {
+            "description": "Data do cancelamento (dd/mm/yyyy hh:mm)",
+            "type": "string",
+            "example": "06/12/1990 13:30"
+          },
+          "Quantidade": {
+            "description": "Quantidade",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "Motivo": {
+            "description": "Motivo do cancelamento",
+            "type": "string",
+            "example": "Motivo do cancelamento"
+          }
+        }
+      },
+      "TipoDocumentoPost": {
+        "type": "object",
+        "properties": {
+          "TipoDocumento": {
+            "type": "integer",
+            "description": "Tipo do documento\n\n1 - CT-e<br>\n2 - NF-e<br>\n3 - CTRC<br>\n4 - NF<br>\n5 - ACT<br>\n6 - Outros<br>\n7 - MDF-e\n",
+            "enum": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        }
+      },
+      "TipoDocumentoGet": {
+        "type": "object",
+        "properties": {
+          "TipoDocumento": {
+            "type": "string",
+            "description": "Descrição do tipo do documento"
+          }
+        }
+      },
+      "CamposDocumentoPadrao": {
+        "type": "object",
+        "properties": {
+          "Emissao": {
+            "description": "Data de emissão do documento (dd/mm/yyyy)",
+            "type": "string",
+            "example": "06/12/1990"
+          },
+          "Numero": {
+            "description": "Número do documento",
+            "type": "string",
+            "example": "12345"
+          },
+          "Serie": {
+            "description": "Serie do documento",
+            "type": "string",
+            "example": "1"
+          },
+          "Valor": {
+            "description": "Valor do documento",
+            "type": "number",
+            "multipleOf": 0.01,
+            "example": 1000.5
+          }
+        }
+      },
+      "DocumentoPost": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TipoDocumentoPost"
+          },
+          {
+            "$ref": "#/components/schemas/CamposDocumentoPadrao"
+          }
+        ]
+      },
+      "DocumentoGet": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TipoDocumentoGet"
+          },
+          {
+            "$ref": "#/components/schemas/CamposDocumentoPadrao"
+          },
+          {
+            "properties": {
+              "Volume": {
+                "type": "integer",
+                "description": "Volume"
+              }
+            }
+          }
+        ]
+      },
+      "ProdutoPost": {
+        "type": "object",
+        "properties": {
+          "Produto": {
+            "description": "Código de referencia do produto do produto",
+            "type": "string"
+          }
+        }
+      },
+      "ProdutoGet": {
+        "type": "object",
+        "properties": {
+          "Produto": {
+            "description": "Descrição do produto",
+            "type": "string"
+          }
+        }
+      },
+      "CamposItemOrdemPadrao": {
+        "type": "object",
+        "description": "Dados do lote de entrada",
+        "required": [
+          "Produto"
+        ],
+        "properties": {
+          "Quantidade": {
+            "description": "Quantidade",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "ValorUnitario": {
+            "description": "Valor Unitário",
+            "type": "number",
+            "multipleOf": 1e-10,
+            "example": 1.5
+          },
+          "ValorTotal": {
+            "description": "Valor total",
+            "type": "number",
+            "multipleOf": 0.01,
+            "example": 10
+          },
+          "PesoLiquido": {
+            "description": "Peso Líquido",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "PesoBruto": {
+            "description": "Peso Bruto",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "Estoque": {
+            "description": "Estoque",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "Volume": {
+            "description": "Volume",
+            "type": "integer",
+            "example": 10
+          },
+          "Observacao": {
+            "description": "Observação do item",
+            "type": "string",
+            "example": "Observação do item x"
+          }
+        }
+      },
+      "ItemPadraoPost": {
+        "type": "object",
+        "description": "Dados do item de entrada",
+        "required": [
+          "Item"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ProdutoPost"
+          },
+          {
+            "$ref": "#/components/schemas/CamposItemOrdemPadrao"
+          }
+        ]
+      },
+      "ItemPadraoGet": {
+        "type": "object",
+        "description": "Dados do item de entrada",
+        "required": [
+          "Item"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ProdutoGet"
+          },
+          {
+            "$ref": "#/components/schemas/CamposItemOrdemPadrao"
+          }
+        ]
+      },
+      "ItemPost": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ItemPadraoPost"
+          },
+          {
+            "properties": {
+              "Lote": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ItemLotePost"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ItemGet": {
+        "allOf": [
+          {
+            "properties": {
+              "Situacao": {
+                "type": "string",
+                "description": "Situação do registro",
+                "example": "Cadastrada(o)"
+              },
+              "Sequencial": {
+                "type": "integer",
+                "description": "Sequencial"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/ItemPadraoGet"
+          },
+          {
+            "properties": {
+              "UnidadeMedida": {
+                "type": "string",
+                "description": "Sigla da unidade de medida"
+              },
+              "UnidadeVolume": {
+                "type": "string",
+                "description": "Sigla da unidade de volume"
+              },
+              "UnidadeEstoque": {
+                "type": "string",
+                "description": "Sigla da unidade de estoque"
+              },
+              "NumeroDocumento": {
+                "type": "string",
+                "description": "Número do documento"
+              },
+              "Lote": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ItemLoteEntradaGet"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "NaturezaFiscalPost": {
+        "type": "object",
+        "properties": {
+          "NaturezaFiscal": {
+            "description": "ID da natureza fiscal \n\n1 - Compra<br>\n2  - Venda<br>\n3  - Transferência<br>\n4  - Devolução<br>\n5  - Retorno<br>\n6  - Entrada\n",
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ]
+          }
+        }
+      },
+      "NaturezaFiscalGet": {
+        "type": "object",
+        "properties": {
+          "NaturezaFiscal": {
+            "type": "string",
+            "description": "Descrição da natureza fiscal"
+          }
+        }
+      },
+      "CamposBooleanosOrdem": {
+        "type": "object",
+        "properties": {
+          "NaoFaturar": {
+            "description": "Indica que a ordem não será considerada no cálculo do faturamento",
+            "type": "string",
+            "example": "N"
+          },
+          "SemServico": {
+            "description": "Indica que a ordem pode ser encerrada sem que hajam serviços vinculados",
+            "type": "string",
+            "example": "S"
+          },
+          "SemServicoAutomatico": {
+            "description": "Indica que a ordem não terá serviços vinculados automaticamente ao calcular o faturamento",
+            "type": "string",
+            "example": "N"
+          },
+          "ApontamentoTerceiroObrigatorio": {
+            "description": "Indica que a ordem deve ter apontamentos de terceiro vinculados para que possa ser encerrada",
+            "type": "string",
+            "example": "N"
+          }
+        }
+      },
+      "CamposPadraoOrdem": {
+        "type": "object",
+        "properties": {
+          "Observacao": {
+            "description": "Observação",
+            "type": "string",
+            "example": "Observação da ordem de armazenagem"
+          },
+          "Solicitacao": {
+            "description": "Data de solicitação (dd/mm/yyyy hh:mm)",
+            "type": "string",
+            "example": "06/12/1990 13:30"
+          },
+          "Previsao": {
+            "description": "Data de previsão (dd/mm/yyyy hh:mm)",
+            "type": "string",
+            "example": "06/12/1990 13:30"
+          },
+          "Data": {
+            "description": "Data da ordem (dd/mm/yyyy hh:mm)",
+            "type": "string",
+            "example": "06/12/1990 13:30"
+          },
+          "NumeroPedido": {
+            "description": "Número do pedido",
+            "type": "string",
+            "example": "PED123784"
+          },
+          "NumeroControle": {
+            "description": "Número de controle",
+            "type": "string",
+            "example": "CONTR648425"
+          }
+        }
+      },
+      "CamposPadraoOrdemPost": {
+        "type": "object",
+        "properties": {
+          "Filial": {
+            "description": "CNPJ da filial sem caracteres especiais - conforme tabela de filiais",
+            "type": "integer"
+          },
+          "Tipo": {
+            "description": "Conforme tabela de tipos de ordem",
+            "type": "integer"
+          },
+          "Cliente": {
+            "description": "CNPJ do cliente sem caracteres especiais",
+            "type": "integer"
+          },
+          "ClienteFaturamento": {
+            "description": "CNPJ do cliente de faturamento sem caracteres especiais",
+            "type": "integer"
+          },
+          "NaturezaOperacao": {
+            "description": "Conforme tabela de naturezas de operação",
+            "type": "integer"
+          },
+          "Solicitante": {
+            "description": "ID do solicitante (pessoa cadastrada na base)",
+            "type": "integer"
+          },
+          "Deposito": {
+            "description": "Conforme tabela de depósitos",
+            "type": "integer"
+          },
+          "Projeto": {
+            "description": "Conforme tabela de projetos",
+            "type": "integer"
+          },
+          "UnidadeNegocioCliente": {
+            "description": "Conforme tabela de unidades de negócio do cliente",
+            "type": "integer"
+          }
+        }
+      },
+      "CamposPadraoOrdemGet": {
+        "type": "object",
+        "properties": {
+          "Filial": {
+            "description": "Descrição da filial",
+            "type": "string"
+          },
+          "Tipo": {
+            "description": "Descrição tipo da ordem",
+            "type": "string"
+          },
+          "Cliente": {
+            "description": "Descrição do cliente",
+            "type": "string"
+          },
+          "ClienteFaturamento": {
+            "description": "Descrição do cliente de faturamento",
+            "type": "string"
+          },
+          "NaturezaOperacao": {
+            "description": "Descrição da natureza de operacão",
+            "type": "string"
+          },
+          "Solicitante": {
+            "description": "Descrição do solicitante",
+            "type": "string"
+          },
+          "Deposito": {
+            "description": "Descrição do depósito",
+            "type": "string"
+          },
+          "Projeto": {
+            "description": "Descrição do projeto",
+            "type": "string"
+          },
+          "UnidadeNegocioCliente": {
+            "description": "Descrição da unidade de negócio do cliente",
+            "type": "string"
+          }
+        }
+      },
+      "OrdemPost": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CamposPadraoOrdemPost"
+          },
+          {
+            "$ref": "#/components/schemas/CamposPadraoOrdem"
+          },
+          {
+            "$ref": "#/components/schemas/CamposBooleanosOrdem"
+          },
+          {
+            "$ref": "#/components/schemas/NaturezaFiscalPost"
+          },
+          {
+            "description": "Ordem de armazenagem",
+            "type": "object",
+            "required": [
+              "Filial",
+              "Tipo",
+              "Cliente",
+              "ClienteFaturamento",
+              "Solicitacao",
+              "Data"
+            ],
+            "properties": {
+              "Documento": {
+                "$ref": "#/components/schemas/DocumentoPost"
+              },
+              "Entrada": {
+                "$ref": "#/components/schemas/EntradaPost"
+              },
+              "Saida": {
+                "$ref": "#/components/schemas/SaidaPost"
+              }
+            }
+          }
+        ]
+      },
+      "OrdemPut": {
+        "allOf": [
+          {
+            "properties": {
+              "NaturezaOperacao": {
+                "description": "Conforme tabela de naturezas de operação",
+                "type": "integer"
+              },
+              "Solicitante": {
+                "description": "ID do solicitante (pessoa cadastrada na base)",
+                "type": "integer"
+              },
+              "Deposito": {
+                "description": "Conforme tabela de depósitos",
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/CamposPadraoOrdem"
+          },
+          {
+            "properties": {
+              "NaoFaturar": {
+                "description": "Indica que a ordem não será considerada no cálculo do faturamento",
+                "type": "string",
+                "example": "N"
+              },
+              "SemServico": {
+                "description": "Indica que a ordem pode ser encerrada sem que hajam serviços vinculados",
+                "type": "string",
+                "example": "S"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/NaturezaFiscalPost"
+          },
+          {
+            "description": "Ordem de armazenagem",
+            "type": "object",
+            "required": [
+              "Filial",
+              "Tipo",
+              "Cliente",
+              "ClienteFaturamento",
+              "Solicitacao",
+              "Data"
+            ],
+            "properties": {
+              "Documento": {
+                "$ref": "#/components/schemas/DocumentoPost"
+              },
+              "Entrada": {
+                "title": "Entrada de mercadoria",
+                "description": "Somente informar estes dados quando for uma entrada de mercadoria",
+                "type": "object",
+                "properties": {
+                  "ChaveDocumentoEletronico": {
+                    "description": "Chave do documento eletrônico",
+                    "type": "string",
+                    "example": "24130401211699999126550010001026811138186206"
+                  },
+                  "Recebimento": {
+                    "description": "Dados para recebimento da mercadoria",
+                    "type": "object",
+                    "properties": {
+                      "TipoDescarga": {
+                        "description": "Conforme tabela de tipos de descarga",
+                        "type": "integer"
+                      },
+                      "Placa": {
+                        "description": "Placa do veículo",
+                        "type": "string",
+                        "example": "ABC-1234"
+                      },
+                      "UFPlaca": {
+                        "description": "Estado do veículo - conforme tabela de estados",
+                        "type": "integer"
+                      },
+                      "Carreta": {
+                        "description": "Placa da carreta do veículo",
+                        "type": "string",
+                        "example": "DEF-5678"
+                      },
+                      "Motorista": {
+                        "description": "Motorista (quando a pessoa não for cadastrada no sistema)",
+                        "type": "string",
+                        "example": "Pedro da Silva"
+                      },
+                      "NumeroDocumento": {
+                        "description": "Número do documento do motorista (quando a pessoa não for cadastrada no sistema). Pode ser CPF, RG..",
+                        "type": "string",
+                        "example": "874.554.955-85"
+                      },
+                      "DI": {
+                        "description": "DI",
+                        "type": "string",
+                        "example": "AC12"
+                      },
+                      "Processo": {
+                        "description": "Processo",
+                        "type": "string",
+                        "example": "ERD123"
+                      },
+                      "Numero": {
+                        "description": "Número do documento de entrada",
+                        "type": "string",
+                        "example": "111111"
+                      },
+                      "Serie": {
+                        "description": "Série do documento de entrada",
+                        "type": "string",
+                        "example": "1"
+                      },
+                      "Emissao": {
+                        "description": "Data de emissão do documento (dd/mm/yyyy)",
+                        "type": "string",
+                        "example": "06/12/1990"
+                      }
+                    }
+                  }
+                }
+              },
+              "Saida": {
+                "title": "Saída de mercadoria",
+                "description": "Somente informar estes dados quando for uma saída de mercadoria",
+                "type": "object",
+                "properties": {
+                  "TipoTransporte": {
+                    "description": "Tipo de transporte\n\n1 -  Transportadora<br>\n2  - Pac<br>\n3  - Sedex<br>\n4  - Sedex 10<br>\n5  - E-sedex<br>\n6  - Cliente retira<br>\n",
+                    "type": "integer",
+                    "enum": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6
+                    ]
+                  },
+                  "Transportadora": {
+                    "description": "CNPJ da transportadora sem caracteres especiais",
+                    "type": "integer"
+                  },
+                  "Ordem": {
+                    "description": "Indica a ordem em que a saída será considerada como prioridade",
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "ClienteFinal": {
+                    "description": "Cliente final (pessoa cadastrada na base)",
+                    "type": "integer"
+                  },
+                  "NomeClienteFinal": {
+                    "description": "Nome do cliente final (para quando a pessoa não for cadastrada no sistema)",
+                    "type": "string",
+                    "example": "João da Silva"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "OrdemGet": {
+        "allOf": [
+          {
+            "properties": {
+              "Situacao": {
+                "type": "string",
+                "description": "Situação do registro",
+                "example": "Cadastrada(o)"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/CamposPadraoOrdemGet"
+          },
+          {
+            "$ref": "#/components/schemas/CamposPadraoOrdem"
+          },
+          {
+            "$ref": "#/components/schemas/CamposBooleanosOrdem"
+          },
+          {
+            "$ref": "#/components/schemas/NaturezaFiscalGet"
+          },
+          {
+            "description": "Ordem de armazenagem",
+            "type": "object",
+            "required": [
+              "Filial",
+              "Tipo",
+              "Cliente",
+              "ClienteFaturamento",
+              "Solicitacao",
+              "Data"
+            ],
+            "properties": {
+              "Documento": {
+                "$ref": "#/components/schemas/DocumentoGet"
+              },
+              "Entrada": {
+                "$ref": "#/components/schemas/EntradaGet"
+              },
+              "Saida": {
+                "$ref": "#/components/schemas/SaidaGet"
+              }
+            }
+          }
+        ]
+      },
+      "EntradaPadraoPost": {
+        "type": "object",
+        "properties": {
+          "LocalColeta": {
+            "description": "ID do local de coleta (pessoa cadastrada na base)",
+            "type": "integer"
+          },
+          "EnderecoLocalColeta": {
+            "description": "ID do endereço do local de coleta (endereço da pessoa)",
+            "type": "integer"
+          },
+          "ChaveDocumentoEletronico": {
+            "description": "Chave do documento eletrônico",
+            "type": "string",
+            "example": "24130401211699999126550010001026811138186206"
+          },
+          "Recebimento": {
+            "$ref": "#/components/schemas/RecebimentoPost"
+          }
+        }
+      },
+      "EntradaPadraoGet": {
+        "type": "object",
+        "properties": {
+          "LocalColeta": {
+            "description": "Descrição do local de coleta",
+            "type": "integer"
+          },
+          "EnderecoLocalColeta": {
+            "description": "Descrição do endereço do local de coleta",
+            "type": "integer"
+          },
+          "ChaveDocumentoEletronico": {
+            "description": "Chave do documento eletrônico",
+            "type": "string",
+            "example": "24130401211699999126550010001026811138186206"
+          },
+          "Recebimento": {
+            "$ref": "#/components/schemas/RecebimentoGet"
+          }
+        }
+      },
+      "EntradaPost": {
+        "title": "Entrada de mercadoria",
+        "description": "Somente informar estes dados quando for uma entrada de mercadoria",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntradaPadraoPost"
+          },
+          {
+            "properties": {
+              "Item": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ItemPost"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "EntradaGet": {
+        "title": "Entrada de mercadoria",
+        "description": "Somente informado quando for uma entrada de mercadoria",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntradaPadraoGet"
+          },
+          {
+            "properties": {
+              "Item": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ItemGet"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "DadosLotePadrao": {
+        "type": "object",
+        "properties": {
+          "Fabricacao": {
+            "description": "Data de fabricação (dd/mm/yyyy)",
+            "type": "string",
+            "example": "06/12/1990"
+          },
+          "Validade": {
+            "description": "Data de validade (dd/mm/yyyy)",
+            "type": "string",
+            "example": "06/12/1990"
+          },
+          "Lote": {
+            "description": "Lote",
+            "type": "string",
+            "example": "546249967"
+          },
+          "NumeroSerie": {
+            "description": "Número de série",
+            "type": "string",
+            "example": "XSDAFFRD4123"
+          },
+          "InicioCobranca": {
+            "description": "Início de cobrança da mercadoria no estoque (dd/mm/yyyy)",
+            "type": "string",
+            "example": "06/12/1990"
+          }
+        }
+      },
+      "ValoresLotePadrao": {
+        "type": "object",
+        "properties": {
+          "Quantidade": {
+            "description": "Quantidade",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "Estoque": {
+            "description": "Estoque",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "PesoLiquido": {
+            "description": "Peso Líquido",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "PesoBruto": {
+            "description": "Peso Bruto",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "Valor": {
+            "description": "Valor",
+            "type": "number",
+            "multipleOf": 0.01,
+            "example": 10
+          },
+          "Volume": {
+            "description": "Volume",
+            "type": "integer",
+            "example": 10
+          }
+        }
+      },
+      "ItemLotePost": {
+        "type": "object",
+        "description": "Dados do lote de entrada",
+        "allOf": [
+          {
+            "properties": {
+              "NumeroDescarga": {
+                "description": "ID do número da descarga",
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/DadosLotePadrao"
+          },
+          {
+            "properties": {
+              "ReferenciaLote": {
+                "description": "ID de referência do lote",
+                "type": "integer"
+              },
+              "Fornecedor": {
+                "description": "CNPJ do fornecedor sem caracteres especiais",
+                "type": "integer"
+              },
+              "Fabricante": {
+                "description": "CNPJ do fabricante sem caracteres especiais",
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/ValoresLotePadrao"
+          }
+        ]
+      },
+      "ItemLoteGet": {
+        "type": "object",
+        "description": "Dados do lote de entrada",
+        "allOf": [
+          {
+            "properties": {
+              "Situacao": {
+                "type": "string",
+                "description": "Situação do registro",
+                "example": "Cadastrada(o)"
+              },
+              "NumeroDescarga": {
+                "description": "Número da descarga",
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/DadosLotePadrao"
+          },
+          {
+            "properties": {
+              "ReferenciaLote": {
+                "description": "Descrição da referência do lote",
+                "type": "string"
+              },
+              "Fornecedor": {
+                "description": "Descrição do fornecedor da mercadoria",
+                "type": "string"
+              },
+              "Fabricante": {
+                "description": "Descrição do fabricante da mercadoria",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/ValoresLotePadrao"
+          },
+          {
+            "properties": {
+              "Sequencial": {
+                "type": "integer",
+                "description": "Sequencial"
+              },
+              "UnidadeMedida": {
+                "type": "string",
+                "description": "Sigla da unidade de medida"
+              },
+              "UnidadeVolume": {
+                "type": "string",
+                "description": "Sigla da unidade de volume"
+              },
+              "UnidadeEstoque": {
+                "type": "string",
+                "description": "Sigla da unidade de estoque"
+              },
+              "Protocolo": {
+                "type": "integer",
+                "description": "Protocolo"
+              }
+            }
+          }
+        ]
+      },
+      "ProgramacaoPost": {
+        "description": "Programação de saída de mercadoria",
+        "type": "object",
+        "required": [
+          "Produto",
+          "UnidadeMedida"
+        ],
+        "properties": {
+          "Produto": {
+            "description": "Código de referência do produto",
+            "type": "string"
+          },
+          "UnidadeMedida": {
+            "description": "Sigla da unidade de medida - Conforme tabela de unidades de medida",
+            "type": "string"
+          },
+          "Data": {
+            "description": "Data da programação (dd/mm/yyyy hh:mm)",
+            "type": "string",
+            "example": "06/12/1990 13:30"
+          },
+          "Quantidade": {
+            "description": "Quantidade",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 5
+          },
+          "SequencialPedido": {
+            "description": "Sequencial do produto no pedido",
+            "type": "integer",
+            "example": 1
+          },
+          "TipoSelecao": {
+            "description": "Tipo de seleção\n\n1 -  Seleção manual<br>\n2  - Seleção automática<br>\n",
+            "type": "integer",
+            "enum": [
+              1,
+              2
+            ]
+          },
+          "GrupoMetodoSelecao": {
+            "description": "Conforme tabela de grupos de método de seleção",
+            "type": "integer"
+          },
+          "Observacao": {
+            "description": "Observação",
+            "type": "string",
+            "example": "Observação da programação x"
+          },
+          "Parametro": {
+            "$ref": "#/components/schemas/ParametroProgramacao"
+          },
+          "Filtro": {
+            "$ref": "#/components/schemas/FiltroProgramacaoPost"
+          }
+        }
+      },
+      "ProgramacaoGet": {
+        "allOf": [
+          {
+            "properties": {
+              "Situacao": {
+                "type": "string",
+                "description": "Situação do registro",
+                "example": "Cadastrada(o)"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/ProgramacaoPadraoGet"
+          },
+          {
+            "properties": {
+              "Picking": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PickingGet"
+                }
+              },
+              "Item": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ItemProgramacaoGet"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "PickingGet": {
+        "description": "Picking da programação",
+        "type": "object",
+        "properties": {
+          "Situacao": {
+            "description": "Situação do registro",
+            "type": "string",
+            "example": "Cadastrada"
+          },
+          "Deposito": {
+            "description": "Sigla do depósito",
+            "type": "string"
+          },
+          "TipoAreaInterna": {
+            "description": "Tipo de área",
+            "type": "string"
+          },
+          "Produto": {
+            "description": "Descrição do produto",
+            "type": "string"
+          },
+          "UnidadeMedida": {
+            "description": "Sigla da unidade de medida",
+            "type": "string"
+          },
+          "Quantidade": {
+            "description": "Quantidade",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 5
+          },
+          "Saldo": {
+            "description": "Saldo",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 5
+          },
+          "Sequencial": {
+            "description": "Sequencial do registro",
+            "type": "integer"
+          },
+          "Endereco": {
+            "description": "Descrição do endereço",
+            "type": "string"
+          },
+          "Fabricacao": {
+            "description": "Data de fabricação (dd/mm/yyyy)",
+            "type": "string",
+            "example": "06/12/1990"
+          },
+          "Validade": {
+            "description": "Data de validade (dd/mm/yyyy)",
+            "type": "string",
+            "example": "06/12/1990"
+          },
+          "NumeroPedido": {
+            "description": "Número do pedido",
+            "type": "string",
+            "example": "546249967"
+          },
+          "Lote": {
+            "description": "Lote",
+            "type": "string",
+            "example": "546249967"
+          }
+        }
+      },
+      "ItemProgramacaoGet": {
+        "description": "Itens da programação",
+        "type": "object",
+        "properties": {
+          "Situaçao": {
+            "description": "Situação do registro",
+            "type": "string"
+          },
+          "UnidadeMedida": {
+            "description": "Sigla da unidade de medida",
+            "type": "string"
+          },
+          "UnidadeVolume": {
+            "description": "Sigla da unidade de volume",
+            "type": "string"
+          },
+          "UnidadeEstoque": {
+            "description": "Sigla da unidade de estoque",
+            "type": "string"
+          },
+          "NumeroDocumento": {
+            "type": "integer",
+            "description": "Número do documento"
+          },
+          "Quantidade": {
+            "description": "Quantidade",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 5
+          },
+          "ValorUnitario": {
+            "description": "Valor unitário",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 5
+          },
+          "ValorTotal": {
+            "description": "Valor total",
+            "type": "number",
+            "multipleOf": 0.01,
+            "example": 5
+          },
+          "PesoLiquido": {
+            "description": "Peso líquido",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 5
+          },
+          "PesoBruto": {
+            "description": "Peso bruto",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 5
+          },
+          "Estoque": {
+            "description": "Estoque",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 5
+          },
+          "Sequencial": {
+            "description": "Sequencial do registro",
+            "type": "integer"
+          },
+          "Volume": {
+            "description": "Quantidade de volumes",
+            "type": "integer"
+          },
+          "Observacao": {
+            "description": "Observação",
+            "type": "string"
+          },
+          "Lote": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLoteProgramacaoGet"
+            }
+          }
+        }
+      },
+      "ServicoItemLoteGet": {
+        "type": "object",
+        "description": "Dados de serviço do lote",
+        "properties": {
+          "Servico": {
+            "description": "Descrição do serviço",
+            "type": "string"
+          },
+          "Unidade": {
+            "description": "Sigla da unidade de medida",
+            "type": "string"
+          },
+          "Quantidade": {
+            "description": "Quantidade",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "Sequencial": {
+            "description": "Sequencial do registro",
+            "type": "integer"
+          },
+          "Responsavel": {
+            "description": "Responsável pelo serviço",
+            "type": "string"
+          },
+          "Observacao": {
+            "description": "Observação",
+            "type": "string"
+          },
+          "Data": {
+            "description": "Data (dd/mm/yyyy)",
+            "type": "string"
+          },
+          "Inicio": {
+            "description": "Hora de início (hh:mm)",
+            "type": "string"
+          },
+          "Fim": {
+            "description": "Hora final (hh:mm)",
+            "type": "string"
+          },
+          "Horas": {
+            "description": "Total de horas",
+            "type": "number",
+            "multipleOf": 0.01,
+            "example": 10
+          },
+          "Turno": {
+            "description": "Turno",
+            "type": "integer"
+          },
+          "Deposito": {
+            "description": "Sigla do depósito",
+            "type": "string"
+          },
+          "PeriodoExecucao": {
+            "description": "Descrição do período de execução",
+            "type": "string"
+          },
+          "NaturezaMercadoria": {
+            "description": "Natureza da mercadoria",
+            "type": "string"
+          },
+          "GrupoArmazenagem": {
+            "description": "Grupo de armazenagem",
+            "type": "string"
+          },
+          "Parametro": {
+            "type": "object",
+            "properties": {
+              "NaoCobrarCliente": {
+                "description": "Indica que o serviço não será cobrado do cliente",
+                "type": "string",
+                "example": "S"
+              },
+              "ExibirTodosServicos": {
+                "description": "Indica que todos os serviços serão exibidos para consulta",
+                "type": "string",
+                "example": "N"
+              },
+              "GeradoPeloFaturamento": {
+                "description": "Indica que o serviço foi gerado pelo cálculo de faturamento",
+                "type": "string",
+                "example": "N"
+              }
+            }
+          },
+          "TabelaPreco": {
+            "type": "object",
+            "properties": {
+              "Tabela": {
+                "description": "Descrição da tabela de preço",
+                "type": "string"
+              },
+              "Lista": {
+                "description": "Descrição da lista de preço",
+                "type": "string"
+              },
+              "Faturado": {
+                "description": "Indica se o registro já foi faturado ou não",
+                "type": "string",
+                "example": "N"
+              },
+              "Quantidade": {
+                "description": "Quantidade",
+                "type": "number",
+                "multipleOf": 0.0001,
+                "example": 10
+              },
+              "ValorUnitario": {
+                "description": "Valor",
+                "type": "number",
+                "multipleOf": 0.0001,
+                "example": 10
+              },
+              "ValorTotal": {
+                "description": "Valor",
+                "type": "number",
+                "multipleOf": 0.01,
+                "example": 10
+              }
+            }
+          }
+        }
+      },
+      "UnitizacaoGet": {
+        "type": "object",
+        "description": "Dados de unitização do lote",
+        "properties": {
+          "UnitizadoPor": {
+            "description": "Nome do usuário que efetuou a confirmação da unitização",
+            "type": "string"
+          },
+          "UnitizadoEm": {
+            "description": "Data/hora em que foi feita confirmação da unitização (dd/mm/yyyy hh:mm)",
+            "type": "string",
+            "example": "06/12/1990 13:30"
+          },
+          "Sequencial": {
+            "description": "Sequencial do registro",
+            "type": "integer"
+          },
+          "TipoCarga": {
+            "description": "Tipo da carga no unitizador",
+            "type": "string"
+          },
+          "TipoUnitizador": {
+            "description": "Tipo do unitizador",
+            "type": "string"
+          },
+          "NormaUnitizacao": {
+            "description": "Norma de unitização",
+            "type": "string"
+          },
+          "UnitizacaoOrdem": {
+            "description": "Vinculo com a unitização da ordem",
+            "type": "integer"
+          },
+          "Unitizacao": {
+            "description": "Unitização",
+            "type": "integer"
+          },
+          "Deposito": {
+            "description": "Depósito em que a mercadoria foi recebida",
+            "type": "string"
+          },
+          "Endereco": {
+            "description": "Endereço em que a mercadoria foi recebida",
+            "type": "string"
+          },
+          "GrupoEtiquetagem": {
+            "description": "Grupo de etiquetagem do recebimento",
+            "type": "string"
+          },
+          "Volume": {
+            "description": "Volume",
+            "type": "integer"
+          },
+          "UnidadeEstoque": {
+            "description": "Sigla da unidade de estoque",
+            "type": "string"
+          },
+          "UnidadeVolume": {
+            "description": "Sigla da unidade de volume",
+            "type": "string"
+          },
+          "ReferenciaUnitizador": {
+            "description": "Referência do unitizador",
+            "type": "string"
+          },
+          "Quantidade": {
+            "description": "Quantidade",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "PesoLiquido": {
+            "description": "Peso Líquido",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "PesoBruto": {
+            "description": "Peso Bruto",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "Valor": {
+            "description": "Valor",
+            "type": "number",
+            "multipleOf": 0.01,
+            "example": 10
+          },
+          "QuantidadeVolume": {
+            "description": "Quantidade de volume na unitização",
+            "type": "integer"
+          }
+        }
+      },
+      "OcorrenciaGet": {
+        "type": "object",
+        "description": "Dados de ocorrência do lote",
+        "properties": {
+          "Situação": {
+            "description": "Situação do registro",
+            "type": "string"
+          },
+          "Tipo": {
+            "description": "Tipo da ocorrência",
+            "type": "string"
+          },
+          "Deposito": {
+            "description": "Sigla do depósito",
+            "type": "string"
+          },
+          "Responsavel": {
+            "description": "Responsável pela ocorrência",
+            "type": "string"
+          },
+          "Data": {
+            "description": "Data da ocorrência (dd/mm/aaaa)",
+            "type": "string"
+          },
+          "Numero": {
+            "description": "Número",
+            "type": "integer"
+          },
+          "Conferente": {
+            "description": "Nome do conferente",
+            "type": "string"
+          },
+          "UnidadeEstoque": {
+            "description": "Sigla da unidade de estoque",
+            "type": "string"
+          },
+          "UnidadeVolume": {
+            "description": "Sigla da unidade de volume",
+            "type": "string"
+          },
+          "Observacao": {
+            "description": "Observação da ocorrência",
+            "type": "string"
+          },
+          "Quantidade": {
+            "description": "Quantidade",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "PesoLiquido": {
+            "description": "Peso Líquido",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "PesoBruto": {
+            "description": "Peso Bruto",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "Valor": {
+            "description": "Valor",
+            "type": "number",
+            "multipleOf": 0.01,
+            "example": 10
+          },
+          "Volume": {
+            "description": "Quantidade de volumes",
+            "type": "integer"
+          }
+        }
+      },
+      "ChecklistGet": {
+        "type": "object",
+        "description": "Ckecklist do lote",
+        "properties": {
+          "Item": {
+            "description": "Descrição do item de análise",
+            "type": "string"
+          },
+          "Abrangencia": {
+            "description": "Agrangência",
+            "type": "string"
+          },
+          "Historico": {
+            "description": "Histórico",
+            "type": "string"
+          },
+          "Protocolo": {
+            "description": "Protocolo",
+            "type": "integer"
+          },
+          "Valor": {
+            "description": "Valor",
+            "type": "string"
+          }
+        }
+      },
+      "CamposPadraoSaidaGet": {
+        "title": "Saída de mercadoria",
+        "description": "Somente informado quando for uma saída de mercadoria",
+        "type": "object",
+        "properties": {
+          "TipoTransporte": {
+            "description": "Tipo de transporte",
+            "type": "string"
+          },
+          "Transportadora": {
+            "description": "Descrição da transportadora",
+            "type": "string"
+          },
+          "Ordem": {
+            "description": "Indica a ordem em que a saída será considerada como prioridade",
+            "type": "integer"
+          },
+          "ClienteFinal": {
+            "description": "Descrição do cliente final",
+            "type": "string"
+          },
+          "NomeClienteFinal": {
+            "description": "Nome do cliente final",
+            "type": "string"
+          },
+          "Municipio": {
+            "description": "Descrição do município do cliente final",
+            "type": "string"
+          },
+          "UF": {
+            "description": "Descrição da UF do cliente final",
+            "type": "string"
+          },
+          "LocalEntrega": {
+            "description": "Descrição do local de entrega",
+            "type": "string"
+          },
+          "EnderecoLocalEntrega": {
+            "description": "Descrição do endereço do local de entrega",
+            "type": "string"
+          },
+          "FilialReentrada": {
+            "description": "Descrição da filial de reentrada para casos de ordem de armazenagem do tipo saída com reentrada",
+            "type": "string"
+          },
+          "DepositoReentrada": {
+            "description": "Descrição do depósito de reentrada para casos de ordem de armazenagem do tipo saída com reentrada",
+            "type": "string"
+          },
+          "EnderecoReentrada": {
+            "description": "Descrição do endereço de reentrada para casos de ordem de armazenagem do tipo saída com reentrada",
+            "type": "string"
+          }
+        }
+      },
+      "CamposPadraoSaidaPost": {
+        "title": "Saída de mercadoria",
+        "description": "Somente informar estes dados quando for uma saída de mercadoria",
+        "type": "object",
+        "properties": {
+          "TipoTransporte": {
+            "description": "Tipo de transporte\n\n1 -  Transportadora<br>\n2  - Pac<br>\n3  - Sedex<br>\n4  - Sedex 10<br>\n5  - E-sedex<br>\n6  - Cliente retira<br>\n",
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ]
+          },
+          "Transportadora": {
+            "description": "CNPJ da transportadora sem caracteres especiais",
+            "type": "integer"
+          },
+          "Ordem": {
+            "description": "Indica a ordem em que a saída será considerada como prioridade",
+            "type": "integer",
+            "example": 1
+          },
+          "ClienteFinal": {
+            "description": "Cliente final (pessoa cadastrada na base)",
+            "type": "integer"
+          },
+          "NomeClienteFinal": {
+            "description": "Nome do cliente final (para quando a pessoa não for cadastrada no sistema)",
+            "type": "string",
+            "example": "João da Silva"
+          },
+          "Municipio": {
+            "description": "Nome do município do cliente final",
+            "type": "string"
+          },
+          "UF": {
+            "description": "UF do cliente final - conforme tabela de UF",
+            "type": "integer"
+          },
+          "LocalEntrega": {
+            "description": "ID do local de entrega (pessoa cadastrada na base)",
+            "type": "integer"
+          },
+          "EnderecoLocalEntrega": {
+            "description": "ID do endereço do local de entrega",
+            "type": "integer"
+          },
+          "FilialReentrada": {
+            "description": "CNPJ da filial de reentrada para casos de ordem de armazenagem do tipo saída com reentrada - Conforme tabela de filiais",
+            "type": "integer"
+          },
+          "DepositoReentrada": {
+            "description": "ID do depósito de reentrada para casos de ordem de armazenagem do tipo saída com reentrada - Conforme tabela de depósitos",
+            "type": "integer"
+          },
+          "EnderecoReentrada": {
+            "description": "ID do endereço de reentrada para casos de ordem de armazenagem do tipo saída com reentrada",
+            "type": "integer"
+          }
+        }
+      },
+      "SaidaPost": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CamposPadraoSaidaPost"
+          },
+          {
+            "properties": {
+              "Programacao": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ProgramacaoPost"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "SaidaGet": {
+        "allOf": [
+          {
+            "properties": {
+              "Carregamento": {
+                "type": "integer",
+                "description": "Número do carregamento"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/CamposPadraoSaidaGet"
+          },
+          {
+            "properties": {
+              "Programacao": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ProgramacaoGet"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ItemLoteEntradaGet": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ItemLoteGet"
+          },
+          {
+            "properties": {
+              "Unitizacao": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UnitizacaoGet"
+                }
+              },
+              "Ocorrencia": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OcorrenciaGet"
+                }
+              },
+              "Servico": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ServicoItemLoteGet"
+                }
+              },
+              "Checklist": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ChecklistGet"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ItemLoteProgramacaoGet": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ItemLoteGet"
+          },
+          {
+            "properties": {
+              "Servico": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ServicoItemLoteGet"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ParametroProgramacao": {
+        "description": "Parâmetro da programação",
+        "type": "object",
+        "properties": {
+          "QuantidadeDefinidaPeloSaldoEstoque": {
+            "description": "Será separada toda a quantidade em estoque do produto",
+            "type": "string",
+            "example": "N"
+          },
+          "CancelarAutomaticamenteSaldoInsuficiente": {
+            "description": "Caso a quantidade em estoque seja inferior a quantidade programada, a quantidade faltante será cancelada e o restante será separado.",
+            "type": "string",
+            "example": "N"
+          },
+          "GerarEmbalagensAutomaticamente": {
+            "description": "Gera as embalagens automaticamente após a confirmação da separação da mercadoria",
+            "type": "string",
+            "example": "S"
+          },
+          "GerarEmbalagensPorVolume": {
+            "description": "Gera uma embalagem para cada volume",
+            "type": "string",
+            "example": "N"
+          },
+          "NaoExibirMercadoriasAreaOcorrencia": {
+            "description": "Ao exibir as mercadorias para efetuar a separação, não exibe as que estão em área de ocorrência",
+            "type": "string",
+            "example": "N"
+          },
+          "NaFaltaMercadoriaProgramarSaldoEstoque": {
+            "description": "Caso a quantidade em estoque seja inferior a quantidade programada, a quantidade faltante ficará pendente e o restante será separado.",
+            "type": "string",
+            "example": "N"
+          },
+          "SepararQuantidadeSoltaPeloPrePickingPicking": {
+            "description": "Quando a mercadoria estiver solta, ela será separada somente pelo pré-picking e pelo picking",
+            "type": "string",
+            "example": "N"
+          }
+        }
+      },
+      "RecebimentoPost": {
+        "description": "Dados para recebimento da mercadoria",
+        "type": "object",
+        "properties": {
+          "TipoDescarga": {
+            "description": "Conforme tabela de tipos de descarga",
+            "type": "integer"
+          },
+          "Transportadora": {
+            "description": "CNPJ da transportadora sem caracteres especiais",
+            "type": "integer"
+          },
+          "Fornecedor": {
+            "description": "CNPJ do fornecedor sem caracteres especiais",
+            "type": "integer"
+          },
+          "Placa": {
+            "description": "Placa do veículo",
+            "type": "string",
+            "example": "ABC-1234"
+          },
+          "UFPlaca": {
+            "description": "Estado do veículo - conforme tabela de estados",
+            "type": "integer"
+          },
+          "Carreta": {
+            "description": "Placa da carreta do veículo",
+            "type": "string",
+            "example": "DEF-5678"
+          },
+          "Doca": {
+            "description": "ID da doca",
+            "type": "integer"
+          },
+          "Navio": {
+            "description": "ID do navio",
+            "type": "integer"
+          },
+          "Conteiner": {
+            "description": "Número do conteiner",
+            "type": "string"
+          },
+          "PessoaDocumento": {
+            "description": "ID do motorista (pessoa cadastrada na base)",
+            "type": "integer"
+          },
+          "Motorista": {
+            "description": "Motorista (quando a pessoa não for cadastrada no sistema)",
+            "type": "string",
+            "example": "Pedro da Silva"
+          },
+          "NumeroDocumento": {
+            "description": "Número do documento do motorista (quando a pessoa não for cadastrada no sistema). Pode ser CPF, RG..",
+            "type": "string",
+            "example": "874.554.955-85"
+          },
+          "DI": {
+            "description": "DI",
+            "type": "string",
+            "example": "AC12"
+          },
+          "Processo": {
+            "description": "Processo",
+            "type": "string",
+            "example": "ERD123"
+          },
+          "Numero": {
+            "description": "Número do documento de entrada",
+            "type": "string",
+            "example": "111111"
+          },
+          "Serie": {
+            "description": "Série do documento de entrada",
+            "type": "string",
+            "example": "1"
+          },
+          "Emissao": {
+            "description": "Data de emissão do documento (dd/mm/yyyy)",
+            "type": "string",
+            "example": "06/12/1990"
+          }
+        }
+      },
+      "RecebimentoGet": {
+        "description": "Dados para recebimento da mercadoria",
+        "type": "object",
+        "properties": {
+          "TipoDescarga": {
+            "description": "Descrição do tipo da descarga",
+            "type": "string"
+          },
+          "Transportadora": {
+            "description": "Descrição da transportadora",
+            "type": "string"
+          },
+          "Fornecedor": {
+            "description": "Descrição do fornecedor",
+            "type": "string"
+          },
+          "Placa": {
+            "description": "Placa do veículo",
+            "type": "string",
+            "example": "ABC-1234"
+          },
+          "UFPlaca": {
+            "description": "Descrição do estado do veículo",
+            "type": "string"
+          },
+          "Carreta": {
+            "description": "Placa da carreta do veículo",
+            "type": "string",
+            "example": "DEF-5678"
+          },
+          "Doca": {
+            "description": "Descrição da doca",
+            "type": "string"
+          },
+          "Navio": {
+            "description": "Descrição do navio",
+            "type": "string"
+          },
+          "Conteiner": {
+            "description": "Descrição do conteiner",
+            "type": "string"
+          },
+          "PessoaDocumento": {
+            "description": "Descrição da pessoa do documento",
+            "type": "string"
+          },
+          "Motorista": {
+            "description": "Motorista",
+            "type": "string"
+          },
+          "NumeroDocumento": {
+            "description": "Número do documento do motorista",
+            "type": "string"
+          },
+          "DI": {
+            "description": "DI",
+            "type": "string",
+            "example": "AC12"
+          },
+          "Processo": {
+            "description": "Processo",
+            "type": "string",
+            "example": "ERD123"
+          },
+          "Numero": {
+            "description": "Número do documento de entrada",
+            "type": "string",
+            "example": "111111"
+          },
+          "Serie": {
+            "description": "Série do documento de entrada",
+            "type": "string",
+            "example": "1"
+          },
+          "Emissao": {
+            "description": "Data de emissão do documento (dd/mm/yyyy)",
+            "type": "string",
+            "example": "06/12/1990"
+          }
+        }
+      },
+      "ProgramacaoPadraoGet": {
+        "description": "Programação de saída de mercadoria",
+        "type": "object",
+        "required": [
+          "Produto",
+          "UnidadeMedida"
+        ],
+        "properties": {
+          "Produto": {
+            "description": "Descrição do produto",
+            "type": "string"
+          },
+          "UnidadeMedida": {
+            "description": "Sigla da unidade de medida",
+            "type": "string"
+          },
+          "Data": {
+            "description": "Data da programação (dd/mm/yyyy hh:mm)",
+            "type": "string",
+            "example": "06/12/1990 13:30"
+          },
+          "Quantidade": {
+            "description": "Quantidade",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 5
+          },
+          "SequencialPedido": {
+            "description": "Sequencial do produto no pedido",
+            "type": "integer"
+          },
+          "TipoSelecao": {
+            "description": "Descrição do tipo de seleção",
+            "type": "string"
+          },
+          "GrupoMetodoSelecao": {
+            "description": "Descrição do grupo do método de seleção",
+            "type": "string"
+          },
+          "Observacao": {
+            "description": "Observação",
+            "type": "string",
+            "example": "Observação da programação x"
+          },
+          "Parametro": {
+            "$ref": "#/components/schemas/ParametroProgramacao"
+          },
+          "Filtro": {
+            "$ref": "#/components/schemas/FiltroProgramacaoGet"
+          }
+        }
+      },
+      "FiltroProgramacaoPost": {
+        "description": "Filtros da programação",
+        "type": "object",
+        "allOf": [
+          {
+            "properties": {
+              "ReferenciaLote": {
+                "description": "ID de referência do lote de entrada",
+                "type": "integer"
+              },
+              "Conteiner": {
+                "description": "Número do conteiner da entrada da mercadoria",
+                "type": "integer"
+              },
+              "Projeto": {
+                "description": "Projeto da entrada da mercadoria - conforme tabela de projetos",
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/FiltroPadraoProgramacao"
+          }
+        ]
+      },
+      "FiltroProgramacaoGet": {
+        "description": "Filtros da programação",
+        "type": "object",
+        "allOf": [
+          {
+            "properties": {
+              "ReferenciaLote": {
+                "description": "Referência do lote de entrada",
+                "type": "string"
+              },
+              "Conteiner": {
+                "description": "Conteiner da entrada da mercadoria",
+                "type": "string"
+              },
+              "Projeto": {
+                "description": "Projeto da entrada da mercadoria",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/FiltroPadraoProgramacao"
+          }
+        ]
+      },
+      "FiltroPadraoProgramacao": {
+        "type": "object",
+        "properties": {
+          "Fabricacao": {
+            "description": "Fabricação do lote de entrada (dd/mm/yyyy)",
+            "type": "string",
+            "example": "06/12/1990"
+          },
+          "Validade": {
+            "description": "Validade do lote de entrada (dd/mm/yyyy)",
+            "type": "string",
+            "example": "06/12/1990"
+          },
+          "Lote": {
+            "description": "Descrição do lote de entrada",
+            "type": "string",
+            "example": "ASDF13132"
+          },
+          "NumeroSerie": {
+            "description": "Numero de série do lote de entrada",
+            "type": "string",
+            "example": "123132446"
+          },
+          "NumeroDocumento": {
+            "description": "Numero do documente de entrada da mercadoria",
+            "type": "string",
+            "example": "1234"
+          },
+          "NumeroPedido": {
+            "description": "Numero do pedido de entrada da mercadoria",
+            "type": "string",
+            "example": "PED4585"
+          },
+          "DI": {
+            "description": "DI de entrada da mercadoria",
+            "type": "string",
+            "example": "AC12"
+          },
+          "Processo": {
+            "description": "Processo de entrada da mercadoria",
+            "type": "string",
+            "example": "ERD123"
+          },
+          "Endereco": {
+            "description": "Endereço da mercadoria",
+            "type": "string",
+            "example": "A.01.20"
+          },
+          "Unitizacao": {
+            "description": "Unitização da mercadoria",
+            "type": "string",
+            "example": "564846"
+          },
+          "ReferenciaUnitizador": {
+            "description": "referência do unitizador da mercadoria",
+            "type": "string",
+            "example": "XFS4544"
+          }
+        }
+      },
+      "PedidoPendenteGet": {
+        "type": "object",
+        "properties": {
+          "Pedidos": {
+            "description": "Pedidos",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CamposPedidoPendentePadrao"
+            }
+          }
+        }
+      },
+      "EstoqueMercadoriaGet": {
+        "type": "object",
+        "properties": {
+          "EstoqueMercadoria": {
+            "description": "Estoque de mercadoria",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CamposEstoqueMercadoriaPadrao"
+            }
+          }
+        }
+      },
+      "CamposPedidoPendentePadrao": {
+        "type": "object",
+        "properties": {
+          "NumeroOrdem": {
+            "description": "Número da ordem",
+            "type": "integer"
+          },
+          "NumeroPedido": {
+            "description": "Número do pedido",
+            "type": "integer"
+          }
+        }
+      },
+      "CamposEstoqueMercadoriaPadrao": {
+        "type": "object",
+        "properties": {
+          "Filial": {
+            "description": "Descrição da filial",
+            "type": "string"
+          },
+          "Cliente": {
+            "description": "Descrição do cliente",
+            "type": "string"
+          },
+          "Produto": {
+            "description": "Descrição do produto",
+            "type": "string"
+          },
+          "UnidadeMedida": {
+            "description": "Sigla da unidade de medida",
+            "type": "string"
+          },
+          "NumeroOrdem": {
+            "description": "Número da ordem de entrada",
+            "type": "integer"
+          },
+          "NumeroPedido": {
+            "description": "Número do pedido",
+            "type": "string"
+          },
+          "NaturezaOperacao": {
+            "description": "Descrição da natureza de operação",
+            "type": "string"
+          },
+          "ClienteFaturamento": {
+            "description": "Descrição do cliente de faturamento",
+            "type": "string"
+          },
+          "Deposito": {
+            "description": "Descrição do depósito",
+            "type": "string"
+          },
+          "Endereco": {
+            "description": "Descrição do endereço",
+            "type": "string"
+          },
+          "Unitizacao": {
+            "description": "Número da unitização",
+            "type": "integer"
+          },
+          "Volume": {
+            "description": "Número do volume",
+            "type": "integer"
+          },
+          "NumeroOcorrencia": {
+            "description": "Número da ocorrência",
+            "type": "integer"
+          },
+          "NumeroDocumento": {
+            "description": "Número do documento",
+            "type": "integer"
+          },
+          "NumeroDescarga": {
+            "description": "Número da descarga",
+            "type": "integer"
+          },
+          "Lote": {
+            "description": "Lote de entrada da mercadoria",
+            "type": "string"
+          },
+          "NumeroSerie": {
+            "description": "Numero de série do lote de entrada",
+            "type": "string"
+          },
+          "Fabricacao": {
+            "description": "Fabricação do lote de entrada (dd/mm/yyyy)",
+            "type": "string",
+            "example": "06/12/1990"
+          },
+          "Validade": {
+            "description": "Validade do lote de entrada (dd/mm/yyyy)",
+            "type": "string",
+            "example": "06/12/1990"
+          },
+          "Conteiner": {
+            "description": "Conteiner de entrada",
+            "type": "string"
+          },
+          "SaldoDisponivel": {
+            "$ref": "#/components/schemas/CamposQuantidadeEstoqueMercadoriaPadrao"
+          },
+          "SaldoReservado": {
+            "$ref": "#/components/schemas/CamposQuantidadeEstoqueMercadoriaPadrao"
+          },
+          "SaldoBloqueado": {
+            "$ref": "#/components/schemas/CamposQuantidadeEstoqueMercadoriaPadrao"
+          },
+          "SaldoAtual": {
+            "$ref": "#/components/schemas/CamposQuantidadeEstoqueMercadoriaPadrao"
+          }
+        }
+      },
+      "CamposQuantidadeEstoqueMercadoriaPadrao": {
+        "type": "object",
+        "properties": {
+          "Quantidade": {
+            "description": "Quantidade",
+            "type": "number",
+            "multipleOf": 0.0001
+          },
+          "PesoBruto": {
+            "description": "Peso Bruto",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "PesoLiquido": {
+            "description": "Peso Líquido",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "Valor": {
+            "description": "Valor",
+            "type": "number",
+            "multipleOf": 0.01,
+            "example": 10
+          },
+          "Volume": {
+            "description": "Volume",
+            "type": "integer",
+            "example": 10
+          }
+        }
+      },
+      "RemoverPedidoFila": {
+        "description": "Remove o pedido da fila",
+        "type": "array",
+        "items": {
+          "properties": {
+            "NumeroPedido": {
+              "description": "Número do pedido",
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "ListaPessoa": {
+        "description": "Listagem de pessoas",
+        "type": "object",
+        "properties": {
+          "Pessoa": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PessoaPost"
+            }
+          }
+        }
+      },
+      "PessoaPost": {
+        "type": "object"
+      },
+      "ListaProduto": {
+        "description": "Listagem de produtos",
+        "type": "object",
+        "properties": {
+          "Item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MaterialSuprimentoProdutoPost"
+            }
+          }
+        }
+      },
+      "MaterialSuprimentoProdutoPut": {
+        "type": "object",
+        "properties": {
+          "Nome": {
+            "description": "Nome",
+            "type": "string"
+          },
+          "Unidade": {
+            "description": "Sigla da unidade de medida - Conforme tabela de unidades de medida",
+            "type": "string"
+          },
+          "Familia": {
+            "description": "Conforme tabela de familias do produto",
+            "type": "integer"
+          },
+          "Grupo": {
+            "description": "Conforme tabela de grupos do produto",
+            "type": "integer"
+          },
+          "CodigoAuxiliar": {
+            "description": "Código auxiliar do produto",
+            "type": "string"
+          },
+          "CentroCusto": {
+            "description": "Centro de custo a qual o produto está vinculado - conforme tabela de centros de custo",
+            "type": "integer"
+          },
+          "UnidadeNegocio": {
+            "description": "Unidade de negócio a qual o produto está vinculado - conforme tabela de unidades de negócio",
+            "type": "integer"
+          },
+          "Projeto": {
+            "description": "Projeto a qual o produto está vinculado - conforme tabela de projetos",
+            "type": "integer"
+          },
+          "KitPacote": {
+            "description": "Indica se o produto é parte de um kit/pacote",
+            "type": "string",
+            "example": "S"
+          },
+          "Observacao": {
+            "description": "Observação",
+            "type": "string"
+          },
+          "Produto": {
+            "$ref": "#/components/schemas/MaterialSuprimentoDadosProdutoPost"
+          },
+          "Servico": {
+            "$ref": "#/components/schemas/MaterialSuprimentoDadosServicoPost"
+          },
+          "InformacaoComplementar": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MaterialSuprimentoDadosComplementoPost"
+            }
+          }
+        }
+      },
+      "MaterialSuprimentoProdutoPost": {
+        "type": "object",
+        "required": [
+          "Nome",
+          "Unidade",
+          "Tipo",
+          "Familia",
+          "TipoIdentificador"
+        ],
+        "properties": {
+          "Nome": {
+            "description": "Nome",
+            "type": "string"
+          },
+          "Codigo": {
+            "description": "Código",
+            "type": "integer"
+          },
+          "CodigoReferencia": {
+            "description": "Codigo de referência do produto",
+            "type": "string"
+          },
+          "Unidade": {
+            "description": "Sigla da unidade de medida - Conforme tabela de unidades de medida",
+            "type": "string"
+          },
+          "Tipo": {
+            "description": "Tipo do produto\n\n1 -  Produto<br>\n2  - Serviço<br>\n3  - Produto de terceiro<br>\n",
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3
+            ]
+          },
+          "Familia": {
+            "description": "Conforme tabela de familias do produto",
+            "type": "integer"
+          },
+          "Grupo": {
+            "description": "Conforme tabela de grupos do produto",
+            "type": "integer"
+          },
+          "TipoIdentificador": {
+            "description": "Conforme tabela de tipos de identificador",
+            "type": "integer"
+          },
+          "CodigoAuxiliar": {
+            "description": "Código auxiliar do produto",
+            "type": "string"
+          },
+          "CentroCusto": {
+            "description": "Centro de custo a qual o produto está vinculado - conforme tabela de centros de custo",
+            "type": "integer"
+          },
+          "UnidadeNegocio": {
+            "description": "Unidade de negócio a qual o produto está vinculado - conforme tabela de unidades de negócio",
+            "type": "integer"
+          },
+          "Projeto": {
+            "description": "Projeto a qual o produto está vinculado - conforme tabela de projetos",
+            "type": "integer"
+          },
+          "KitPacote": {
+            "description": "Indica se o produto é parte de um kit/pacote",
+            "type": "string",
+            "example": "S"
+          },
+          "Observacao": {
+            "description": "Observação",
+            "type": "string"
+          },
+          "Produto": {
+            "$ref": "#/components/schemas/MaterialSuprimentoDadosProdutoPost"
+          },
+          "Servico": {
+            "$ref": "#/components/schemas/MaterialSuprimentoDadosServicoPost"
+          },
+          "InformacaoComplementar": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MaterialSuprimentoDadosComplementoPost"
+            }
+          }
+        }
+      },
+      "MaterialSuprimentoDadosServicoPost": {
+        "type": "object",
+        "description": "Somente informar estes dados quando for item do tipo serviço",
+        "required": [
+          "TipoServico"
+        ],
+        "properties": {
+          "TipoServico": {
+            "description": "Tipo do serviço - conforme tabela de tipos de serviço",
+            "type": "integer"
+          }
+        }
+      },
+      "MaterialSuprimentoDadosProdutoPost": {
+        "type": "object",
+        "description": "Somente informar estes dados quando for item do tipo produto ou produto de terceiro",
+        "properties": {
+          "Cliente": {
+            "description": "CNPJ do cliente sem caracteres especiais",
+            "type": "integer"
+          },
+          "Origem": {
+            "description": "Origem do produto \n\n1 - Nacional<br>\n2 - Estrangeira - Importacao Direta<br>\n3 - Estrangeira - Adquirida no Mercado Interno<br>\n4 - Nacional (Superior a 40%)<br>\n5 - Nacional (Zona Franca Manaus)<br>\n6 - Nacional (Inferior a 40%)<br>\n7 - Estrangeira - Importacao direta (Camex)<br>\n8 - Estrangeira - Adquirida no mercado interno (Camex)<br>\n9 - Nacional (Superior a 70%)<br>\n",
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9
+            ]
+          },
+          "CEST": {
+            "description": "Código especificador da substituição tributária - conforme tabela de CEST",
+            "type": "integer"
+          },
+          "NCM": {
+            "description": "NCM - conforme tabela de NCM",
+            "type": "integer"
+          },
+          "CodigoANP": {
+            "description": "Código de produto da ANP - conforme tabela de ANP",
+            "type": "integer"
+          },
+          "ProdutoPerigoso": {
+            "description": "Produto perigoso - conforme tabela de tipos de produto perigoso",
+            "type": "integer"
+          },
+          "NaturezaMercadoria": {
+            "description": "Natureza da mercadoria - conforme tabela de naturezas de mercadoria",
+            "type": "integer"
+          },
+          "Marca": {
+            "description": "Marca do produto - conforme tabela de marcas",
+            "type": "integer"
+          },
+          "GrupoRotulagem": {
+            "description": "Grupo de rotulagem - conforme tabela de grupos de rotulagem",
+            "type": "integer"
+          },
+          "CurvaABC": {
+            "description": "Curva ABC\n\n1 - A<br>\n2 - B<br>\n3 - C<br>\n",
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3
+            ]
+          },
+          "UnidadeVolume": {
+            "description": "Sigla da unidade de volume - Conforme tabela de unidades de medida",
+            "type": "string"
+          },
+          "UnidadeEstoque": {
+            "description": "Sigla da unidade de estoque - Conforme tabela de unidades de medida",
+            "type": "string"
+          },
+          "Altura": {
+            "description": "Altura",
+            "type": "number",
+            "multipleOf": 0.001,
+            "example": 1
+          },
+          "Largura": {
+            "description": "Largura",
+            "type": "number",
+            "multipleOf": 0.001,
+            "example": 1
+          },
+          "Comprimento": {
+            "description": "Comprimento",
+            "type": "number",
+            "multipleOf": 0.001,
+            "example": 1
+          },
+          "M2": {
+            "description": "Dimensão do produto em metros quadrados",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 1
+          },
+          "M3": {
+            "description": "Dimensão do produto em metros cúbicos",
+            "type": "number",
+            "multipleOf": 1e-10,
+            "example": 1
+          },
+          "PesoLiquidoKG": {
+            "description": "Peso líquido em KG",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "PesoBrutoKG": {
+            "description": "Peso bruto em KG",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 1.0001
+          },
+          "TaraKG": {
+            "description": "Tara em KG",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 1.0001
+          },
+          "Fabricante": {
+            "description": "CNPJ do fabricante sem caracteres especiais",
+            "type": "integer"
+          },
+          "Proprio": {
+            "$ref": "#/components/schemas/MaterialSuprimentoDadosProdutoProprioPost"
+          },
+          "Armazenagem": {
+            "$ref": "#/components/schemas/MaterialSuprimentoDadosProdutoArmazemPost"
+          },
+          "CodigoBarra": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MaterialSuprimentoDadosProdutoCodigoBarraPost"
+            }
+          },
+          "FatorConversao": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MaterialSuprimentoDadosProdutoFatorConversaoPost"
+            }
+          }
+        }
+      },
+      "MaterialSuprimentoDadosProdutoProprioPost": {
+        "description": "Somente informar estes dados quando for um item do tipo produto",
+        "type": "object",
+        "properties": {
+          "TipoReposicaoEstoque": {
+            "description": "Tipo de reposição no estoque - conforme tabela de tipos de reposição no estoque",
+            "type": "integer"
+          },
+          "RoteiroProducao": {
+            "description": "Roteiro de produção - conforme tabela de roteiros de produção",
+            "type": "integer"
+          },
+          "EstoqueMinimo": {
+            "description": "Estoque mínimo",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "EstoqueMaximo": {
+            "description": "Estoque máximo",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "EstoqueSeguranca": {
+            "description": "Estoque de segurança",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "PontoReposicao": {
+            "description": "Ponto de reposição",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "LoteReposicao": {
+            "description": "Lote de reposição",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          },
+          "TempoReposicao": {
+            "description": "Tempo de reposição",
+            "type": "integer"
+          }
+        }
+      },
+      "MaterialSuprimentoDadosProdutoArmazemPost": {
+        "description": "Somente informar estes dados quando for um item do tipo produto de terceiro",
+        "type": "object",
+        "properties": {
+          "NaoPermiteMovimentarQuantidadeVolumeFracionada": {
+            "description": "Indica que não pode ser feita a separação de volume fracionado",
+            "type": "string",
+            "example": "S"
+          },
+          "GerarProgramacaoSaidaAutomaticamente": {
+            "description": "Indica que a programação de saída é gerada automaticamente",
+            "type": "string",
+            "example": "S"
+          },
+          "CancelarSaldosInsuficientesProgramacaoSaida": {
+            "description": "Indica que ao separar a quantidade da programação, caso tenha quantidade insuficiente, o saldo faltante será cancelado automaticamente",
+            "type": "string",
+            "example": "S"
+          },
+          "EfetuarSeparacaoMercadoriasApenasPeloPicking": {
+            "description": "Indica que a separação da mercadoria pode ser efetuada apenas pelos endereços de picking",
+            "type": "string",
+            "example": "S"
+          },
+          "EfetuarLeituraLoteSepararMercadoria": {
+            "description": "Indica que deve ser efetuada a leitura em lote no processo de separação de mercadoria",
+            "type": "string",
+            "example": "S"
+          },
+          "NaoPermiteSepararAutomaticamenteValidadeVencida": {
+            "description": "Indica que não irá sugerir mercadorias vencidas quando o metódo de seleção for automático",
+            "type": "string",
+            "example": "S"
+          },
+          "PermiteSepararQuantidadeDiferenteQuantidadeProgramada": {
+            "description": "Indica que poderá separar uma quantidade diferente da programada",
+            "type": "string",
+            "example": "S"
+          },
+          "NaoPermitirEfetuarTrocaReservaPicking": {
+            "description": "Indica que não poderá ser feita a troca da mercadoria que foi reservada no picking",
+            "type": "string",
+            "example": "S"
+          },
+          "GerarEmbalagensAutomaticamenteSepararMercadoria": {
+            "description": "Indica que as embalagens das mercadorias serão geradas automaticamente após a confirmação da separação",
+            "type": "string",
+            "example": "S"
+          },
+          "GerarUnicaEmbalagemUnitizadorSepararPulmao": {
+            "description": "Indica que ao separar um unitizador do pulmão, toda a mercadoria dele será embalada em uma mesma embalagem",
+            "type": "string",
+            "example": "S"
+          },
+          "EmbalarMercadoriasLotesDiferentes": {
+            "description": "Permite embalar produtos de lotes diferentes em uma mesma embalagem",
+            "type": "string",
+            "example": "S"
+          },
+          "EmbalarMercadoriasValidadesDiferentes": {
+            "description": "Permite embalar produtos de validades diferentes em uma mesma embalagem",
+            "type": "string",
+            "example": "S"
+          },
+          "EmbalarMercadoriasProdutosDiferentes": {
+            "description": "Permite embalar produtos diferentes em uma mesma embalagem",
+            "type": "string",
+            "example": "S"
+          },
+          "SomenteGerarEmbalagensCompletas": {
+            "description": "Indica que somente serão geradas embalagens que completarem a norma de embalagem",
+            "type": "string",
+            "example": "S"
+          },
+          "GerarEmbalagensPorVolume": {
+            "description": "Indica que será gerada uma embalagem por volume",
+            "type": "string",
+            "example": "S"
+          },
+          "PossuiCodigoBarrasComposto": {
+            "description": "Indica que o produto possui código de barras composto",
+            "type": "string",
+            "example": "S"
+          },
+          "PesoVariavel": {
+            "description": "Indica que o produto possui peso variável no recebimento da mercadoria",
+            "type": "string",
+            "example": "S"
+          },
+          "NormaUnitizacaoVariavel": {
+            "description": "Indica que o produto possui norma de unitização variável no recebimento da mercadoria",
+            "type": "string",
+            "example": "S"
+          },
+          "NormaVolumeVariavel": {
+            "description": "Indica que o produto possui norma de volume variável no recebimento da mercadoria",
+            "type": "string",
+            "example": "S"
+          },
+          "QuantidadeEstoqueVariavel": {
+            "description": "Indica que o produto possui quantidade de estoque variável no recebimento da mercadoria",
+            "type": "string",
+            "example": "S"
+          },
+          "QuantidadeVolumeVariavel": {
+            "description": "Indica que o produto possui quantidade de volume variável no recebimento da mercadoria",
+            "type": "string",
+            "example": "S"
+          },
+          "UtilizarFatorConversaoCadastradoVolumeVariavel": {
+            "description": "Indica que será utilizado o fator de conversão quando o produto possuir volume variável",
+            "type": "string",
+            "example": "S"
+          },
+          "UtilizaControleLote": {
+            "description": "Indica que o produto controla lote",
+            "type": "string",
+            "example": "S"
+          },
+          "UtilizaControleDescarga": {
+            "description": "Indica que o produto controla carga e descarga",
+            "type": "string",
+            "example": "S"
+          },
+          "UtilizaControleNumeroSerie": {
+            "description": "Indica que o produto controla número de série",
+            "type": "string",
+            "example": "S"
+          },
+          "UtilizaControleReferenciaLote": {
+            "description": "Indica que o produto controla referência de lote",
+            "type": "string",
+            "example": "S"
+          },
+          "UtilizaControleFabricacaoValidade": {
+            "description": "Indica que o produto controla data de fabricação e data de validade",
+            "type": "string",
+            "example": "S"
+          },
+          "UtilizaControlePicking": {
+            "description": "Indica que o produto utiliza controle de picking na separação de mercadorias",
+            "type": "string",
+            "example": "S"
+          },
+          "UtilizaControlePrePickingRessuprirPulmao": {
+            "description": "Indica que o produto utiliza controle de pré-picking ao ressuprir o pulmão",
+            "type": "string",
+            "example": "S"
+          },
+          "UtilizaControleUnitizacaoVolume": {
+            "description": "Indica que o produto efetua controle de unitização de volume",
+            "type": "string",
+            "example": "S"
+          },
+          "Recebimento": {
+            "type": "object",
+            "properties": {
+              "GrupoEtiquetagemRecebimento": {
+                "description": "Grupo de etiquetagem utilizado no recebimento da mercadoria - conforme tabela de grupos de etiquetagem",
+                "type": "integer"
+              },
+              "TipoCarga": {
+                "description": "Tipo da carga\n",
+                "type": "integer"
+              },
+              "TipoUnitizador": {
+                "description": "Tipo de unitizador - conforme tabela de tipos de unitizador",
+                "type": "integer"
+              },
+              "NormaUnitizacao": {
+                "description": "Norma de unitização - conforme tabela de normas de unitização",
+                "type": "integer"
+              },
+              "ItemFiscal": {
+                "description": "ID do item fiscal vinculado ao produto",
+                "type": "integer"
+              },
+              "TipoVolume": {
+                "description": "aaaaaa",
+                "type": "integer"
+              },
+              "NormaVolume": {
+                "description": "aaaaaa",
+                "type": "integer"
+              },
+              "ConfiguracaoRelatorio": {
+                "description": "aaaaaa",
+                "type": "integer"
+              },
+              "FormatoCodigoBarras": {
+                "description": "Formato do código de barras\n\n1 - Codigo de barras simples<br>;\n2 - Codigo de referencia do item +lote<br>;\n3 - Codigo referencia do item + quantidade + lote<br>;\n",
+                "type": "integer",
+                "enum": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "GerarUnitizacaoVolumeAutomaticamenteLiberarLote": {
+                "description": "Indica que a unitização de volume será gerada automaticamente ao liberar o lote",
+                "type": "string",
+                "example": "S"
+              },
+              "GerarLoteEntradaPelaQuantidadeIndividual": {
+                "description": "Indica que os lotes serão gerados conforme a quantidade individual",
+                "type": "string",
+                "example": "S"
+              },
+              "GerarLoteEntradaPelaQuantidadeVolume": {
+                "description": "Indica que os lotes serão gerados conforme a quantidade de volumes",
+                "type": "string",
+                "example": "S"
+              },
+              "PermiteIncluirProdutosDiferentesMesmoUnitizador": {
+                "description": "Indica que produtos diferentes podem ser colocados em um mesmo unitizador",
+                "type": "string",
+                "example": "S"
+              },
+              "PermiteIncluirLotesDiferentesMesmoUnitizador": {
+                "description": "Indica que produtos de lotes diferentes podem ser colocados em uma mesmo unitizador",
+                "type": "string",
+                "example": "S"
+              },
+              "PermiteIncluirValidadesDiferentesMesmoUnitizador": {
+                "description": "Indica que produtos de validades diferentes podem ser colocados em um mesmo unitizador",
+                "type": "string",
+                "example": "S"
+              },
+              "EfetuarConferenciaRecebimento": {
+                "description": "Indica que o produto exige conferência no recebimento de mercadoria",
+                "type": "string",
+                "example": "S"
+              },
+              "EfetuarSegundaConferenciaCasoDivergencia": {
+                "description": "Indica que o produto exige segunda conferência no recebimento de mercadoria caso haja divergência",
+                "type": "string",
+                "example": "S"
+              },
+              "EfetuarRetencaoAmostra": {
+                "description": "Indica que o produto efetua retenção de amostra no recebimento de mercadoria",
+                "type": "string",
+                "example": "S"
+              },
+              "EfetuarAnaliseQuarentenaQualidade": {
+                "description": "Indica que o produto efetua análise de quarentena no recebimento de mercadoria",
+                "type": "string",
+                "example": "S"
+              }
+            }
+          },
+          "Expedicao": {
+            "type": "object",
+            "required": [
+              "TipoExpedicao"
+            ],
+            "properties": {
+              "GrupoEtiquetagemExpedicao": {
+                "description": "Grupo de etiquetagem utilizado na expedição da mercadoria - conforme tabela de grupos de etiquetagem",
+                "type": "integer"
+              },
+              "TipoExpedicao": {
+                "description": "Tipo da expedição\n\n1 - Embalada<br>\n2 - Sem Embalagem<br>\n",
+                "type": "integer",
+                "enum": [
+                  1,
+                  2
+                ]
+              },
+              "TipoEmbalagem": {
+                "description": "Tipo de embalagem - conforme tabela de tipos de embalagem",
+                "type": "integer"
+              },
+              "NormaEmbalagem": {
+                "description": "Norma de embalagem - conforme tabela de normas de embalagem",
+                "type": "integer"
+              },
+              "GrupoMetodoSeparacao": {
+                "description": "Grupo de método de separação - conforme tabela de métodos de separação",
+                "type": "integer"
+              },
+              "GrupoMetodoRessuprimento": {
+                "description": "Grupo de método de resusprimento - conforme tabela de métodos de resusprimento",
+                "type": "integer"
+              },
+              "FormaRessuprimento": {
+                "description": "Forma de ressuprimento\n\n1 - Endereco vago<br>\n2 - Quantidade maxima<br>\n3 - Quantidade solicitada (pre-picking)<br>\n4 - Quantidade solicitada (picking)<br>\n",
+                "type": "integer",
+                "enum": [
+                  1,
+                  2,
+                  3,
+                  4
+                ]
+              },
+              "PickingMinimo": {
+                "description": "Picking mínimo",
+                "type": "number",
+                "multipleOf": 0.0001,
+                "example": 10
+              },
+              "PickingMaximo": {
+                "description": "Picking máximo",
+                "type": "number",
+                "multipleOf": 0.0001,
+                "example": 10
+              },
+              "AmostragemMinima": {
+                "description": "Amostragem mínima",
+                "type": "number",
+                "multipleOf": 0.0001,
+                "example": 10
+              },
+              "QuantidadeEnderecoPicking": {
+                "description": "Quantidade de endereços de picking",
+                "type": "integer"
+              },
+              "RessuprirMultiplos": {
+                "description": "Ressuprimento múltiplo",
+                "type": "integer"
+              }
+            }
+          },
+          "ColetorDados": {
+            "type": "object",
+            "properties": {
+              "LeituraIndividualSeparacaoPeloColetor": {
+                "description": "Indica que a leitura pelo coletor de dados durante a separação das mercadorias deve ser feita individualmente",
+                "type": "string",
+                "example": "S"
+              },
+              "LeituraIndividualEmbalagemPeloColetor": {
+                "description": "Indica que a leitura pelo coletor de dados durante a embalagem das mercadorias deve ser feita individualmente",
+                "type": "string",
+                "example": "S"
+              },
+              "LeituraIndividualRecebimentoPeloColetor": {
+                "description": "Indica que a leitura pelo coletor de dados durante o recebimento das mercadorias deve ser feita individualmente",
+                "type": "string",
+                "example": "S"
+              },
+              "LeituraIndividualInventarioPorEnderecoPeloColetor": {
+                "description": "Indica que a leitura pelo coletor de dados durante o inventário por endereço deve ser feita individualmente",
+                "type": "string",
+                "example": "S"
+              },
+              "EfetuaConferenciaComLeituraParcial": {
+                "description": "Indica que na conferência do recebimento pode ser feita a leiura parcial das quantidades",
+                "type": "string",
+                "example": "S"
+              },
+              "ObrigatorioConfirmarNumeroSerieEnderecamentoPeloColetor": {
+                "description": "Indica que é obrigatório efetuar a confirmação por número de série no coletor de dados",
+                "type": "string",
+                "example": "S"
+              },
+              "ObrigatorioInformarQuantidadeSeparacaoPeloColetor": {
+                "description": "Indica que é obrigatório informar a quantidade ao efetuar a separação pelo coletor de dados",
+                "type": "string",
+                "example": "S"
+              },
+              "ObrigatorioInformarCodigoBarrasSeparacaoPeloColetor": {
+                "description": "Indica que é obrigatório informar o código de barras na separação pelo coletor de dados",
+                "type": "string",
+                "example": "S"
+              }
+            }
+          }
+        }
+      },
+      "MaterialSuprimentoDadosProdutoCodigoBarraPost": {
+        "type": "object",
+        "required": [
+          "Un",
+          "Tipo",
+          "CodigoBarras"
+        ],
+        "properties": {
+          "Un": {
+            "description": "Sigla da unidade de medida relacionada ao código de barras - conforme tabela de unidades de medida",
+            "type": "string"
+          },
+          "Tipo": {
+            "description": "Tipo do código de barras - conforme tabela de tipos de código de barras",
+            "type": "integer"
+          },
+          "GrupoRotulagem": {
+            "description": "Grupo de rotulagem - conforme tabela de grupos de rotulagem",
+            "type": "integer"
+          },
+          "CodigoBarras": {
+            "description": "Código de barras",
+            "type": "string"
+          }
+        }
+      },
+      "MaterialSuprimentoDadosProdutoFatorConversaoPost": {
+        "type": "object",
+        "required": [
+          "De",
+          "Para",
+          "Operacao",
+          "Quantidade"
+        ],
+        "properties": {
+          "De": {
+            "description": "Sigla da unidade de medida de origem - conforme tabela de unidades de medida",
+            "type": "string"
+          },
+          "Para": {
+            "description": "Sigla da unidade de medida de destino - conforme tabela de unidades de medida",
+            "type": "string"
+          },
+          "Operacao": {
+            "description": "Operação de conversão\n\n1 - Multiplicação<br>\n2 - Divisão<br>\n",
+            "type": "integer"
+          },
+          "Quantidade": {
+            "description": "Quantidade usada para conversão",
+            "type": "number",
+            "multipleOf": 0.0001,
+            "example": 10
+          }
+        }
+      },
+      "MaterialSuprimentoDadosComplementoPost": {
+        "type": "object",
+        "required": [
+          "Tipo"
+        ],
+        "properties": {
+          "Tipo": {
+            "description": "Tipo do campo complementar - conforme tabela de tipos de campo complementar",
+            "type": "integer"
+          },
+          "Conteudo": {
+            "description": "Conteúdo do campo - informar somente quando o tipo do campo complementar for texto",
+            "type": "string"
+          },
+          "Valor": {
+            "description": "Valor do campo - informar somente quando o tipo do campo complementar for numérico",
+            "type": "number"
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "PostOrdemArmazenagem": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Ordem de Armazenagem",
+              "title": "Nova Ordem de Armazenagem",
+              "type": "object",
+              "properties": {
+                "Lista": {
+                  "$ref": "#/components/schemas/Lista"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PutOrdemArmazenagem": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Ordem de Armazenagem",
+              "title": "Alterar Ordem de Armazenagem",
+              "type": "object",
+              "properties": {
+                "Ordem": {
+                  "$ref": "#/components/schemas/OrdemPut"
+                }
+              }
+            }
+          }
+        }
+      },
+      "DeleteOrdemArmazenagem": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Ordem",
+              "title": "Cancelar ordem",
+              "type": "object",
+              "required": [
+                "Motivo"
+              ],
+              "properties": {
+                "Motivo": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostItemOrdemArmazenagem": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Item da ordem de Armazenagem",
+              "title": "Novo item da ardem de Armazenagem",
+              "type": "object",
+              "properties": {
+                "Lista": {
+                  "$ref": "#/components/schemas/ListaItem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostItemLoteOrdemArmazenagem": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Item lote da ordem de Armazenagem",
+              "title": "Novo item lote da ardem de Armazenagem",
+              "type": "object",
+              "properties": {
+                "Lista": {
+                  "$ref": "#/components/schemas/ListaItemLote"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostProgramacaoOrdemArmazenagem": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Programação da ordem de Armazenagem",
+              "title": "Nova programação da ardem de Armazenagem",
+              "type": "object",
+              "properties": {
+                "Lista": {
+                  "$ref": "#/components/schemas/ListaProgramacao"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostAdicionarQuantidadeProgramacaoOrdemArmazenagem": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Adicionar quantidade na programação da ordem de Armazenagem",
+              "title": "Adicionar quantidade na programação da ordem de Armazenagem",
+              "type": "object",
+              "properties": {
+                "AdicionarQuantidade": {
+                  "$ref": "#/components/schemas/AdicionarQuantidadeProgramacao"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostCancelarQuantidadeProgramacaoOrdemArmazenagem": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Cancelar quantidade na programação da ordem de Armazenagem",
+              "title": "Cancelar quantidade na programação da ordem de Armazenagem",
+              "type": "object",
+              "properties": {
+                "CancelarQuantidade": {
+                  "$ref": "#/components/schemas/CancelarQuantidadeProgramacao"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostAtrelarOrdemArmazenagem": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Atrelar ordem de Armazenagem",
+              "title": "Atrela a ordem de armazenagem com outra ordem. Utilizado para casos onde os pedidos tenham dependência",
+              "type": "object",
+              "properties": {
+                "AtrelarOrdem": {
+                  "$ref": "#/components/schemas/AtrelarOrdemArmazenagem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostRemoverPedidoFila": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Remover pedido da fila",
+              "title": "Remove o pedido da fila de pedidos pendentes",
+              "type": "object",
+              "properties": {
+                "Pedidos": {
+                  "$ref": "#/components/schemas/RemoverPedidoFila"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostPessoa": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Pessoa",
+              "title": "Nova Pessoa",
+              "type": "object",
+              "properties": {
+                "Lista": {
+                  "$ref": "#/components/schemas/ListaPessoa"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostProduto": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Produto",
+              "title": "Novo produto",
+              "type": "object",
+              "properties": {
+                "Lista": {
+                  "$ref": "#/components/schemas/ListaProduto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "DeleteProduto": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Produto",
+              "title": "Cancelar produto",
+              "type": "object",
+              "required": [
+                "Motivo"
+              ],
+              "properties": {
+                "Motivo": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PutProduto": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Produto",
+              "title": "Alterar produto",
+              "type": "object",
+              "properties": {
+                "Item": {
+                  "$ref": "#/components/schemas/MaterialSuprimentoProdutoPut"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
