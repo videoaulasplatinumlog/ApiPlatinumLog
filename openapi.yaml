@@ -8,10 +8,7 @@ info:
     url: "http://wiki.tpl.com.br/images/thumb/c/c9/Logo.png/1050px-Logo.png"
 
 servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/PlatinumLog/Api-Documentation/v1.0.0
-    
+  # Added by API Auto Mocking Plugin  
   - description: Servidor Web service do ambiente de produção
     url: http://api.tpl.com.br:9909/platinumlog
 
@@ -37,8 +34,7 @@ paths:
       tags:
         - Segurança
       summary: Gerar novo token
-      description: BASIC, deve ser enviado no cabeçalho da requisição o usuário e a senha gerados pela Platinum Log. O token grerado e que permite o consumo da API Webservice possui validade de 24 horas.
-      
+      description: BASIC, deve ser enviado no cabeçalho da requisição o usuário e a senha gerados pela Platinum Log. O token gerado possui validade de 24 horas.
       operationId: gettoken
       requestBody:
         $ref: "#/components/requestBodies/gettoken"
