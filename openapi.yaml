@@ -782,16 +782,17 @@ components:
       type: object
       properties:
         Retorno:
-          type: object
-          properties:
-            codigo: 
-              description: Lista de informações do retorno
-              type: string
-              example: '200'
-            token: 
-              description: Lista de informações do retorno
-              type: string
-              example: YYko8uSVoyF9tGtan+o75AponwE=
+          type: array
+          items:
+            properties:
+              codigo: 
+                description: Código de situação de retorno
+                type: string
+                example: '200'
+              token: 
+                description: Token gerado
+                type: string
+                example: YYko8uSVoyF9tGtan+o75AponwE=
   
 
     
