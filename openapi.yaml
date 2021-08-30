@@ -6,10 +6,9 @@ info:
   x-logo:
     url: http://wiki.tpl.com.br/images/thumb/c/c9/Logo.png/1050px-Logo.png
 servers:
-- url: https://virtserver.swaggerhub.com/PlatinumLog/Api-Documentation/v1.0.0
-  description: SwaggerHub API Auto Mocking
-- url: https://api.example1.com
-  description: New Server 1
+- url: http://api.tpl.com.br:9909/platinumlog/
+  description: Servidor Web Service do ambiente de produção
+
 security:
 - BearerAuth: []
 tags:
