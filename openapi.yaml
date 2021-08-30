@@ -37,8 +37,7 @@ paths:
       tags:
         - SEGURANÇA
       summary: Gerar novo token
-      description: BASIC, deve ser enviado no cabeçalho da requisição o usuário e a senha gerados pela Platinum Log. O token grerado e que permite o consumo da API Webservice 
-     possui validade de 24 horas.
+      description: BASIC, deve ser enviado no cabeçalho da requisição o usuário e a senha gerados pela Platinum Log. O token grerado e que permite o consumo da API Webservice possui validade de 24 horas.
       
       operationId: gettoken
       requestBody:
@@ -735,7 +734,6 @@ components:
       scheme: basic
       description: |
         A autenticação inicial com as APIs REST da Escalasoft deve ser realizada por uma requisição GET utilizando Basic Auth.
-
         Para autenticar, você deve informar o usuário e senha fornecidos pelo cliente.
         
         Esta requisição irá retornar um token que deverá ser utilizado para autenticação nas demais rotas. 
@@ -747,11 +745,9 @@ components:
       scheme: bearer
       description: |
         A autenticação com as APIs REST da Escalasoft deve ser realizadas por token utilizando Bearer Token.
-
         Para autenticar, você deve utilizar o token recebido na rota de Login e adicioná-lo no header da requisição. 
         
         O header de autenticação deve ser enviado para todos os endpoints disponíveis na API.
-
   schemas:
   
       #### ERRO ####
@@ -2862,7 +2858,6 @@ components:
             7 - Estrangeira - Importacao direta (Camex)<br>
             8 - Estrangeira - Adquirida no mercado interno (Camex)<br>
             9 - Nacional (Superior a 70%)<br>
-
           type: integer
           enum:
             - 1
@@ -2910,7 +2905,6 @@ components:
             1 - A<br>
             2 - B<br>
             3 - C<br>
-
           type: integer
           enum:
             - 1
@@ -3230,7 +3224,6 @@ components:
                 1 - Codigo de barras simples<br>;
                 2 - Codigo de referencia do item +lote<br>;
                 3 - Codigo referencia do item + quantidade + lote<br>;
-
               type: integer
               enum:
                 - 1
@@ -3460,8 +3453,8 @@ components:
       content:
         application/json:
           schema:
-              Lista:
-                $ref: "#/components/schemas/gettoken"
+            description: Novo Token
+            title: Novo Token
 
 
     #### POST ORDEM ####  
