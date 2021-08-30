@@ -2,10 +2,10 @@ openapi: "3.0.0"
 
 info:
   version: v1.0.0
-  title: API de Integração Escalasoft
+  title: API de Integração PlatinumLog
 
   x-logo:
-    url: "http://www.escalasoft.com.br/images/logo.png"
+    url: "http://wiki.tpl.com.br/images/thumb/c/c9/Logo.png/1050px-Logo.png"
 
 servers:
   # Added by API Auto Mocking Plugin
@@ -36,8 +36,10 @@ paths:
     post:
       tags:
         - SEGURANÇA
-      summary: Gerar um novo token que permite o consumo da API Webservice (válido por 24h)
-      description: BASIC, deve ser enviado no cabeçalho da requisição o usuário e a senha gerados pela Platinum Log.
+      summary: Gerar novo token
+      description: BASIC, deve ser enviado no cabeçalho da requisição o usuário e a senha gerados pela Platinum Log. O token grerado e que permite o consumo da API Webservice 
+     possui validade de 24 horas.
+      
       operationId: gettoken
       requestBody:
         $ref: "#/components/requestBodies/gettoken"
