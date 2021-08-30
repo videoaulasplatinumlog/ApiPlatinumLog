@@ -1,3095 +1,3635 @@
----
-openapi: 3.0.0
+openapi: "3.0.0"
+
 info:
-  title: API de Integração Escalasoft
   version: v1.0.0
+  title: API de Integração Escalasoft
+
   x-logo:
-    url: http://wiki.tpl.com.br/images/thumb/c/c9/Logo.png/1050px-Logo.png
+    url: "http://www.escalasoft.com.br/images/logo.png"
+
 servers:
-- url: http://api.tpl.com.br:9909/platinumlog/
-  description: Servidor Web Service do ambiente de produção
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/PlatinumLog/Api-Documentation/v1.0.0
+    
+  - description: Servidor Web service do ambiente de produção
+    url: http://api.tpl.com.br:9909/platinumlog
 
 security:
-- BearerAuth: []
+  - BearerAuth: []
+
 tags:
-- name: WMS - Ordem de armazenagem
-- name: ERP - Fiscal
-- name: ERP - Materiais e suprimentos
+
+  - name: SEGURANÇA
+  - name: WMS - Ordem de armazenagem
+  - name: ERP - Fiscal
+  - name: ERP - Materiais e suprimentos  
+  
+#### ENDPOINTS ####
+
 paths:
-  /armazem/ordem/cadastrar:
+  
+  #### SEGURANÇA - GERAR TOKEN ####
+  /authorization:
+  
+    #### POST ####
     post:
       tags:
-      - WMS - Ordem de armazenagem
+        - SEGURANÇA
+      summary: Gerar um novo token que permite o consumo da API Webservice (válido por 24h)
+      description: BASIC, deve ser enviado no cabeçalho da requisição o usuário e a senha gerados pela Platinum Log.
+      operationId: gettoken
+      requestBody:
+        $ref: "#/components/requestBodies/gettoken"
+
+      responses:
+        "200":
+          description: Token cadastrado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Retornotoken"
+
+        "400":
+          description: Conteúdo inválido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+
+              example:
+                'Campo obrigatório não preenchido  O campo "Tipo" é  obrigatório. Preencha o campo para salvar o registro. Campo: TIPO'
+
+        "401":
+          description: Não autorizado (Autenticação não informada ou inválida)
+
+
+  #### ORDEM DE ARMAZENAGEM - CADASTRAR ####
+  /armazem/ordem/cadastrar:
+  
+    #### POST ####
+    post:
+      tags:
+        - WMS - Ordem de armazenagem
       summary: Criar ordem de armazenagem
       description: Cria uma ordem de armazenagem com base nos dados informados
       operationId: postOrdemArmazenagem
       requestBody:
-        $ref: '#/components/requestBodies/PostOrdemArmazenagem'
+        $ref: "#/components/requestBodies/PostOrdemArmazenagem"
+
       responses:
         "200":
           description: Ordem de armazenagem cadastrada com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetornoCadastroRegistro'
+                $ref: "#/components/schemas/RetornoCadastroRegistro"
+
         "400":
           description: Conteúdo inválido
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Erro'
-              example: 'Campo obrigatório não preenchido  O campo "Tipo" é  obrigatório. Preencha o campo para salvar o registro. Campo: TIPO'
+                $ref: "#/components/schemas/Erro"
+
+              example:
+                'Campo obrigatório não preenchido  O campo "Tipo" é  obrigatório. Preencha o campo para salvar o registro. Campo: TIPO'
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+          
+  #### ORDEM DE ARMAZENAGEM - CADASTRAR ####
   /armazem/ordem/alterar:
+  
+    #### POST ####
     post:
       tags:
-      - WMS - Ordem de armazenagem
+        - WMS - Ordem de armazenagem
       summary: Alterar ordem de armazenagem
       description: Altera a ordem de armazenagem com base nos dados informados
       operationId: putOrdemArmazenagem
-      parameters:
-      - name: idOrdem
-        in: query
-        description: Número da ordem de armazenagem
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
       requestBody:
-        $ref: '#/components/requestBodies/PutOrdemArmazenagem'
+        $ref: "#/components/requestBodies/PutOrdemArmazenagem"
+      parameters:
+
+        - name: idOrdem
+          required: true
+          in: query
+          description: Número da ordem de armazenagem
+          schema:
+            type: integer
+
       responses:
         "200":
           description: Ordem de armazenagem alterada com sucesso
+
         "400":
           description: Conteúdo inválido
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Erro'
-              example: 'Campo obrigatório não preenchido  O campo "Tipo" é  obrigatório. Preencha o campo para salvar o registro. Campo: TIPO'
+                $ref: "#/components/schemas/Erro"
+
+              example:
+                'Campo obrigatório não preenchido  O campo "Tipo" é  obrigatório. Preencha o campo para salvar o registro. Campo: TIPO'
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+  
+  #### ORDEM DE ARMAZENAGEM ####
   /armazem/ordem/cancelar:
+  
+    #### POST ####
     post:
       tags:
-      - WMS - Ordem de armazenagem
+        - WMS - Ordem de armazenagem
       summary: Cancelar ordem de armazenagem
       description: Cancela a ordem de armazenagem
       operationId: deleteOrdemArmazenagem
-      parameters:
-      - name: idOrdem
-        in: query
-        description: Número da ordem de armazenagem
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
       requestBody:
-        $ref: '#/components/requestBodies/DeleteOrdemArmazenagem'
+        $ref: "#/components/requestBodies/DeleteOrdemArmazenagem"
+      parameters:
+
+        - name: idOrdem
+          required: true
+          in: query
+          description: Número da ordem de armazenagem
+          schema:
+            type: integer
+
       responses:
         "200":
           description: Ordem de armazenagem cancelada com sucesso
+
         "400":
           description: Parâmetro(s) inválido(s)
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+  
+  #### ORDEM DE ARMAZENAGEM ####
   /armazem/ordem/consultar:
+  
+    #### GET ####
     get:
       tags:
-      - WMS - Ordem de armazenagem
+        - WMS - Ordem de armazenagem
       summary: Consultar ordem de armazenagem
       description: Retorna todas as informações da ordem de armazenagem
       operationId: getOrdemArmazenagem
       parameters:
-      - name: idOrdem
-        in: query
-        description: Número da ordem de armazenagem
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
+
+        - name: idOrdem
+          required: true
+          in: query
+          description: Número da ordem de armazenagem
+          schema:
+            type: integer
+
       responses:
         "200":
           description: Informações da ordem de armazenagem
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetornoConsultaOrdem'
+                $ref: "#/components/schemas/RetornoConsultaOrdem"
+
         "400":
           description: Parâmetro(s) inválido(s)
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+          
+  #### ITEM DA ORDEM DE ARMAZENAGEM ####
   /armazem/ordem/item/cadastrar:
+  
+    #### POST ####
     post:
       tags:
-      - WMS - Ordem de armazenagem
+        - WMS - Ordem de armazenagem
       summary: Criar item
       description: Cria um item na ordem de armazenagem com base nos dados informados
       operationId: postItemOrdemArmazenagem
       parameters:
-      - name: idOrdem
-        in: query
-        description: Número da ordem de armazenagem
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
+        - name: idOrdem
+          required: true
+          in: query
+          description: Número da ordem de armazenagem
+          schema:
+            type: integer
       requestBody:
-        $ref: '#/components/requestBodies/PostItemOrdemArmazenagem'
+        $ref: "#/components/requestBodies/PostItemOrdemArmazenagem"
+
       responses:
         "200":
           description: Item da ordem de armazenagem cadastrado com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetornoCadastroRegistro'
+                $ref: "#/components/schemas/RetornoCadastroRegistro"
+
         "400":
           description: Conteúdo inválido
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Erro'
+                $ref: "#/components/schemas/Erro"
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+          
+  #### ITEM DA ORDEM DE ARMAZENAGEM ####
   /armazem/ordem/item/cancelar:
+  
+    #### DELETE ####      
     post:
       tags:
-      - WMS - Ordem de armazenagem
+        - WMS - Ordem de armazenagem
       summary: Cancelar item
       description: Cancela a ordem de armazenagem
       operationId: deleteItemOrdemArmazenagem
       parameters:
-      - name: idItemOrdem
-        in: query
-        description: ID do item da ordem de armazenagem
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
+
+        - name: idItemOrdem
+          required: true
+          in: query
+          description: ID do item da ordem de armazenagem
+          schema:
+            type: integer
+
       responses:
         "200":
           description: Item da ordem de armazenagem cancelado com sucesso
+
         "400":
           description: Parâmetro(s) inválido(s)
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+
+  #### ITEM LOTE DA ORDEM DE ARMAZENAGEM ####
   /armazem/ordem/item/lote/cadastrar:
+  
+    #### POST ####
     post:
       tags:
-      - WMS - Ordem de armazenagem
+        - WMS - Ordem de armazenagem
       summary: Criar item lote
       description: Cria um item lote na ordem de armazenagem com base nos dados informados
       operationId: postItemLoteOrdemArmazenagem
       parameters:
-      - name: idItem
-        in: query
-        description: ID do item da ordem de armazenagem
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
+        - name: idItem
+          required: true
+          in: query
+          description: ID do item da ordem de armazenagem
+          schema:
+            type: integer
       requestBody:
-        $ref: '#/components/requestBodies/PostItemLoteOrdemArmazenagem'
+        $ref: "#/components/requestBodies/PostItemLoteOrdemArmazenagem"
+
       responses:
         "200":
           description: Item lote da ordem de armazenagem cadastrado com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetornoCadastroRegistro'
+                $ref: "#/components/schemas/RetornoCadastroRegistro"
+
         "400":
           description: Conteúdo inválido
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Erro'
+                $ref: "#/components/schemas/Erro"
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+          
+  #### ITEM LOTE DA ORDEM DE ARMAZENAGEM ####
   /armazem/ordem/item/lote/cancelar:
+
+    #### DELETE ####    
     post:
       tags:
-      - WMS - Ordem de armazenagem
+        - WMS - Ordem de armazenagem
       summary: Cancelar item lote
       description: Cancela a ordem de armazenagem
       operationId: deleteItemLoteOrdemArmazenagem
       parameters:
-      - name: id
-        in: query
-        description: ID do item lote da ordem de armazenagem
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
+
+        - name: id
+          required: true
+          in: query
+          description: ID do item lote da ordem de armazenagem
+          schema:
+            type: integer
+
       responses:
         "200":
           description: Item lote da ordem de armazenagem cancelado com sucesso
+
         "400":
           description: Parâmetro(s) inválido(s)
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+
+  #### ATRELAR ORDEM DE ARMAZENAGEM ####
   /armazem/ordem/atrelar:
+  
+    #### POST ####
     post:
       tags:
-      - WMS - Ordem de armazenagem
+        - WMS - Ordem de armazenagem
       summary: Atrelar ordens de armazenagem
       description: Atrela uma ordem a outra ordem de armazenagem
       operationId: postAtrelarOrdemArmazenagem
       parameters:
-      - name: idOrdem
-        in: query
-        description: Número da ordem de armazenagem
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
+        - name: idOrdem
+          required: true
+          in: query
+          description: Número da ordem de armazenagem
+          schema:
+            type: integer
       requestBody:
-        $ref: '#/components/requestBodies/PostAtrelarOrdemArmazenagem'
+        $ref: "#/components/requestBodies/PostAtrelarOrdemArmazenagem"
+
       responses:
         "200":
           description: Atrelamento da ordem de armazenagem efetuado com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetornoCadastroRegistro'
+                $ref: "#/components/schemas/RetornoCadastroRegistro"
+
         "400":
           description: Conteúdo inválido
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Erro'
+                $ref: "#/components/schemas/Erro"
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+          
+  #### PROGRAMACAO DA ORDEM DE ARMAZENAGEM ####
   /armazem/ordem/programacao/cadastrar:
+  
+    #### POST ####
     post:
       tags:
-      - WMS - Ordem de armazenagem
+        - WMS - Ordem de armazenagem
       summary: Criar programação
       description: Cria uma programação na ordem de armazenagem com base nos dados informados
       operationId: postProgramacaoOrdemArmazenagem
       parameters:
-      - name: idOrdem
-        in: query
-        description: Número da ordem de armazenagem
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
+        - name: idOrdem
+          required: true
+          in: query
+          description: Número da ordem de armazenagem
+          schema:
+            type: integer
       requestBody:
-        $ref: '#/components/requestBodies/PostProgramacaoOrdemArmazenagem'
+        $ref: "#/components/requestBodies/PostProgramacaoOrdemArmazenagem"
+
       responses:
         "200":
           description: Programação da ordem de armazenagem cadastrada com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetornoCadastroRegistro'
+                $ref: "#/components/schemas/RetornoCadastroRegistro"
+
         "400":
           description: Conteúdo inválido
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Erro'
+                $ref: "#/components/schemas/Erro"
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+  
+  #### ADICIONAR QUANTIDADE PROGRAMACAO ####
   /armazem/ordem/programacao/adicionarQuantidade:
+  
+    #### POST ####
     post:
       tags:
-      - WMS - Ordem de armazenagem
+        - WMS - Ordem de armazenagem
       summary: Adiciona quantidades a programação
       description: Adiciona quantidades a programação da ordem de armazenagem
       operationId: postAdicionaQuantidadeProgramacaoOrdemArmazenagem
       parameters:
-      - name: idProgramacaoOrdem
-        in: query
-        description: ID da programação da ordem de armazenagem
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
+        - name: idProgramacaoOrdem
+          required: true
+          in: query
+          description: ID da programação da ordem de armazenagem
+          schema:
+            type: integer
       requestBody:
-        $ref: '#/components/requestBodies/PostAdicionarQuantidadeProgramacaoOrdemArmazenagem'
+        $ref: "#/components/requestBodies/PostAdicionarQuantidadeProgramacaoOrdemArmazenagem"
+
       responses:
         "200":
-          description: Quantidade adicionada com sucesso na programação da ordem
+          description: Quantidade adicionada com sucesso na programação da ordem 
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetornoCadastroRegistro'
+                $ref: "#/components/schemas/RetornoCadastroRegistro"
+
         "400":
           description: Conteúdo inválido
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Erro'
+                $ref: "#/components/schemas/Erro"
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+    
+  #### CANCELAR QUANTIDADE PROGRAMACAO ####
   /armazem/ordem/programacao/cancelarQuantidade:
+  
+    #### POST ####
     post:
       tags:
-      - WMS - Ordem de armazenagem
+        - WMS - Ordem de armazenagem
       summary: Cancela quantidades da programação
       description: Cancela quantidades da programação da ordem de armazenagem
       operationId: postCancelaQuantidadeProgramacaoOrdemArmazenagem
       parameters:
-      - name: idProgramacaoOrdem
-        in: query
-        description: ID da programação ordem de armazenagem
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
+        - name: idProgramacaoOrdem
+          required: true
+          in: query
+          description: ID da programação ordem de armazenagem
+          schema:
+            type: integer
       requestBody:
-        $ref: '#/components/requestBodies/PostCancelarQuantidadeProgramacaoOrdemArmazenagem'
+        $ref: "#/components/requestBodies/PostCancelarQuantidadeProgramacaoOrdemArmazenagem"
+
       responses:
         "200":
           description: Quantidade cancelada com sucesso na programação da ordem
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetornoCadastroRegistro'
+                $ref: "#/components/schemas/RetornoCadastroRegistro"
+
         "400":
           description: Conteúdo inválido
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Erro'
+                $ref: "#/components/schemas/Erro"
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+  
+  #### PEDIDOS PENDENTES ####
   /armazem/ordem/pedidoPendente:
+    
+    #### GET ####
     get:
       tags:
-      - WMS - Ordem de armazenagem
+        - WMS - Ordem de armazenagem
       summary: Consultar pedidos pendentes
       description: Retorna todos os pedidos que estão aguardando documento fiscal e que ainda não foram recebidos pelo cliente
       operationId: getPedidoPendente
+
       responses:
         "200":
           description: Listagem dos pedidos pendentes
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetornoConsultaPedidoPendente'
+                $ref: "#/components/schemas/RetornoConsultaPedidoPendente"
+
         "400":
           description: Parâmetro(s) inválido(s)
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+          
+  #### REMOVER PEDIDO DA FILA ####
   /armazem/ordem/removerPedidoFila:
+  
+    #### POST ####
     post:
       tags:
-      - WMS - Ordem de armazenagem
+        - WMS - Ordem de armazenagem
       summary: Remover pedido pendente
       description: Remove o pedido da fila de pedidos pendentes
       operationId: postRemoverPedidoFila
       requestBody:
-        $ref: '#/components/requestBodies/PostRemoverPedidoFila'
+        $ref: "#/components/requestBodies/PostRemoverPedidoFila"
+
       responses:
         "200":
           description: Pedidos removidos com sucesso da fila de pendências
+
         "400":
           description: Conteúdo inválido
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Erro'
+                $ref: "#/components/schemas/Erro"
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+          
+  #### ESTOQUE DE MERCADORIA ####
   /armazem/estoqueMercadoria/consultar:
+    
+    #### GET ####
     get:
       tags:
-      - WMS - Ordem de armazenagem
+        - WMS - Ordem de armazenagem
       summary: Consultar estoque de mercadoria
       description: Retorna todos o estoque de mercadoria do cliente
       operationId: getEstoqueMercadoria
+
       responses:
         "200":
           description: Listagem do estoque do cliente
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetornoConsultaEstoqueMercadoria'
+                $ref: "#/components/schemas/RetornoConsultaEstoqueMercadoria"
+
         "400":
           description: Parâmetro(s) inválido(s)
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+          
+  #### PESSOA ####
   /fiscal/pessoa/cadastrar:
+  
+    #### POST ####
     post:
       tags:
-      - ERP - Fiscal
+        - ERP - Fiscal
       summary: Criar pessoa
       description: Cria uma pessoa com base nos dados informados
       operationId: postPessoa
       requestBody:
-        $ref: '#/components/requestBodies/PostPessoa'
+        $ref: "#/components/requestBodies/PostPessoa"
+
       responses:
         "200":
           description: Pessoa cadastrada com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetornoCadastroRegistro'
+                $ref: "#/components/schemas/RetornoCadastroRegistro"
+
         "400":
           description: Conteúdo inválido
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Erro'
-              example: 'Campo obrigatório não preenchido  O campo "Tipo" é  obrigatório. Preencha o campo para salvar o registro. Campo: TIPO'
+                $ref: "#/components/schemas/Erro"
+
+              example:
+                'Campo obrigatório não preenchido  O campo "Tipo" é  obrigatório. Preencha o campo para salvar o registro. Campo: TIPO'
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+          
+  #### PESSOA ####
   /fiscal/pessoa/alterar:
+  
+    #### UPDATE ####
     post:
       tags:
-      - ERP - Fiscal
+        - ERP - Fiscal
       summary: Alterar pessoa
       description: Altera os dados da pessoa informada
       operationId: putPessoa
       parameters:
-      - name: id
-        in: query
-        description: ID da pessoa
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
+
+        - name: id
+          required: true
+          in: query
+          description: ID da pessoa
+          schema:
+            type: integer
+
       responses:
         "200":
           description: Pessoa alterada com sucesso
+
         "400":
           description: Parâmetro(s) inválido(s)
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+    
+  #### PRODUTO ####
   /materialSuprimento/produto/cadastrar:
+  
+    #### POST ####
     post:
       tags:
-      - ERP - Materiais e suprimentos
+        - ERP - Materiais e suprimentos
       summary: Criar produto
       description: Cria um produto com base nos dados informados
       operationId: postProduto
       requestBody:
-        $ref: '#/components/requestBodies/PostProduto'
+        $ref: "#/components/requestBodies/PostProduto"
+
       responses:
         "200":
           description: Pessoa cadastrada com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetornoCadastroRegistro'
+                $ref: "#/components/schemas/RetornoCadastroRegistro"
+
         "400":
           description: Conteúdo inválido
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Erro'
-              example: 'Campo obrigatório não preenchido  O campo "Tipo" é  obrigatório. Preencha o campo para salvar o registro. Campo: TIPO'
+                $ref: "#/components/schemas/Erro"
+
+              example:
+                'Campo obrigatório não preenchido  O campo "Tipo" é  obrigatório. Preencha o campo para salvar o registro. Campo: TIPO'
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+          
+  #### PRODUTO ####
   /materialSuprimento/produto/alterar:
+  
+    #### UPDATE ####
     post:
       tags:
-      - ERP - Materiais e suprimentos
+        - ERP - Materiais e suprimentos
       summary: Alterar produto
       description: Altera os dados do produto informado
       operationId: putProduto
-      parameters:
-      - name: idProduto
-        in: query
-        description: Código de referência do produto
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
       requestBody:
-        $ref: '#/components/requestBodies/PutProduto'
+        $ref: "#/components/requestBodies/PutProduto"
+      parameters:
+
+        - name: idProduto
+          required: true
+          in: query
+          description: Código de referência do produto
+          schema:
+            type: string
+
       responses:
         "200":
           description: Produto alterado com sucesso
+
         "400":
           description: Parâmetro(s) inválido(s)
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+          
+  #### PRODUTO ####
   /materialSuprimento/produto/cancelar:
+  
+    #### DELETE ####
     post:
       tags:
-      - ERP - Materiais e suprimentos
+        - ERP - Materiais e suprimentos
       summary: Cancelar produto
       description: Cancela o produto informado
       operationId: deleteProduto
-      parameters:
-      - name: idProduto
-        in: query
-        description: Código de referência do produto
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
       requestBody:
-        $ref: '#/components/requestBodies/DeleteProduto'
+        $ref: "#/components/requestBodies/DeleteProduto"
+      parameters:
+
+        - name: idProduto
+          required: true
+          in: query
+          description: Código de referência do produto
+          schema:
+            type: string
+
       responses:
         "200":
           description: Produto cancelado com sucesso
+
         "400":
           description: Parâmetro(s) inválido(s)
+
         "401":
           description: Não autorizado (Autenticação não informada ou inválida)
+    
+          
+#### COMPONENTES ####
+          
 components:
+  securitySchemes:
+  
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: |
+        A autenticação inicial com as APIs REST da Escalasoft deve ser realizada por uma requisição GET utilizando Basic Auth.
+
+        Para autenticar, você deve informar o usuário e senha fornecidos pelo cliente.
+        
+        Esta requisição irá retornar um token que deverá ser utilizado para autenticação nas demais rotas. 
+        
+        Este token tem uma validade de 24 horas, e após este intervalo, deverá ser requisitado um novo token.
+        
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: |
+        A autenticação com as APIs REST da Escalasoft deve ser realizadas por token utilizando Bearer Token.
+
+        Para autenticar, você deve utilizar o token recebido na rota de Login e adicioná-lo no header da requisição. 
+        
+        O header de autenticação deve ser enviado para todos os endpoints disponíveis na API.
+
   schemas:
+  
+      #### ERRO ####
     Erro:
-      required:
-      - message
       type: object
+      required:
+        - message
+
       properties:
         message:
           type: string
           description: Descrição do erro
+          
+    #### RETORNO PADRAO ####      
     RetornoCadastroRegistro:
-      required:
-      - id
       type: object
+      required:
+        - id
       properties:
         id:
           type: integer
           description: int32
           example: 468415
+  
+      #### RETORNO GERARTOKEN ####      
+    Retornotoken:
+      $ref: "#/components/schemas/tokenget"
+      
+      
+         #### RETORNO TOKEN - GET ####           
+    tokenget:
+      type: object
+      properties:
+        Retorno:
+          type: object
+          properties:
+            codigo: 
+              description: Lista de informações do retorno
+              type: string
+              example: '200'
+            token: 
+              description: Lista de informações do retorno
+              type: string
+              example: YYko8uSVoyF9tGtan+o75AponwE=
+  
+
+    
+    #### RETORNO CONSULTA ORDEM ####      
     RetornoConsultaOrdem:
-      $ref: '#/components/schemas/OrdemGet'
+      $ref: "#/components/schemas/OrdemGet"
+    
+    #### RETORNO CONSULTA PEDIDO PENDENTE ####   
     RetornoConsultaPedidoPendente:
-      $ref: '#/components/schemas/PedidoPendenteGet'
+      $ref: "#/components/schemas/PedidoPendenteGet"
+      
+    #### RETORNO CONSULTA ESTOQUE MERCADORIA ####   
     RetornoConsultaEstoqueMercadoria:
-      $ref: '#/components/schemas/EstoqueMercadoriaGet'
+      $ref: "#/components/schemas/EstoqueMercadoriaGet"
+    
+    #### LISTA DE ORDENS - POST ####
     Lista:
+      description: Listagem de ordens de armazenagem
       type: object
       properties:
         Ordem:
           type: array
           items:
-            $ref: '#/components/schemas/OrdemPost'
-      description: Listagem de ordens de armazenagem
+            $ref: "#/components/schemas/OrdemPost"
+            
+    #### LISTA DE ITENS - POST ####
     ListaItem:
+      description: Listagem de itens da ordem de armazenagem
       type: object
       properties:
         Item:
           type: array
           items:
-            $ref: '#/components/schemas/ItemPost'
-      description: Listagem de itens da ordem de armazenagem
+            $ref: "#/components/schemas/ItemPost"
+    
+    #### LISTA DE ITEM LOTE - POST ####
     ListaItemLote:
+      description: Listagem de itens lote da ordem de armazenagem
       type: object
       properties:
         Lote:
           type: array
           items:
-            $ref: '#/components/schemas/ItemLotePost'
-      description: Listagem de itens lote da ordem de armazenagem
+            $ref: "#/components/schemas/ItemLotePost"
+    
+    #### LISTA DE PROGRAMACAO - POST #### 
     ListaProgramacao:
+      description: Listagem de programações da ordem de armazenagem
       type: object
       properties:
         Programacao:
           type: array
           items:
-            $ref: '#/components/schemas/ProgramacaoPost'
-      description: Listagem de programações da ordem de armazenagem
+            $ref: "#/components/schemas/ProgramacaoPost"
+    
+    #### ATRELAR ORDEM - POST ####     
     AtrelarOrdemArmazenagem:
+      description: Atrela a ordem com outra ordem de armazenagem
       type: object
       properties:
         TipoAtrelamento:
-          type: integer
           description: Conforme tabela de tipos de atrelamento
+          type: integer 
         OrdemAtrelada:
-          type: integer
           description: Número da ordem a ser atrelada
+          type: integer
         Observacao:
-          type: string
           description: Observação
-          example: Observação do atrelamento das ordens
-      description: Atrela a ordem com outra ordem de armazenagem
+          type: string
+          example: "Observação do atrelamento das ordens"
+    
+    #### CANCELAR QUANTIDADE PROGRAMACAO - POST ####      
     CancelarQuantidadeProgramacao:
-      type: object
-      properties:
-        Tipo:
-          type: integer
-          description: Conforme tabela de tipos de ocorrência
-        Data:
-          type: string
-          description: Data do cancelamento (dd/mm/yyyy hh:mm)
-          example: 06/12/1990 13:30
-        Quantidade:
-          multipleOf: 0.0001
-          type: number
-          description: Quantidade
-          example: 10
-        Motivo:
-          type: string
-          description: Motivo do cancelamento
-          example: Motivo do cancelamento
       description: Cancelar quantidade da programação da ordem de armazenagem
-    AdicionarQuantidadeProgramacao:
       type: object
       properties:
         Tipo:
-          type: integer
           description: Conforme tabela de tipos de ocorrência
+          type: integer 
         Data:
-          type: string
           description: Data do cancelamento (dd/mm/yyyy hh:mm)
-          example: 06/12/1990 13:30
-        Quantidade:
-          multipleOf: 0.0001
-          type: number
-          description: Quantidade
-          example: 10
-        Motivo:
           type: string
+          example: "06/12/1990 13:30"   
+        Quantidade:
+          description: Quantidade
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
+        Motivo:
           description: Motivo do cancelamento
-          example: Motivo do cancelamento
+          type: string
+          example: "Motivo do cancelamento"
+          
+    #### ADICIONAR QUANTIDADE PROGRAMACAO - POST #### 
+    AdicionarQuantidadeProgramacao:
       description: Adicionar quantidade da programação da ordem de armazenagem
+      type: object
+      properties:
+        Tipo:
+          description: Conforme tabela de tipos de ocorrência
+          type: integer 
+        Data:
+          description: Data do cancelamento (dd/mm/yyyy hh:mm)
+          type: string
+          example: "06/12/1990 13:30"   
+        Quantidade:
+          description: Quantidade
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
+        Motivo:
+          description: Motivo do cancelamento
+          type: string
+          example: "Motivo do cancelamento"
+          
+    #### TIPO DO DOCUMENTO - POST ####      
     TipoDocumentoPost:
       type: object
       properties:
         TipoDocumento:
           type: integer
           description: |
-            Tipo do documento
-
-            1 - CT-e<br>
-            2 - NF-e<br>
-            3 - CTRC<br>
-            4 - NF<br>
-            5 - ACT<br>
-            6 - Outros<br>
-            7 - MDF-e
-          enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
+                Tipo do documento
+                
+                1 - CT-e<br>
+                2 - NF-e<br>
+                3 - CTRC<br>
+                4 - NF<br>
+                5 - ACT<br>
+                6 - Outros<br>
+                7 - MDF-e
+          enum: 
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
+    
+    #### TIPO DO DOCUMENTO - GET ####           
     TipoDocumentoGet:
       type: object
       properties:
         TipoDocumento:
           type: string
           description: Descrição do tipo do documento
+          
+
+    
+    #### DADOS DO DOCUMENTO - POST E GET ####     
     CamposDocumentoPadrao:
       type: object
       properties:
         Emissao:
-          type: string
           description: Data de emissão do documento (dd/mm/yyyy)
-          example: 06/12/1990
-        Numero:
           type: string
+          example: "06/12/1990"
+        Numero:
           description: Número do documento
+          type: string
           example: "12345"
         Serie:
-          type: string
           description: Serie do documento
+          type: string
           example: "1"
         Valor:
-          multipleOf: 0.01
-          type: number
           description: Valor do documento
-          example: 1000.5
+          type: number
+          multipleOf: 0.01
+          example: 1000.50
+
+    #### DOCUMENTO DA ORDEM - POST ####           
     DocumentoPost:
       allOf:
-      - $ref: '#/components/schemas/TipoDocumentoPost'
-      - $ref: '#/components/schemas/CamposDocumentoPadrao'
+        - $ref: "#/components/schemas/TipoDocumentoPost"
+        - $ref: "#/components/schemas/CamposDocumentoPadrao"
+ 
+    #### DOCUMENTO DA ORDEM - GET ####       
     DocumentoGet:
       allOf:
-      - $ref: '#/components/schemas/TipoDocumentoGet'
-      - $ref: '#/components/schemas/CamposDocumentoPadrao'
-      - properties:
-          Volume:
-            type: integer
-            description: Volume
+        - $ref: "#/components/schemas/TipoDocumentoGet"
+        - $ref: "#/components/schemas/CamposDocumentoPadrao"
+        - properties:
+            Volume:
+              type: integer
+              description: Volume
+              
+    #### PRODUTO - POST ####      
     ProdutoPost:
       type: object
       properties:
         Produto:
-          type: string
           description: Código de referencia do produto do produto
+          type: string
+
+    #### PRODUTO - GET ####           
     ProdutoGet:
       type: object
       properties:
         Produto:
-          type: string
           description: Descrição do produto
+          type: string
+      
+    #### ITEM DA ORDEM PADRAO - POST E GET ####      
     CamposItemOrdemPadrao:
-      required:
-      - Produto
       type: object
-      properties:
+      description: Dados do lote de entrada
+      required:
+        - Produto
+      properties: 
         Quantidade:
-          multipleOf: 0.0001
-          type: number
           description: Quantidade
-          example: 10
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
         ValorUnitario:
-          multipleOf: 0.0000000001
-          type: number
           description: Valor Unitário
-          example: 1.5
+          type: number
+          multipleOf: 0.0000000001
+          example: 1.5000000000  
         ValorTotal:
-          multipleOf: 0.01
-          type: number
           description: Valor total
-          example: 10
+          type: number
+          multipleOf: 0.01
+          example: 10.00
         PesoLiquido:
-          multipleOf: 0.0001
-          type: number
           description: Peso Líquido
-          example: 10
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
         PesoBruto:
-          multipleOf: 0.0001
-          type: number
           description: Peso Bruto
-          example: 10
-        Estoque:
-          multipleOf: 0.0001
           type: number
+          multipleOf: 0.0001
+          example: 10.0000
+        Estoque:
           description: Estoque
-          example: 10
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
         Volume:
-          type: integer
           description: Volume
+          type: integer
           example: 10
         Observacao:
-          type: string
           description: Observação do item
-          example: Observação do item x
-      description: Dados do lote de entrada
+          type: string
+          example: "Observação do item x"
+    
+    #### ITEM DA ORDEM PADRAO - POST ####            
     ItemPadraoPost:
-      required:
-      - Item
       type: object
       description: Dados do item de entrada
+      required:
+        - Item
       allOf:
-      - $ref: '#/components/schemas/ProdutoPost'
-      - $ref: '#/components/schemas/CamposItemOrdemPadrao'
+        - $ref: "#/components/schemas/ProdutoPost"
+        - $ref: "#/components/schemas/CamposItemOrdemPadrao"
+        
+    #### ITEM DA ORDEM PADRAO - GET ####            
     ItemPadraoGet:
-      required:
-      - Item
       type: object
       description: Dados do item de entrada
+      required:
+        - Item
       allOf:
-      - $ref: '#/components/schemas/ProdutoGet'
-      - $ref: '#/components/schemas/CamposItemOrdemPadrao'
+        - $ref: "#/components/schemas/ProdutoGet"
+        - $ref: "#/components/schemas/CamposItemOrdemPadrao"
+        
+        
+    #### ITEM DA ORDEM - POST ####      
     ItemPost:
       allOf:
-      - $ref: '#/components/schemas/ItemPadraoPost'
-      - properties:
-          Lote:
-            type: array
-            items:
-              $ref: '#/components/schemas/ItemLotePost'
+        - $ref: "#/components/schemas/ItemPadraoPost"
+        - properties:  
+            Lote:
+              type: array
+              items:
+                $ref: "#/components/schemas/ItemLotePost"
+
+    #### ITEM DA ORDEM - GET ####   
     ItemGet:
       allOf:
-      - properties:
-          Situacao:
-            type: string
-            description: Situação do registro
-            example: Cadastrada(o)
-          Sequencial:
-            type: integer
-            description: Sequencial
-      - $ref: '#/components/schemas/ItemPadraoGet'
-      - properties:
-          UnidadeMedida:
-            type: string
-            description: Sigla da unidade de medida
-          UnidadeVolume:
-            type: string
-            description: Sigla da unidade de volume
-          UnidadeEstoque:
-            type: string
-            description: Sigla da unidade de estoque
-          NumeroDocumento:
-            type: string
-            description: Número do documento
-          Lote:
-            type: array
-            items:
-              $ref: '#/components/schemas/ItemLoteEntradaGet'
+        - properties:
+            Situacao:
+              type: string
+              description: Situação do registro
+              example: Cadastrada(o) 
+            Sequencial:
+              type: integer
+              description: Sequencial
+              
+        - $ref: "#/components/schemas/ItemPadraoGet"
+        
+        - properties: 
+            UnidadeMedida:
+              type: string
+              description: Sigla da unidade de medida
+            UnidadeVolume:
+              type: string
+              description: Sigla da unidade de volume
+            UnidadeEstoque:
+              type: string
+              description: Sigla da unidade de estoque
+            NumeroDocumento:
+              type: string
+              description: Número do documento
+            Lote:
+              type: array
+              items:
+                $ref: "#/components/schemas/ItemLoteEntradaGet"
+                
+    #### NATUREZA FISCAL - POST ####      
     NaturezaFiscalPost:
       type: object
       properties:
         NaturezaFiscal:
+          description: | 
+            ID da natureza fiscal 
+            
+            1 - Compra<br>
+            2  - Venda<br>
+            3  - Transferência<br>
+            4  - Devolução<br>
+            5  - Retorno<br>
+            6  - Entrada
           type: integer
-          description: "ID da natureza fiscal \n\n1 - Compra<br>\n2  - Venda<br>\n3  - Transferência<br>\n4  - Devolução<br>\n5  - Retorno<br>\n6  - Entrada\n"
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+    
+    #### NATUREZA FISCAL - GET ####           
     NaturezaFiscalGet:
       type: object
       properties:
         NaturezaFiscal:
           type: string
           description: Descrição da natureza fiscal
+          
+    #### CAMPOS BOOLEANOS ORDEM - GET E POST ####
     CamposBooleanosOrdem:
       type: object
       properties:
         NaoFaturar:
-          type: string
           description: Indica que a ordem não será considerada no cálculo do faturamento
+          type: string
           example: "N"
         SemServico:
-          type: string
           description: Indica que a ordem pode ser encerrada sem que hajam serviços vinculados
-          example: S
-        SemServicoAutomatico:
           type: string
+          example: "S"
+        SemServicoAutomatico:
           description: Indica que a ordem não terá serviços vinculados automaticamente ao calcular o faturamento
+          type: string
           example: "N"
         ApontamentoTerceiroObrigatorio:
-          type: string
           description: Indica que a ordem deve ter apontamentos de terceiro vinculados para que possa ser encerrada
+          type: string
           example: "N"
+    
+    #### CAMPOS PADRAO ORDEM - GET E POST ####      
     CamposPadraoOrdem:
       type: object
       properties:
         Observacao:
-          type: string
           description: Observação
-          example: Observação da ordem de armazenagem
+          type: string
+          example: "Observação da ordem de armazenagem" 
         Solicitacao:
-          type: string
           description: Data de solicitação (dd/mm/yyyy hh:mm)
-          example: 06/12/1990 13:30
+          type: string
+          example: "06/12/1990 13:30"   
         Previsao:
-          type: string
           description: Data de previsão (dd/mm/yyyy hh:mm)
-          example: 06/12/1990 13:30
+          type: string
+          example: "06/12/1990 13:30"
         Data:
-          type: string
           description: Data da ordem (dd/mm/yyyy hh:mm)
-          example: 06/12/1990 13:30
+          type: string
+          example: "06/12/1990 13:30"
         NumeroPedido:
-          type: string
           description: Número do pedido
-          example: PED123784
-        NumeroControle:
           type: string
+          example: "PED123784"
+        NumeroControle:
           description: Número de controle
-          example: CONTR648425
+          type: string
+          example: "CONTR648425"
+    
+    #### CAMPOS PADRAO ORDEM - POST ####      
     CamposPadraoOrdemPost:
       type: object
-      properties:
+      properties: 
         Filial:
-          type: integer
           description: CNPJ da filial sem caracteres especiais - conforme tabela de filiais
+          type: integer
         Tipo:
-          type: integer
           description: Conforme tabela de tipos de ordem
+          type: integer
         Cliente:
-          type: integer
           description: CNPJ do cliente sem caracteres especiais
+          type: integer
         ClienteFaturamento:
-          type: integer
           description: CNPJ do cliente de faturamento sem caracteres especiais
+          type: integer
         NaturezaOperacao:
-          type: integer
           description: Conforme tabela de naturezas de operação
+          type: integer
         Solicitante:
-          type: integer
           description: ID do solicitante (pessoa cadastrada na base)
+          type: integer
         Deposito:
-          type: integer
           description: Conforme tabela de depósitos
+          type: integer
         Projeto:
-          type: integer
           description: Conforme tabela de projetos
-        UnidadeNegocioCliente:
           type: integer
+        UnidadeNegocioCliente:
           description: Conforme tabela de unidades de negócio do cliente
+          type: integer
+    
+    #### CAMPOS PADRAO ORDEM - GET ####      
     CamposPadraoOrdemGet:
       type: object
-      properties:
+      properties: 
         Filial:
-          type: string
           description: Descrição da filial
+          type: string
         Tipo:
-          type: string
           description: Descrição tipo da ordem
+          type: string
         Cliente:
-          type: string
           description: Descrição do cliente
+          type: string
         ClienteFaturamento:
-          type: string
           description: Descrição do cliente de faturamento
+          type: string
         NaturezaOperacao:
-          type: string
           description: Descrição da natureza de operacão
+          type: string
         Solicitante:
-          type: string
           description: Descrição do solicitante
+          type: string
         Deposito:
-          type: string
           description: Descrição do depósito
+          type: string
         Projeto:
-          type: string
           description: Descrição do projeto
-        UnidadeNegocioCliente:
           type: string
+        UnidadeNegocioCliente:
           description: Descrição da unidade de negócio do cliente
+          type: string
+          
+    #### ORDEM - POST ####
     OrdemPost:
       allOf:
-      - $ref: '#/components/schemas/CamposPadraoOrdemPost'
-      - $ref: '#/components/schemas/CamposPadraoOrdem'
-      - $ref: '#/components/schemas/CamposBooleanosOrdem'
-      - $ref: '#/components/schemas/NaturezaFiscalPost'
-      - required:
-        - Cliente
-        - ClienteFaturamento
-        - Data
-        - Filial
-        - Solicitacao
-        - Tipo
-        type: object
-        properties:
-          Documento:
-            $ref: '#/components/schemas/DocumentoPost'
-          Entrada:
-            $ref: '#/components/schemas/EntradaPost'
-          Saida:
-            $ref: '#/components/schemas/SaidaPost'
-        description: Ordem de armazenagem
+        - $ref: "#/components/schemas/CamposPadraoOrdemPost" 
+        - $ref: "#/components/schemas/CamposPadraoOrdem"       
+        - $ref: "#/components/schemas/CamposBooleanosOrdem"      
+        - $ref: "#/components/schemas/NaturezaFiscalPost"
+        - description: Ordem de armazenagem
+          type: object
+          required:
+            - Filial
+            - Tipo
+            - Cliente
+            - ClienteFaturamento
+            - Solicitacao
+            - Data
+          properties:
+            Documento:
+              $ref: "#/components/schemas/DocumentoPost"
+            Entrada:
+              $ref: "#/components/schemas/EntradaPost"
+            Saida:
+              $ref: "#/components/schemas/SaidaPost"
+              
+    #### ORDEM - PUT ####
     OrdemPut:
       allOf:
-      - properties:
-          NaturezaOperacao:
-            type: integer
-            description: Conforme tabela de naturezas de operação
-          Solicitante:
-            type: integer
-            description: ID do solicitante (pessoa cadastrada na base)
-          Deposito:
-            type: integer
-            description: Conforme tabela de depósitos
-      - $ref: '#/components/schemas/CamposPadraoOrdem'
-      - properties:
-          NaoFaturar:
-            type: string
-            description: Indica que a ordem não será considerada no cálculo do faturamento
-            example: "N"
-          SemServico:
-            type: string
-            description: Indica que a ordem pode ser encerrada sem que hajam serviços vinculados
-            example: S
-      - $ref: '#/components/schemas/NaturezaFiscalPost'
-      - required:
-        - Cliente
-        - ClienteFaturamento
-        - Data
-        - Filial
-        - Solicitacao
-        - Tipo
-        type: object
-        properties:
-          Documento:
-            $ref: '#/components/schemas/DocumentoPost'
-          Entrada:
-            $ref: '#/components/schemas/Entrada de mercadoria'
-          Saida:
-            $ref: '#/components/schemas/Sada de mercadoria'
-        description: Ordem de armazenagem
+        - properties:
+            NaturezaOperacao:
+              description: Conforme tabela de naturezas de operação
+              type: integer
+            Solicitante:
+              description: ID do solicitante (pessoa cadastrada na base)
+              type: integer
+            Deposito:
+              description: Conforme tabela de depósitos
+              type: integer
+
+        - $ref: "#/components/schemas/CamposPadraoOrdem" 
+        
+        - properties:
+            NaoFaturar:
+              description: Indica que a ordem não será considerada no cálculo do faturamento
+              type: string
+              example: "N"
+            SemServico:
+              description: Indica que a ordem pode ser encerrada sem que hajam serviços vinculados
+              type: string
+              example: "S"
+          
+        - $ref: "#/components/schemas/NaturezaFiscalPost"
+        - description: Ordem de armazenagem
+          type: object
+          required:
+            - Filial
+            - Tipo
+            - Cliente
+            - ClienteFaturamento
+            - Solicitacao
+            - Data
+          properties:
+            Documento:
+              $ref: "#/components/schemas/DocumentoPost"
+            Entrada:
+              title: Entrada de mercadoria
+              description: Somente informar estes dados quando for uma entrada de mercadoria
+              
+              type: object
+              properties:
+                ChaveDocumentoEletronico: 
+                  description: Chave do documento eletrônico
+                  type: string
+                  example: "24130401211699999126550010001026811138186206"
+                Recebimento:
+                  description: Dados para recebimento da mercadoria
+                  type: object
+                  properties:
+                    TipoDescarga: 
+                      description: Conforme tabela de tipos de descarga
+                      type: integer
+                    Placa: 
+                      description: Placa do veículo
+                      type: string
+                      example: "ABC-1234"
+                    UFPlaca:
+                      description: Estado do veículo - conforme tabela de estados
+                      type: integer
+                    Carreta:
+                      description: Placa da carreta do veículo
+                      type: string
+                      example: "DEF-5678"
+                    Motorista:
+                      description: Motorista (quando a pessoa não for cadastrada no sistema)
+                      type: string
+                      example: "Pedro da Silva"
+                    NumeroDocumento:
+                      description: Número do documento do motorista (quando a pessoa não for cadastrada no sistema). Pode ser CPF, RG..
+                      type: string
+                      example: "874.554.955-85"
+                    DI: 
+                      description: DI
+                      type: string
+                      example: "AC12"
+                    Processo: 
+                      description: Processo
+                      type: string
+                      example: "ERD123"
+                    Numero: 
+                      description: Número do documento de entrada
+                      type: string
+                      example: "111111"
+                    Serie: 
+                      description: Série do documento de entrada
+                      type: string
+                      example: "1"
+                    Emissao: 
+                      description: Data de emissão do documento (dd/mm/yyyy)
+                      type: string
+                      example: "06/12/1990"
+
+            Saida:
+              title: Saída de mercadoria
+              description: Somente informar estes dados quando for uma saída de mercadoria
+              type: object
+              properties:
+                TipoTransporte: 
+                  description: |
+                    Tipo de transporte
+                    
+                    1 -  Transportadora<br>
+                    2  - Pac<br>
+                    3  - Sedex<br>
+                    4  - Sedex 10<br>
+                    5  - E-sedex<br>
+                    6  - Cliente retira<br>
+                  type: integer
+                  enum:
+                    - 1
+                    - 2
+                    - 3
+                    - 4
+                    - 5
+                    - 6
+                Transportadora: 
+                  description: CNPJ da transportadora sem caracteres especiais
+                  type: integer
+                Ordem: 
+                  description: Indica a ordem em que a saída será considerada como prioridade
+                  type: integer
+                  example: 1
+                ClienteFinal: 
+                  description: Cliente final (pessoa cadastrada na base)
+                  type: integer
+                NomeClienteFinal: 
+                  description: Nome do cliente final (para quando a pessoa não for cadastrada no sistema)
+                  type: string
+                  example: "João da Silva"
+    
+    #### ORDEM - GET ####
     OrdemGet:
       allOf:
-      - properties:
-          Situacao:
-            type: string
-            description: Situação do registro
-            example: Cadastrada(o)
-      - $ref: '#/components/schemas/CamposPadraoOrdemGet'
-      - $ref: '#/components/schemas/CamposPadraoOrdem'
-      - $ref: '#/components/schemas/CamposBooleanosOrdem'
-      - $ref: '#/components/schemas/NaturezaFiscalGet'
-      - required:
-        - Cliente
-        - ClienteFaturamento
-        - Data
-        - Filial
-        - Solicitacao
-        - Tipo
-        type: object
-        properties:
-          Documento:
-            $ref: '#/components/schemas/DocumentoGet'
-          Entrada:
-            $ref: '#/components/schemas/EntradaGet'
-          Saida:
-            $ref: '#/components/schemas/SaidaGet'
-        description: Ordem de armazenagem
+      
+        - properties:
+            Situacao:
+              type: string
+              description: Situação do registro
+              example: Cadastrada(o) 
+
+        - $ref: "#/components/schemas/CamposPadraoOrdemGet" 
+        - $ref: "#/components/schemas/CamposPadraoOrdem"       
+        - $ref: "#/components/schemas/CamposBooleanosOrdem"      
+        - $ref: "#/components/schemas/NaturezaFiscalGet"
+        
+        - description: Ordem de armazenagem
+          type: object
+          required:
+            - Filial
+            - Tipo
+            - Cliente
+            - ClienteFaturamento
+            - Solicitacao
+            - Data
+          properties:
+            Documento:
+              $ref: "#/components/schemas/DocumentoGet"
+            Entrada:
+              $ref: "#/components/schemas/EntradaGet"
+            Saida:
+              $ref: "#/components/schemas/SaidaGet"
+
+    #### CAMPOS PADRAO ENTRADA - POST ####
     EntradaPadraoPost:
       type: object
       properties:
-        LocalColeta:
-          type: integer
+        LocalColeta: 
           description: ID do local de coleta (pessoa cadastrada na base)
-        EnderecoLocalColeta:
           type: integer
+        EnderecoLocalColeta: 
           description: ID do endereço do local de coleta (endereço da pessoa)
-        ChaveDocumentoEletronico:
-          type: string
+          type: integer
+        ChaveDocumentoEletronico: 
           description: Chave do documento eletrônico
+          type: string
           example: "24130401211699999126550010001026811138186206"
         Recebimento:
-          $ref: '#/components/schemas/RecebimentoPost'
+          $ref: "#/components/schemas/RecebimentoPost"
+         
+    #### CAMPOS PADRÃO ENTRADA - GET ####
     EntradaPadraoGet:
       type: object
       properties:
-        LocalColeta:
-          type: integer
+        LocalColeta: 
           description: Descrição do local de coleta
-        EnderecoLocalColeta:
           type: integer
+        EnderecoLocalColeta: 
           description: Descrição do endereço do local de coleta
-        ChaveDocumentoEletronico:
-          type: string
+          type: integer
+        ChaveDocumentoEletronico: 
           description: Chave do documento eletrônico
+          type: string
           example: "24130401211699999126550010001026811138186206"
         Recebimento:
-          $ref: '#/components/schemas/RecebimentoGet'
+          $ref: "#/components/schemas/RecebimentoGet"
+    
+    #### ENTRADA - POST ####
     EntradaPost:
       title: Entrada de mercadoria
       description: Somente informar estes dados quando for uma entrada de mercadoria
       allOf:
-      - $ref: '#/components/schemas/EntradaPadraoPost'
-      - properties:
-          Item:
-            type: array
-            items:
-              $ref: '#/components/schemas/ItemPost'
+        - $ref: "#/components/schemas/EntradaPadraoPost"
+        - properties:  
+            Item:
+              type: array
+              items:
+                $ref: "#/components/schemas/ItemPost"
+    
+    #### ENTRADA - GET ####
     EntradaGet:
       title: Entrada de mercadoria
       description: Somente informado quando for uma entrada de mercadoria
       allOf:
-      - $ref: '#/components/schemas/EntradaPadraoGet'
-      - properties:
-          Item:
-            type: array
-            items:
-              $ref: '#/components/schemas/ItemGet'
+        - $ref: "#/components/schemas/EntradaPadraoGet"
+        - properties:  
+            Item:
+              type: array
+              items:
+                $ref: "#/components/schemas/ItemGet"
+                
+                
+    #### DADOS LOTE PADRAO ####      
     DadosLotePadrao:
       type: object
       properties:
         Fabricacao:
-          type: string
           description: Data de fabricação (dd/mm/yyyy)
-          example: 06/12/1990
+          type: string
+          example: "06/12/1990"
         Validade:
-          type: string
           description: Data de validade (dd/mm/yyyy)
-          example: 06/12/1990
-        Lote:
           type: string
+          example: "06/12/1990"
+        Lote:
           description: Lote
+          type: string
           example: "546249967"
         NumeroSerie:
-          type: string
           description: Número de série
-          example: XSDAFFRD4123
-        InicioCobranca:
           type: string
+          example: "XSDAFFRD4123"
+        InicioCobranca:
           description: Início de cobrança da mercadoria no estoque (dd/mm/yyyy)
-          example: 06/12/1990
+          type: string
+          example: "06/12/1990"
+    
+    #### VALORES LOTE PADRAO ####       
     ValoresLotePadrao:
       type: object
       properties:
         Quantidade:
-          multipleOf: 0.0001
-          type: number
           description: Quantidade
-          example: 10
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
         Estoque:
-          multipleOf: 0.0001
-          type: number
           description: Estoque
-          example: 10
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
         PesoLiquido:
-          multipleOf: 0.0001
-          type: number
           description: Peso Líquido
-          example: 10
-        PesoBruto:
+          type: number
           multipleOf: 0.0001
-          type: number
+          example: 10.0000
+        PesoBruto:
           description: Peso Bruto
-          example: 10
-        Valor:
-          multipleOf: 0.01
           type: number
+          multipleOf: 0.0001
+          example: 10.0000
+        Valor:
           description: Valor
-          example: 10
+          type: number
+          multipleOf: 0.01
+          example: 10.00
         Volume:
-          type: integer
           description: Volume
+          type: integer
           example: 10
+    
+    #### ITEM LOTE - POST ####      
     ItemLotePost:
       type: object
       description: Dados do lote de entrada
-      allOf:
-      - properties:
-          NumeroDescarga:
-            type: integer
-            description: ID do número da descarga
-      - $ref: '#/components/schemas/DadosLotePadrao'
-      - properties:
-          ReferenciaLote:
-            type: integer
-            description: ID de referência do lote
-          Fornecedor:
-            type: integer
-            description: CNPJ do fornecedor sem caracteres especiais
-          Fabricante:
-            type: integer
-            description: CNPJ do fabricante sem caracteres especiais
-      - $ref: '#/components/schemas/ValoresLotePadrao'
+      allOf:  
+        - properties:
+            NumeroDescarga:
+              description: ID do número da descarga
+              type: integer
+        - $ref: "#/components/schemas/DadosLotePadrao" 
+        - properties:
+            ReferenciaLote:
+              description: ID de referência do lote
+              type: integer
+            Fornecedor:
+              description: CNPJ do fornecedor sem caracteres especiais
+              type: integer
+            Fabricante:
+              description: CNPJ do fabricante sem caracteres especiais
+              type: integer
+        - $ref: "#/components/schemas/ValoresLotePadrao"
+        
+    #### ITEM LOTE - GET ####                
     ItemLoteGet:
       type: object
       description: Dados do lote de entrada
-      allOf:
-      - properties:
-          Situacao:
-            type: string
-            description: Situação do registro
-            example: Cadastrada(o)
-          NumeroDescarga:
-            type: integer
-            description: Número da descarga
-      - $ref: '#/components/schemas/DadosLotePadrao'
-      - properties:
-          ReferenciaLote:
-            type: string
-            description: Descrição da referência do lote
-          Fornecedor:
-            type: string
-            description: Descrição do fornecedor da mercadoria
-          Fabricante:
-            type: string
-            description: Descrição do fabricante da mercadoria
-      - $ref: '#/components/schemas/ValoresLotePadrao'
-      - properties:
-          Sequencial:
-            type: integer
-            description: Sequencial
-          UnidadeMedida:
-            type: string
-            description: Sigla da unidade de medida
-          UnidadeVolume:
-            type: string
-            description: Sigla da unidade de volume
-          UnidadeEstoque:
-            type: string
-            description: Sigla da unidade de estoque
-          Protocolo:
-            type: integer
-            description: Protocolo
+      allOf:  
+        - properties:
+            Situacao:
+              type: string
+              description: Situação do registro
+              example: Cadastrada(o)   
+          
+            NumeroDescarga:
+              description: Número da descarga
+              type: integer
+              
+        - $ref: "#/components/schemas/DadosLotePadrao" 
+        
+        - properties:
+            ReferenciaLote:
+              description: Descrição da referência do lote
+              type: string
+            Fornecedor:
+              description: Descrição do fornecedor da mercadoria
+              type: string
+            Fabricante:
+              description: Descrição do fabricante da mercadoria
+              type: string
+              
+        - $ref: "#/components/schemas/ValoresLotePadrao"
+        
+        - properties:
+            Sequencial:
+              type: integer
+              description: Sequencial
+            UnidadeMedida:
+              type: string
+              description: Sigla da unidade de medida
+            UnidadeVolume:
+              type: string
+              description: Sigla da unidade de volume
+            UnidadeEstoque:
+              type: string
+              description: Sigla da unidade de estoque
+            Protocolo:
+              type: integer
+              description: Protocolo
+                
+    #### PROGRAMAÇÃO DA ORDEM - POST ####             
     ProgramacaoPost:
-      required:
-      - Produto
-      - UnidadeMedida
+      description: Programação de saída de mercadoria
       type: object
+      required:
+        - Produto
+        - UnidadeMedida
       properties:
-        Produto:
-          type: string
+        Produto: 
           description: Código de referência do produto
-        UnidadeMedida:
           type: string
+        UnidadeMedida: 
           description: Sigla da unidade de medida - Conforme tabela de unidades de medida
-        Data:
           type: string
+        Data: 
           description: Data da programação (dd/mm/yyyy hh:mm)
-          example: 06/12/1990 13:30
+          type: string
+          example: "06/12/1990 13:30"
         Quantidade:
-          multipleOf: 0.0001
-          type: number
           description: Quantidade
-          example: 5
-        SequencialPedido:
-          type: integer
+          type: number
+          multipleOf: 0.0001
+          example: 5.0000
+        SequencialPedido: 
           description: Sequencial do produto no pedido
-          example: 1
-        TipoSelecao:
           type: integer
+          example: 1
+        TipoSelecao: 
           description: |
             Tipo de seleção
-
+            
             1 -  Seleção manual<br>
             2  - Seleção automática<br>
-          enum:
-          - 1
-          - 2
-        GrupoMetodoSelecao:
           type: integer
+          enum:
+            - 1
+            - 2
+        GrupoMetodoSelecao: 
           description: Conforme tabela de grupos de método de seleção
-        Observacao:
-          type: string
+          type: integer
+        Observacao: 
           description: Observação
-          example: Observação da programação x
-        Parametro:
-          $ref: '#/components/schemas/ParametroProgramacao'
-        Filtro:
-          $ref: '#/components/schemas/FiltroProgramacaoPost'
-      description: Programação de saída de mercadoria
+          type: string
+          example: "Observação da programação x"
+        Parametro: 
+          $ref: "#/components/schemas/ParametroProgramacao"
+        Filtro: 
+          $ref: "#/components/schemas/FiltroProgramacaoPost"
+    
+    #### PROGRAMAÇÃO DA ORDEM - GET ####     
     ProgramacaoGet:
       allOf:
-      - properties:
-          Situacao:
-            type: string
-            description: Situação do registro
-            example: Cadastrada(o)
-      - $ref: '#/components/schemas/ProgramacaoPadraoGet'
-      - properties:
-          Picking:
-            type: array
-            items:
-              $ref: '#/components/schemas/PickingGet'
-          Item:
-            type: array
-            items:
-              $ref: '#/components/schemas/ItemProgramacaoGet'
+        - properties:
+            Situacao:
+              type: string
+              description: Situação do registro
+              example: Cadastrada(o) 
+              
+        - $ref: "#/components/schemas/ProgramacaoPadraoGet"
+        
+        - properties:
+            Picking:
+              type: array
+              items:
+                $ref: "#/components/schemas/PickingGet"
+            Item:
+              type: array
+              items:
+                $ref: "#/components/schemas/ItemProgramacaoGet"            
+                
+    #### PICKINK PROGRAMAÇÃO DA ORDEM - GET ####               
     PickingGet:
+      description: Picking da programação
       type: object
       properties:
-        Situacao:
-          type: string
+        Situacao: 
           description: Situação do registro
+          type: string
           example: Cadastrada
-        Deposito:
-          type: string
+        Deposito: 
           description: Sigla do depósito
-        TipoAreaInterna:
           type: string
+        TipoAreaInterna: 
           description: Tipo de área
-        Produto:
           type: string
+        Produto: 
           description: Descrição do produto
-        UnidadeMedida:
           type: string
+        UnidadeMedida: 
           description: Sigla da unidade de medida
+          type: string
         Quantidade:
-          multipleOf: 0.0001
-          type: number
           description: Quantidade
-          example: 5
-        Saldo:
-          multipleOf: 0.0001
           type: number
+          multipleOf: 0.0001
+          example: 5.0000
+        Saldo:
           description: Saldo
-          example: 5
-        Sequencial:
-          type: integer
+          type: number
+          multipleOf: 0.0001
+          example: 5.0000
+        Sequencial: 
           description: Sequencial do registro
-        Endereco:
-          type: string
+          type: integer
+        Endereco: 
           description: Descrição do endereço
+          type: string  
         Fabricacao:
-          type: string
           description: Data de fabricação (dd/mm/yyyy)
-          example: 06/12/1990
+          type: string
+          example: "06/12/1990"
         Validade:
-          type: string
           description: Data de validade (dd/mm/yyyy)
-          example: 06/12/1990
-        NumeroPedido:
           type: string
+          example: "06/12/1990"
+        NumeroPedido:
           description: Número do pedido
+          type: string
           example: "546249967"
         Lote:
-          type: string
           description: Lote
+          type: string
           example: "546249967"
-      description: Picking da programação
+          
+    #### ITEM DA PROGRAMAÇÃO - GET ####
     ItemProgramacaoGet:
+      description: Itens da programação
       type: object
       properties:
-        Situaçao:
-          type: string
+        Situaçao: 
           description: Situação do registro
-        UnidadeMedida:
           type: string
+        UnidadeMedida: 
           description: Sigla da unidade de medida
-        UnidadeVolume:
           type: string
+        UnidadeVolume: 
           description: Sigla da unidade de volume
-        UnidadeEstoque:
           type: string
+        UnidadeEstoque: 
           description: Sigla da unidade de estoque
+          type: string
         NumeroDocumento:
           type: integer
           description: Número do documento
         Quantidade:
-          multipleOf: 0.0001
-          type: number
           description: Quantidade
-          example: 5
+          type: number
+          multipleOf: 0.0001
+          example: 5.0000
         ValorUnitario:
-          multipleOf: 0.0001
-          type: number
           description: Valor unitário
-          example: 5
+          type: number
+          multipleOf: 0.0001
+          example: 5.0000
         ValorTotal:
-          multipleOf: 0.01
-          type: number
           description: Valor total
-          example: 5
+          type: number
+          multipleOf: 0.01
+          example: 5.00
         PesoLiquido:
-          multipleOf: 0.0001
-          type: number
           description: Peso líquido
-          example: 5
+          type: number
+          multipleOf: 0.0001
+          example: 5.0000
         PesoBruto:
-          multipleOf: 0.0001
-          type: number
           description: Peso bruto
-          example: 5
-        Estoque:
-          multipleOf: 0.0001
           type: number
+          multipleOf: 0.0001
+          example: 5.0000
+        Estoque:
           description: Estoque
-          example: 5
+          type: number
+          multipleOf: 0.0001
+          example: 5.0000
         Sequencial:
-          type: integer
           description: Sequencial do registro
-        Volume:
           type: integer
+        Volume:
           description: Quantidade de volumes
+          type: integer
         Observacao:
-          type: string
           description: Observação
+          type: string
         Lote:
           type: array
           items:
-            $ref: '#/components/schemas/ItemLoteProgramacaoGet'
-      description: Itens da programação
+            $ref: "#/components/schemas/ItemLoteProgramacaoGet"
+            
+    #### SERVIÇO DO ITEM LOTE - GET ####            
     ServicoItemLoteGet:
       type: object
-      properties:
-        Servico:
-          type: string
-          description: Descrição do serviço
-        Unidade:
-          type: string
-          description: Sigla da unidade de medida
-        Quantidade:
-          multipleOf: 0.0001
-          type: number
-          description: Quantidade
-          example: 10
-        Sequencial:
-          type: integer
-          description: Sequencial do registro
-        Responsavel:
-          type: string
-          description: Responsável pelo serviço
-        Observacao:
-          type: string
-          description: Observação
-        Data:
-          type: string
-          description: Data (dd/mm/yyyy)
-        Inicio:
-          type: string
-          description: Hora de início (hh:mm)
-        Fim:
-          type: string
-          description: Hora final (hh:mm)
-        Horas:
-          multipleOf: 0.01
-          type: number
-          description: Total de horas
-          example: 10
-        Turno:
-          type: integer
-          description: Turno
-        Deposito:
-          type: string
-          description: Sigla do depósito
-        PeriodoExecucao:
-          type: string
-          description: Descrição do período de execução
-        NaturezaMercadoria:
-          type: string
-          description: Natureza da mercadoria
-        GrupoArmazenagem:
-          type: string
-          description: Grupo de armazenagem
-        Parametro:
-          $ref: '#/components/schemas/ServicoItemLoteGet_Parametro'
-        TabelaPreco:
-          $ref: '#/components/schemas/ServicoItemLoteGet_TabelaPreco'
       description: Dados de serviço do lote
+      properties: 
+        Servico:
+          description: Descrição do serviço
+          type: string
+        Unidade:
+          description: Sigla da unidade de medida
+          type: string
+        Quantidade:
+          description: Quantidade
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000  
+        Sequencial:
+          description: Sequencial do registro
+          type: integer
+        Responsavel:
+          description: Responsável pelo serviço
+          type: string
+        Observacao:
+          description: Observação
+          type: string
+        Data:
+          description: Data (dd/mm/yyyy)
+          type: string
+        Inicio:
+          description: Hora de início (hh:mm)
+          type: string
+        Fim:
+          description: Hora final (hh:mm)
+          type: string
+        Horas:
+          description: Total de horas
+          type: number
+          multipleOf: 0.01
+          example: 10.00
+        Turno:
+          description: Turno
+          type: integer
+        Deposito:
+          description: Sigla do depósito
+          type: string
+        PeriodoExecucao:
+          description: Descrição do período de execução
+          type: string
+        NaturezaMercadoria:
+          description: Natureza da mercadoria
+          type: string
+        GrupoArmazenagem:
+          description: Grupo de armazenagem
+          type: string
+        Parametro:
+          type: object
+          properties:
+            NaoCobrarCliente:
+              description: Indica que o serviço não será cobrado do cliente
+              type: string
+              example: "S"
+            ExibirTodosServicos:
+              description: Indica que todos os serviços serão exibidos para consulta
+              type: string
+              example: "N"
+            GeradoPeloFaturamento:
+              description: Indica que o serviço foi gerado pelo cálculo de faturamento
+              type: string
+              example: "N"
+        TabelaPreco:
+          type: object
+          properties:
+            Tabela:
+              description: Descrição da tabela de preço
+              type: string
+            Lista:
+              description: Descrição da lista de preço
+              type: string
+            Faturado:
+              description: Indica se o registro já foi faturado ou não
+              type: string
+              example: "N"
+            Quantidade:
+              description: Quantidade
+              type: number
+              multipleOf: 0.0001
+              example: 10.0000
+            ValorUnitario:
+              description: Valor
+              type: number
+              multipleOf: 0.0001
+              example: 10.0000
+            ValorTotal:
+              description: Valor
+              type: number
+              multipleOf: 0.01
+              example: 10.00
+              
+    #### UNITIZAÇÃO DO ITEM LOTE - GET ####          
     UnitizacaoGet:
       type: object
+      description: Dados de unitização do lote
       properties:
         UnitizadoPor:
-          type: string
           description: Nome do usuário que efetuou a confirmação da unitização
+          type: string
         UnitizadoEm:
-          type: string
           description: Data/hora em que foi feita confirmação da unitização (dd/mm/yyyy hh:mm)
-          example: 06/12/1990 13:30
+          type: string
+          example: "06/12/1990 13:30"
         Sequencial:
-          type: integer
           description: Sequencial do registro
+          type: integer
         TipoCarga:
-          type: string
           description: Tipo da carga no unitizador
+          type: string
         TipoUnitizador:
-          type: string
           description: Tipo do unitizador
+          type: string
         NormaUnitizacao:
-          type: string
           description: Norma de unitização
+          type: string
         UnitizacaoOrdem:
-          type: integer
           description: Vinculo com a unitização da ordem
+          type: integer
         Unitizacao:
-          type: integer
           description: Unitização
+          type: integer
         Deposito:
-          type: string
           description: Depósito em que a mercadoria foi recebida
+          type: string
         Endereco:
-          type: string
           description: Endereço em que a mercadoria foi recebida
+          type: string
         GrupoEtiquetagem:
-          type: string
           description: Grupo de etiquetagem do recebimento
+          type: string
         Volume:
-          type: integer
           description: Volume
-        UnidadeEstoque:
-          type: string
-          description: Sigla da unidade de estoque
-        UnidadeVolume:
-          type: string
-          description: Sigla da unidade de volume
-        ReferenciaUnitizador:
-          type: string
-          description: Referência do unitizador
-        Quantidade:
-          multipleOf: 0.0001
-          type: number
-          description: Quantidade
-          example: 10
-        PesoLiquido:
-          multipleOf: 0.0001
-          type: number
-          description: Peso Líquido
-          example: 10
-        PesoBruto:
-          multipleOf: 0.0001
-          type: number
-          description: Peso Bruto
-          example: 10
-        Valor:
-          multipleOf: 0.01
-          type: number
-          description: Valor
-          example: 10
-        QuantidadeVolume:
           type: integer
+        UnidadeEstoque: 
+          description: Sigla da unidade de estoque
+          type: string
+        UnidadeVolume: 
+          description: Sigla da unidade de volume
+          type: string
+        ReferenciaUnitizador:
+          description: Referência do unitizador
+          type: string
+        Quantidade:
+          description: Quantidade
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
+        PesoLiquido:
+          description: Peso Líquido
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
+        PesoBruto:
+          description: Peso Bruto
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
+        Valor:
+          description: Valor
+          type: number
+          multipleOf: 0.01
+          example: 10.00
+        QuantidadeVolume:
           description: Quantidade de volume na unitização
-      description: Dados de unitização do lote
+          type: integer
+    
+    #### OCORRÊNCIA DO ITEM LOTE - GET ####  
     OcorrenciaGet:
       type: object
-      properties:
-        Situação:
-          type: string
-          description: Situação do registro
-        Tipo:
-          type: string
-          description: Tipo da ocorrência
-        Deposito:
-          type: string
-          description: Sigla do depósito
-        Responsavel:
-          type: string
-          description: Responsável pela ocorrência
-        Data:
-          type: string
-          description: Data da ocorrência (dd/mm/aaaa)
-        Numero:
-          type: integer
-          description: Número
-        Conferente:
-          type: string
-          description: Nome do conferente
-        UnidadeEstoque:
-          type: string
-          description: Sigla da unidade de estoque
-        UnidadeVolume:
-          type: string
-          description: Sigla da unidade de volume
-        Observacao:
-          type: string
-          description: Observação da ocorrência
-        Quantidade:
-          multipleOf: 0.0001
-          type: number
-          description: Quantidade
-          example: 10
-        PesoLiquido:
-          multipleOf: 0.0001
-          type: number
-          description: Peso Líquido
-          example: 10
-        PesoBruto:
-          multipleOf: 0.0001
-          type: number
-          description: Peso Bruto
-          example: 10
-        Valor:
-          multipleOf: 0.01
-          type: number
-          description: Valor
-          example: 10
-        Volume:
-          type: integer
-          description: Quantidade de volumes
       description: Dados de ocorrência do lote
+      properties: 
+        Situação:
+          description: Situação do registro
+          type: string
+        Tipo:
+          description: Tipo da ocorrência
+          type: string
+        Deposito:
+          description: Sigla do depósito
+          type: string
+        Responsavel:
+          description: Responsável pela ocorrência
+          type: string
+        Data:
+          description: Data da ocorrência (dd/mm/aaaa)
+          type: string
+        Numero:
+          description: Número
+          type: integer
+        Conferente:
+          description: Nome do conferente
+          type: string
+        UnidadeEstoque: 
+          description: Sigla da unidade de estoque
+          type: string
+        UnidadeVolume: 
+          description: Sigla da unidade de volume
+          type: string  
+        Observacao: 
+          description: Observação da ocorrência
+          type: string  
+        Quantidade:
+          description: Quantidade
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
+        PesoLiquido:
+          description: Peso Líquido
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
+        PesoBruto:
+          description: Peso Bruto
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
+        Valor:
+          description: Valor
+          type: number
+          multipleOf: 0.01
+          example: 10.00
+        Volume:
+          description: Quantidade de volumes
+          type: integer
+    
+    #### CHECKLIST DO ITEM LOTE - GET ####         
     ChecklistGet:
       type: object
-      properties:
-        Item:
-          type: string
-          description: Descrição do item de análise
-        Abrangencia:
-          type: string
-          description: Agrangência
-        Historico:
-          type: string
-          description: Histórico
-        Protocolo:
-          type: integer
-          description: Protocolo
-        Valor:
-          type: string
-          description: Valor
       description: Ckecklist do lote
+      properties: 
+        Item:
+          description: Descrição do item de análise
+          type: string
+        Abrangencia:
+          description: Agrangência
+          type: string
+        Historico:
+          description: Histórico
+          type: string
+        Protocolo:
+          description: Protocolo
+          type: integer
+        Valor:
+          description: Valor
+          type: string
+          
+    #### CAMPOS PADRÃO ORDEM DE SAIDA - GET #### 
     CamposPadraoSaidaGet:
       title: Saída de mercadoria
+      description: Somente informado quando for uma saída de mercadoria
       type: object
       properties:
-        TipoTransporte:
+        TipoTransporte: 
+          description:  Tipo de transporte
           type: string
-          description: Tipo de transporte
-        Transportadora:
-          type: string
+        Transportadora: 
           description: Descrição da transportadora
-        Ordem:
-          type: integer
+          type: string
+        Ordem: 
           description: Indica a ordem em que a saída será considerada como prioridade
-        ClienteFinal:
-          type: string
+          type: integer
+        ClienteFinal: 
           description: Descrição do cliente final
-        NomeClienteFinal:
           type: string
+        NomeClienteFinal: 
           description: Nome do cliente final
-        Municipio:
           type: string
+        Municipio: 
           description: Descrição do município do cliente final
-        UF:
           type: string
+        UF: 
           description: Descrição da UF do cliente final
-        LocalEntrega:
           type: string
+        LocalEntrega: 
           description: Descrição do local de entrega
-        EnderecoLocalEntrega:
           type: string
+        EnderecoLocalEntrega: 
           description: Descrição do endereço do local de entrega
-        FilialReentrada:
           type: string
+        FilialReentrada: 
           description: Descrição da filial de reentrada para casos de ordem de armazenagem do tipo saída com reentrada
-        DepositoReentrada:
           type: string
+        DepositoReentrada: 
           description: Descrição do depósito de reentrada para casos de ordem de armazenagem do tipo saída com reentrada
-        EnderecoReentrada:
           type: string
+        EnderecoReentrada: 
           description: Descrição do endereço de reentrada para casos de ordem de armazenagem do tipo saída com reentrada
-      description: Somente informado quando for uma saída de mercadoria
+          type: string
+       
+    #### CAMPOS PADRÃO ORDEM DE SAIDA - POST ####    
     CamposPadraoSaidaPost:
       title: Saída de mercadoria
+      description: Somente informar estes dados quando for uma saída de mercadoria
       type: object
       properties:
-        TipoTransporte:
-          type: integer
+        TipoTransporte: 
           description: |
             Tipo de transporte
-
+            
             1 -  Transportadora<br>
             2  - Pac<br>
             3  - Sedex<br>
             4  - Sedex 10<br>
             5  - E-sedex<br>
             6  - Cliente retira<br>
+          type: integer
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-        Transportadora:
-          type: integer
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+        Transportadora: 
           description: CNPJ da transportadora sem caracteres especiais
-        Ordem:
           type: integer
+        Ordem: 
           description: Indica a ordem em que a saída será considerada como prioridade
+          type: integer
           example: 1
-        ClienteFinal:
-          type: integer
+        ClienteFinal: 
           description: Cliente final (pessoa cadastrada na base)
-        NomeClienteFinal:
-          type: string
+          type: integer
+        NomeClienteFinal: 
           description: Nome do cliente final (para quando a pessoa não for cadastrada no sistema)
-          example: João da Silva
-        Municipio:
           type: string
+          example: "João da Silva"
+        Municipio: 
           description: Nome do município do cliente final
-        UF:
-          type: integer
+          type: string
+        UF: 
           description: UF do cliente final - conforme tabela de UF
-        LocalEntrega:
           type: integer
+        LocalEntrega: 
           description: ID do local de entrega (pessoa cadastrada na base)
-        EnderecoLocalEntrega:
           type: integer
+        EnderecoLocalEntrega: 
           description: ID do endereço do local de entrega
-        FilialReentrada:
           type: integer
+        FilialReentrada: 
           description: CNPJ da filial de reentrada para casos de ordem de armazenagem do tipo saída com reentrada - Conforme tabela de filiais
-        DepositoReentrada:
           type: integer
+        DepositoReentrada: 
           description: ID do depósito de reentrada para casos de ordem de armazenagem do tipo saída com reentrada - Conforme tabela de depósitos
-        EnderecoReentrada:
           type: integer
+        EnderecoReentrada: 
           description: ID do endereço de reentrada para casos de ordem de armazenagem do tipo saída com reentrada
-      description: Somente informar estes dados quando for uma saída de mercadoria
+          type: integer
+    
+    #### ORDEM DE SAIDA - POST ####       
     SaidaPost:
       allOf:
-      - $ref: '#/components/schemas/CamposPadraoSaidaPost'
-      - properties:
-          Programacao:
-            type: array
-            items:
-              $ref: '#/components/schemas/ProgramacaoPost'
+        - $ref: "#/components/schemas/CamposPadraoSaidaPost" 
+        - properties:  
+            Programacao:
+              type: array
+              items:
+                $ref: "#/components/schemas/ProgramacaoPost"
+    
+    #### ORDEM DE SAIDA - GET ####              
     SaidaGet:
       allOf:
-      - properties:
-          Carregamento:
-            type: integer
-            description: Número do carregamento
-      - $ref: '#/components/schemas/CamposPadraoSaidaGet'
-      - properties:
-          Programacao:
-            type: array
-            items:
-              $ref: '#/components/schemas/ProgramacaoGet'
+        - properties:
+            Carregamento:
+              type: integer
+              description: Número do carregamento  
+        - $ref: "#/components/schemas/CamposPadraoSaidaGet"
+        - properties:  
+            Programacao:
+              type: array
+              items:
+                $ref: "#/components/schemas/ProgramacaoGet"
+    
+    #### ITEM LOTE DA ENTRADA - GET ####              
     ItemLoteEntradaGet:
-      allOf:
-      - $ref: '#/components/schemas/ItemLoteGet'
-      - properties:
-          Unitizacao:
-            type: array
-            items:
-              $ref: '#/components/schemas/UnitizacaoGet'
-          Ocorrencia:
-            type: array
-            items:
-              $ref: '#/components/schemas/OcorrenciaGet'
-          Servico:
-            type: array
-            items:
-              $ref: '#/components/schemas/ServicoItemLoteGet'
-          Checklist:
-            type: array
-            items:
-              $ref: '#/components/schemas/ChecklistGet'
+      allOf:  
+        - $ref: "#/components/schemas/ItemLoteGet"
+        - properties:
+            Unitizacao:
+              type: array
+              items:
+                $ref: "#/components/schemas/UnitizacaoGet"
+            Ocorrencia:
+              type: array
+              items:
+                $ref: "#/components/schemas/OcorrenciaGet"
+            Servico:
+              type: array
+              items:
+                $ref: "#/components/schemas/ServicoItemLoteGet"
+            Checklist:
+              type: array
+              items:
+                $ref: "#/components/schemas/ChecklistGet" 
+                
+    #### ITEM LOTE DA PROGRAMAÇÃO DE SAIDA - GET ####        
     ItemLoteProgramacaoGet:
-      allOf:
-      - $ref: '#/components/schemas/ItemLoteGet'
-      - properties:
-          Servico:
-            type: array
-            items:
-              $ref: '#/components/schemas/ServicoItemLoteGet'
+      allOf:  
+        - $ref: "#/components/schemas/ItemLoteGet"
+        - properties:
+            Servico:
+              type: array
+              items:
+                $ref: "#/components/schemas/ServicoItemLoteGet"
+                
+    #### PARAMETROS DA PROGRAMAÇÃO - GET E POST ####               
     ParametroProgramacao:
-      type: object
-      properties:
-        QuantidadeDefinidaPeloSaldoEstoque:
-          type: string
-          description: Será separada toda a quantidade em estoque do produto
-          example: "N"
-        CancelarAutomaticamenteSaldoInsuficiente:
-          type: string
-          description: Caso a quantidade em estoque seja inferior a quantidade programada, a quantidade faltante será cancelada e o restante será separado.
-          example: "N"
-        GerarEmbalagensAutomaticamente:
-          type: string
-          description: Gera as embalagens automaticamente após a confirmação da separação da mercadoria
-          example: S
-        GerarEmbalagensPorVolume:
-          type: string
-          description: Gera uma embalagem para cada volume
-          example: "N"
-        NaoExibirMercadoriasAreaOcorrencia:
-          type: string
-          description: Ao exibir as mercadorias para efetuar a separação, não exibe as que estão em área de ocorrência
-          example: "N"
-        NaFaltaMercadoriaProgramarSaldoEstoque:
-          type: string
-          description: Caso a quantidade em estoque seja inferior a quantidade programada, a quantidade faltante ficará pendente e o restante será separado.
-          example: "N"
-        SepararQuantidadeSoltaPeloPrePickingPicking:
-          type: string
-          description: Quando a mercadoria estiver solta, ela será separada somente pelo pré-picking e pelo picking
-          example: "N"
       description: Parâmetro da programação
+      type: object
+      properties:
+        QuantidadeDefinidaPeloSaldoEstoque: 
+          description: Será separada toda a quantidade em estoque do produto
+          type: string
+          example: "N"
+        CancelarAutomaticamenteSaldoInsuficiente: 
+          description: Caso a quantidade em estoque seja inferior a quantidade programada, a quantidade faltante será cancelada e o restante será separado.
+          type: string
+          example: "N"
+        GerarEmbalagensAutomaticamente: 
+          description: Gera as embalagens automaticamente após a confirmação da separação da mercadoria
+          type: string
+          example: "S"
+        GerarEmbalagensPorVolume: 
+          description: Gera uma embalagem para cada volume
+          type: string
+          example: "N"
+        NaoExibirMercadoriasAreaOcorrencia: 
+          description: Ao exibir as mercadorias para efetuar a separação, não exibe as que estão em área de ocorrência
+          type: string
+          example: "N"
+        NaFaltaMercadoriaProgramarSaldoEstoque: 
+          description: Caso a quantidade em estoque seja inferior a quantidade programada, a quantidade faltante ficará pendente e o restante será separado.
+          type: string
+          example: "N"
+        SepararQuantidadeSoltaPeloPrePickingPicking: 
+          description: Quando a mercadoria estiver solta, ela será separada somente pelo pré-picking e pelo picking
+          type: string
+          example: "N"
+   
+    #### DADOS RECEBIMENTO - POST ####
     RecebimentoPost:
+      description: Dados para recebimento da mercadoria
       type: object
       properties:
-        TipoDescarga:
-          type: integer
+        TipoDescarga: 
           description: Conforme tabela de tipos de descarga
-        Transportadora:
           type: integer
+        Transportadora: 
           description: CNPJ da transportadora sem caracteres especiais
-        Fornecedor:
           type: integer
+        Fornecedor: 
           description: CNPJ do fornecedor sem caracteres especiais
-        Placa:
-          type: string
-          description: Placa do veículo
-          example: ABC-1234
-        UFPlaca:
           type: integer
+        Placa: 
+          description: Placa do veículo
+          type: string
+          example: "ABC-1234"
+        UFPlaca:
           description: Estado do veículo - conforme tabela de estados
-        Carreta:
-          type: string
-          description: Placa da carreta do veículo
-          example: DEF-5678
-        Doca:
           type: integer
+        Carreta:
+          description: Placa da carreta do veículo
+          type: string
+          example: "DEF-5678"
+        Doca:
           description: ID da doca
-        Navio:
           type: integer
+        Navio: 
           description: ID do navio
-        Conteiner:
-          type: string
+          type: integer
+        Conteiner: 
           description: Número do conteiner
+          type: string
         PessoaDocumento:
-          type: integer
           description: ID do motorista (pessoa cadastrada na base)
-        Motorista:
-          type: string
-          description: Motorista (quando a pessoa não for cadastrada no sistema)
-          example: Pedro da Silva
-        NumeroDocumento:
-          type: string
-          description: Número do documento do motorista (quando a pessoa não for cadastrada no sistema). Pode ser CPF, RG..
-          example: 874.554.955-85
-        DI:
-          type: string
-          description: DI
-          example: AC12
-        Processo:
-          type: string
-          description: Processo
-          example: ERD123
-        Numero:
-          type: string
-          description: Número do documento de entrada
-          example: "111111"
-        Serie:
-          type: string
-          description: Série do documento de entrada
-          example: "1"
-        Emissao:
-          type: string
-          description: Data de emissão do documento (dd/mm/yyyy)
-          example: 06/12/1990
-      description: Dados para recebimento da mercadoria
-    RecebimentoGet:
-      type: object
-      properties:
-        TipoDescarga:
-          type: string
-          description: Descrição do tipo da descarga
-        Transportadora:
-          type: string
-          description: Descrição da transportadora
-        Fornecedor:
-          type: string
-          description: Descrição do fornecedor
-        Placa:
-          type: string
-          description: Placa do veículo
-          example: ABC-1234
-        UFPlaca:
-          type: string
-          description: Descrição do estado do veículo
-        Carreta:
-          type: string
-          description: Placa da carreta do veículo
-          example: DEF-5678
-        Doca:
-          type: string
-          description: Descrição da doca
-        Navio:
-          type: string
-          description: Descrição do navio
-        Conteiner:
-          type: string
-          description: Descrição do conteiner
-        PessoaDocumento:
-          type: string
-          description: Descrição da pessoa do documento
-        Motorista:
-          type: string
-          description: Motorista
-        NumeroDocumento:
-          type: string
-          description: Número do documento do motorista
-        DI:
-          type: string
-          description: DI
-          example: AC12
-        Processo:
-          type: string
-          description: Processo
-          example: ERD123
-        Numero:
-          type: string
-          description: Número do documento de entrada
-          example: "111111"
-        Serie:
-          type: string
-          description: Série do documento de entrada
-          example: "1"
-        Emissao:
-          type: string
-          description: Data de emissão do documento (dd/mm/yyyy)
-          example: 06/12/1990
-      description: Dados para recebimento da mercadoria
-    ProgramacaoPadraoGet:
-      required:
-      - Produto
-      - UnidadeMedida
-      type: object
-      properties:
-        Produto:
-          type: string
-          description: Descrição do produto
-        UnidadeMedida:
-          type: string
-          description: Sigla da unidade de medida
-        Data:
-          type: string
-          description: Data da programação (dd/mm/yyyy hh:mm)
-          example: 06/12/1990 13:30
-        Quantidade:
-          multipleOf: 0.0001
-          type: number
-          description: Quantidade
-          example: 5
-        SequencialPedido:
           type: integer
-          description: Sequencial do produto no pedido
-        TipoSelecao:
+        Motorista:
+          description: Motorista (quando a pessoa não for cadastrada no sistema)
           type: string
-          description: Descrição do tipo de seleção
-        GrupoMetodoSelecao:
+          example: "Pedro da Silva"
+        NumeroDocumento:
+          description: Número do documento do motorista (quando a pessoa não for cadastrada no sistema). Pode ser CPF, RG..
           type: string
-          description: Descrição do grupo do método de seleção
-        Observacao:
+          example: "874.554.955-85"
+        DI: 
+          description: DI
           type: string
-          description: Observação
-          example: Observação da programação x
-        Parametro:
-          $ref: '#/components/schemas/ParametroProgramacao'
-        Filtro:
-          $ref: '#/components/schemas/FiltroProgramacaoGet'
+          example: "AC12"
+        Processo: 
+          description: Processo
+          type: string
+          example: "ERD123"
+        Numero: 
+          description: Número do documento de entrada
+          type: string
+          example: "111111"
+        Serie: 
+          description: Série do documento de entrada
+          type: string
+          example: "1"
+        Emissao: 
+          description: Data de emissão do documento (dd/mm/yyyy)
+          type: string
+          example: "06/12/1990"
+          
+    #### DADOS RECEBIMENTO - POST ####
+    RecebimentoGet:
+      description: Dados para recebimento da mercadoria
+      type: object
+      properties:
+        TipoDescarga: 
+          description: Descrição do tipo da descarga
+          type: string
+        Transportadora: 
+          description: Descrição da transportadora
+          type: string
+        Fornecedor: 
+          description: Descrição do fornecedor
+          type: string
+        Placa: 
+          description: Placa do veículo
+          type: string
+          example: "ABC-1234"
+        UFPlaca:
+          description: Descrição do estado do veículo
+          type: string
+        Carreta:
+          description: Placa da carreta do veículo
+          type: string
+          example: "DEF-5678"
+        Doca:
+          description: Descrição da doca
+          type: string
+        Navio: 
+          description: Descrição do navio
+          type: string
+        Conteiner: 
+          description: Descrição do conteiner
+          type: string
+        PessoaDocumento:
+          description: Descrição da pessoa do documento
+          type: string
+        Motorista:
+          description: Motorista
+          type: string
+        NumeroDocumento:
+          description: Número do documento do motorista
+          type: string
+        DI: 
+          description: DI
+          type: string
+          example: "AC12"
+        Processo: 
+          description: Processo
+          type: string
+          example: "ERD123"
+        Numero: 
+          description: Número do documento de entrada
+          type: string
+          example: "111111"
+        Serie: 
+          description: Série do documento de entrada
+          type: string
+          example: "1"
+        Emissao: 
+          description: Data de emissão do documento (dd/mm/yyyy)
+          type: string
+          example: "06/12/1990"
+          
+    #### CAMPOS PADRÃO PROGRAMAÇÃO DA ORDEM - GET ####      
+    ProgramacaoPadraoGet:
       description: Programação de saída de mercadoria
+      type: object
+      required:
+        - Produto
+        - UnidadeMedida
+      properties:
+        Produto: 
+          description: Descrição do produto
+          type: string
+        UnidadeMedida: 
+          description: Sigla da unidade de medida
+          type: string
+        Data: 
+          description: Data da programação (dd/mm/yyyy hh:mm)
+          type: string
+          example: "06/12/1990 13:30"
+        Quantidade:
+          description: Quantidade
+          type: number
+          multipleOf: 0.0001
+          example: 5.0000
+        SequencialPedido: 
+          description: Sequencial do produto no pedido
+          type: integer
+        TipoSelecao: 
+          description: Descrição do tipo de seleção
+          type: string
+        GrupoMetodoSelecao: 
+          description: Descrição do grupo do método de seleção
+          type: string
+        Observacao: 
+          description: Observação
+          type: string
+          example: "Observação da programação x"
+        Parametro: 
+          $ref: "#/components/schemas/ParametroProgramacao"
+        Filtro: 
+          $ref: "#/components/schemas/FiltroProgramacaoGet"
+                
+    #### FILTROS PROGRAMAÇÃO - POST ####    
     FiltroProgramacaoPost:
-      type: object
       description: Filtros da programação
+      type: object
       allOf:
-      - properties:
-          ReferenciaLote:
-            type: integer
-            description: ID de referência do lote de entrada
-          Conteiner:
-            type: integer
-            description: Número do conteiner da entrada da mercadoria
-          Projeto:
-            type: integer
-            description: Projeto da entrada da mercadoria - conforme tabela de projetos
-      - $ref: '#/components/schemas/FiltroPadraoProgramacao'
+        - properties:
+            ReferenciaLote: 
+              description: ID de referência do lote de entrada
+              type: integer
+            Conteiner: 
+              description: Número do conteiner da entrada da mercadoria
+              type: integer
+            Projeto: 
+              description: Projeto da entrada da mercadoria - conforme tabela de projetos
+              type: integer
+        - $ref: "#/components/schemas/FiltroPadraoProgramacao"  
+    
+    #### FILTROS PROGRAMAÇÃO - GET ####          
     FiltroProgramacaoGet:
-      type: object
       description: Filtros da programação
+      type: object
       allOf:
-      - properties:
-          ReferenciaLote:
-            type: string
-            description: Referência do lote de entrada
-          Conteiner:
-            type: string
-            description: Conteiner da entrada da mercadoria
-          Projeto:
-            type: string
-            description: Projeto da entrada da mercadoria
-      - $ref: '#/components/schemas/FiltroPadraoProgramacao'
+        - properties:
+            ReferenciaLote: 
+              description: Referência do lote de entrada
+              type: string
+            Conteiner: 
+              description: Conteiner da entrada da mercadoria
+              type: string
+            Projeto: 
+              description: Projeto da entrada da mercadoria
+              type: string
+            
+        - $ref: "#/components/schemas/FiltroPadraoProgramacao"
+    
+    #### FILTROS PADRÃO PROGRAMAÇÃO ####        
     FiltroPadraoProgramacao:
       type: object
       properties:
-        Fabricacao:
-          type: string
+        Fabricacao: 
           description: Fabricação do lote de entrada (dd/mm/yyyy)
-          example: 06/12/1990
-        Validade:
           type: string
+          example: "06/12/1990"
+        Validade: 
           description: Validade do lote de entrada (dd/mm/yyyy)
-          example: 06/12/1990
-        Lote:
           type: string
+          example: "06/12/1990"
+        Lote: 
           description: Descrição do lote de entrada
-          example: ASDF13132
-        NumeroSerie:
           type: string
+          example: "ASDF13132"
+        NumeroSerie: 
           description: Numero de série do lote de entrada
+          type: string
           example: "123132446"
-        NumeroDocumento:
-          type: string
+        NumeroDocumento: 
           description: Numero do documente de entrada da mercadoria
+          type: string
           example: "1234"
-        NumeroPedido:
-          type: string
+        NumeroPedido: 
           description: Numero do pedido de entrada da mercadoria
-          example: PED4585
-        DI:
           type: string
+          example: "PED4585"
+        DI: 
           description: DI de entrada da mercadoria
-          example: AC12
-        Processo:
           type: string
+          example: "AC12"
+        Processo: 
           description: Processo de entrada da mercadoria
-          example: ERD123
-        Endereco:
           type: string
+          example: "ERD123"
+        Endereco: 
           description: Endereço da mercadoria
-          example: A.01.20
-        Unitizacao:
           type: string
+          example: "A.01.20"
+        Unitizacao: 
           description: Unitização da mercadoria
-          example: "564846"
-        ReferenciaUnitizador:
           type: string
+          example: "564846"
+        ReferenciaUnitizador: 
           description: referência do unitizador da mercadoria
-          example: XFS4544
+          type: string
+          example: "XFS4544"
+    
+    #### LISTA DE PEDIDOS PENDENTES - GET ####      
     PedidoPendenteGet:
       type: object
       properties:
-        Pedidos:
-          type: array
+        Pedidos: 
           description: Pedidos
+          type: array
           items:
-            $ref: '#/components/schemas/CamposPedidoPendentePadrao'
+            $ref: "#/components/schemas/CamposPedidoPendentePadrao"
+    
+    #### LISTA DE ESTOQUE DE MERCADORIA - GET ####        
     EstoqueMercadoriaGet:
       type: object
       properties:
-        EstoqueMercadoria:
-          type: array
+        EstoqueMercadoria: 
           description: Estoque de mercadoria
+          type: array
           items:
-            $ref: '#/components/schemas/CamposEstoqueMercadoriaPadrao'
+            $ref: "#/components/schemas/CamposEstoqueMercadoriaPadrao"
+    
+    #### CAMPO PADRÃO PEDIDO PENDENTE - GET ####          
     CamposPedidoPendentePadrao:
       type: object
       properties:
-        NumeroOrdem:
-          type: integer
+        NumeroOrdem: 
           description: Número da ordem
-        NumeroPedido:
           type: integer
+        NumeroPedido: 
           description: Número do pedido
+          type: integer
+          
+    #### CAMPO PADRÃO ESTOQUE MERCADORIA - GET ####   
     CamposEstoqueMercadoriaPadrao:
       type: object
       properties:
-        Filial:
-          type: string
+        Filial: 
           description: Descrição da filial
-        Cliente:
           type: string
+        Cliente: 
           description: Descrição do cliente
-        Produto:
           type: string
+        Produto: 
           description: Descrição do produto
-        UnidadeMedida:
           type: string
+        UnidadeMedida: 
           description: Sigla da unidade de medida
-        NumeroOrdem:
-          type: integer
+          type: string
+        NumeroOrdem: 
           description: Número da ordem de entrada
-        NumeroPedido:
-          type: string
+          type: integer
+        NumeroPedido: 
           description: Número do pedido
-        NaturezaOperacao:
           type: string
+        NaturezaOperacao: 
           description: Descrição da natureza de operação
-        ClienteFaturamento:
           type: string
+        ClienteFaturamento: 
           description: Descrição do cliente de faturamento
-        Deposito:
           type: string
+        Deposito: 
           description: Descrição do depósito
-        Endereco:
           type: string
+        Endereco: 
           description: Descrição do endereço
-        Unitizacao:
-          type: integer
+          type: string
+        Unitizacao: 
           description: Número da unitização
-        Volume:
           type: integer
+        Volume: 
           description: Número do volume
-        NumeroOcorrencia:
           type: integer
+        NumeroOcorrencia: 
           description: Número da ocorrência
-        NumeroDocumento:
           type: integer
+        NumeroDocumento: 
           description: Número do documento
-        NumeroDescarga:
           type: integer
+        NumeroDescarga: 
           description: Número da descarga
-        Lote:
-          type: string
+          type: integer
+        Lote: 
           description: Lote de entrada da mercadoria
-        NumeroSerie:
           type: string
+        NumeroSerie: 
           description: Numero de série do lote de entrada
-        Fabricacao:
           type: string
+        Fabricacao: 
           description: Fabricação do lote de entrada (dd/mm/yyyy)
-          example: 06/12/1990
-        Validade:
           type: string
+          example: "06/12/1990"
+        Validade: 
           description: Validade do lote de entrada (dd/mm/yyyy)
-          example: 06/12/1990
-        Conteiner:
           type: string
+          example: "06/12/1990"
+        Conteiner: 
           description: Conteiner de entrada
+          type: string
         SaldoDisponivel:
-          $ref: '#/components/schemas/CamposQuantidadeEstoqueMercadoriaPadrao'
+          $ref: "#/components/schemas/CamposQuantidadeEstoqueMercadoriaPadrao"
         SaldoReservado:
-          $ref: '#/components/schemas/CamposQuantidadeEstoqueMercadoriaPadrao'
+          $ref: "#/components/schemas/CamposQuantidadeEstoqueMercadoriaPadrao"
         SaldoBloqueado:
-          $ref: '#/components/schemas/CamposQuantidadeEstoqueMercadoriaPadrao'
+          $ref: "#/components/schemas/CamposQuantidadeEstoqueMercadoriaPadrao"
         SaldoAtual:
-          $ref: '#/components/schemas/CamposQuantidadeEstoqueMercadoriaPadrao'
+          $ref: "#/components/schemas/CamposQuantidadeEstoqueMercadoriaPadrao"
+    
+    #### CAMPO PADRÃO QUANTIDADE ESTOQUE MERCADORIA - GET ####     
     CamposQuantidadeEstoqueMercadoriaPadrao:
       type: object
       properties:
         Quantidade:
-          multipleOf: 0.0001
-          type: number
           description: Quantidade
+          type: number
+          multipleOf: 0.0001
         PesoBruto:
-          multipleOf: 0.0001
-          type: number
           description: Peso Bruto
-          example: 10
-        PesoLiquido:
+          type: number
           multipleOf: 0.0001
-          type: number
+          example: 10.0000
+        PesoLiquido:
           description: Peso Líquido
-          example: 10
-        Valor:
-          multipleOf: 0.01
           type: number
+          multipleOf: 0.0001
+          example: 10.0000
+        Valor:
           description: Valor
-          example: 10
+          type: number
+          multipleOf: 0.01
+          example: 10.00
         Volume:
-          type: integer
           description: Volume
-          example: 10
+          type: integer
+          example: 10  
+ 
+    #### REMOVER PEDIDO DA FILA - POST ####     
     RemoverPedidoFila:
-      type: array
       description: Remove o pedido da fila
+      type: array
       items:
-        $ref: '#/components/schemas/RemoverPedidoFila_inner'
+        properties:
+          NumeroPedido:
+            description: Número do pedido
+            type: integer
+            
+    #### LISTA DE PESSOAS - POST ####
     ListaPessoa:
+      description: Listagem de pessoas
       type: object
       properties:
         Pessoa:
           type: array
           items:
-            $ref: '#/components/schemas/PessoaPost'
-      description: Listagem de pessoas
+            $ref: "#/components/schemas/PessoaPost"
+            
     PessoaPost:
       type: object
+      
+  
+    #### LISTA DE PRODUTOS - POST ####
     ListaProduto:
+      description: Listagem de produtos
       type: object
       properties:
         Item:
           type: array
           items:
-            $ref: '#/components/schemas/MaterialSuprimentoProdutoPost'
-      description: Listagem de produtos
+            $ref: "#/components/schemas/MaterialSuprimentoProdutoPost"
+       
+    #### PRODUTO - UPDATE ####     
     MaterialSuprimentoProdutoPut:
       type: object
       properties:
         Nome:
-          type: string
           description: Nome
+          type: string
+            
         Unidade:
-          type: string
           description: Sigla da unidade de medida - Conforme tabela de unidades de medida
+          type: string
+          
         Familia:
-          type: integer
           description: Conforme tabela de familias do produto
+          type: integer  
+          
         Grupo:
-          type: integer
           description: Conforme tabela de grupos do produto
+          type: integer  
+          
         CodigoAuxiliar:
-          type: string
           description: Código auxiliar do produto
+          type: string
+          
         CentroCusto:
-          type: integer
           description: Centro de custo a qual o produto está vinculado - conforme tabela de centros de custo
+          type: integer
+          
         UnidadeNegocio:
-          type: integer
           description: Unidade de negócio a qual o produto está vinculado - conforme tabela de unidades de negócio
-        Projeto:
           type: integer
+          
+        Projeto:
           description: Projeto a qual o produto está vinculado - conforme tabela de projetos
+          type: integer
+          
         KitPacote:
+          description: Indica se o produto é parte de um kit/pacote  
           type: string
-          description: Indica se o produto é parte de um kit/pacote
-          example: S
+          example: "S"
+          
         Observacao:
-          type: string
           description: Observação
+          type: string
+          
         Produto:
-          $ref: '#/components/schemas/MaterialSuprimentoDadosProdutoPost'
+          $ref: "#/components/schemas/MaterialSuprimentoDadosProdutoPost"
+          
         Servico:
-          $ref: '#/components/schemas/MaterialSuprimentoDadosServicoPost'
+          $ref: "#/components/schemas/MaterialSuprimentoDadosServicoPost"
+          
         InformacaoComplementar:
           type: array
           items:
-            $ref: '#/components/schemas/MaterialSuprimentoDadosComplementoPost'
+            $ref: "#/components/schemas/MaterialSuprimentoDadosComplementoPost"
+            
+    #### PRODUTO - POST ####        
     MaterialSuprimentoProdutoPost:
-      required:
-      - Familia
-      - Nome
-      - Tipo
-      - TipoIdentificador
-      - Unidade
       type: object
+      required:
+        - Nome
+        - Unidade
+        - Tipo
+        - Familia
+        - TipoIdentificador
       properties:
         Nome:
-          type: string
           description: Nome
+          type: string
+          
         Codigo:
-          type: integer
           description: Código
-        CodigoReferencia:
-          type: string
-          description: Codigo de referência do produto
-        Unidade:
-          type: string
-          description: Sigla da unidade de medida - Conforme tabela de unidades de medida
-        Tipo:
           type: integer
+          
+        CodigoReferencia:
+          description: Codigo de referência do produto
+          type: string
+          
+        Unidade:
+          description: Sigla da unidade de medida - Conforme tabela de unidades de medida
+          type: string
+          
+        Tipo:
           description: |
             Tipo do produto
-
+            
             1 -  Produto<br>
             2  - Serviço<br>
             3  - Produto de terceiro<br>
+          type: integer
           enum:
-          - 1
-          - 2
-          - 3
+            - 1
+            - 2
+            - 3
+            
         Familia:
-          type: integer
           description: Conforme tabela de familias do produto
+          type: integer 
+          
         Grupo:
-          type: integer
           description: Conforme tabela de grupos do produto
+          type: integer  
+          
         TipoIdentificador:
-          type: integer
           description: Conforme tabela de tipos de identificador
+          type: integer
+          
         CodigoAuxiliar:
-          type: string
           description: Código auxiliar do produto
+          type: string
+          
         CentroCusto:
-          type: integer
           description: Centro de custo a qual o produto está vinculado - conforme tabela de centros de custo
+          type: integer
+          
         UnidadeNegocio:
-          type: integer
           description: Unidade de negócio a qual o produto está vinculado - conforme tabela de unidades de negócio
-        Projeto:
           type: integer
+          
+        Projeto:
           description: Projeto a qual o produto está vinculado - conforme tabela de projetos
+          type: integer
+          
         KitPacote:
+          description: Indica se o produto é parte de um kit/pacote  
           type: string
-          description: Indica se o produto é parte de um kit/pacote
-          example: S
+          example: "S"
+          
         Observacao:
-          type: string
           description: Observação
+          type: string
+      
         Produto:
-          $ref: '#/components/schemas/MaterialSuprimentoDadosProdutoPost'
+          $ref: "#/components/schemas/MaterialSuprimentoDadosProdutoPost"
+          
         Servico:
-          $ref: '#/components/schemas/MaterialSuprimentoDadosServicoPost'
+          $ref: "#/components/schemas/MaterialSuprimentoDadosServicoPost"
+          
         InformacaoComplementar:
           type: array
           items:
-            $ref: '#/components/schemas/MaterialSuprimentoDadosComplementoPost'
+            $ref: "#/components/schemas/MaterialSuprimentoDadosComplementoPost"
+          
     MaterialSuprimentoDadosServicoPost:
-      required:
-      - TipoServico
       type: object
+      description: Somente informar estes dados quando for item do tipo serviço
+      required:
+        - TipoServico
       properties:
         TipoServico:
-          type: integer
           description: Tipo do serviço - conforme tabela de tipos de serviço
-      description: Somente informar estes dados quando for item do tipo serviço
+          type: integer  
+          
     MaterialSuprimentoDadosProdutoPost:
       type: object
+      description: Somente informar estes dados quando for item do tipo produto ou produto de terceiro
       properties:
         Cliente:
-          type: integer
           description: CNPJ do cliente sem caracteres especiais
+          type: integer
+          
         Origem:
-          type: integer
-          description: "Origem do produto \n\n1 - Nacional<br>\n2 - Estrangeira - Importacao Direta<br>\n3 - Estrangeira - Adquirida no Mercado Interno<br>\n4 - Nacional (Superior a 40%)<br>\n5 - Nacional (Zona Franca Manaus)<br>\n6 - Nacional (Inferior a 40%)<br>\n7 - Estrangeira - Importacao direta (Camex)<br>\n8 - Estrangeira - Adquirida no mercado interno (Camex)<br>\n9 - Nacional (Superior a 70%)<br>\n"
-          enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-        CEST:
-          type: integer
-          description: Código especificador da substituição tributária - conforme tabela de CEST
-        NCM:
-          type: integer
-          description: NCM - conforme tabela de NCM
-        CodigoANP:
-          type: integer
-          description: Código de produto da ANP - conforme tabela de ANP
-        ProdutoPerigoso:
-          type: integer
-          description: Produto perigoso - conforme tabela de tipos de produto perigoso
-        NaturezaMercadoria:
-          type: integer
-          description: Natureza da mercadoria - conforme tabela de naturezas de mercadoria
-        Marca:
-          type: integer
-          description: Marca do produto - conforme tabela de marcas
-        GrupoRotulagem:
-          type: integer
-          description: Grupo de rotulagem - conforme tabela de grupos de rotulagem
-        CurvaABC:
-          type: integer
-          description: |
-            Curva ABC
+          description: | 
+            Origem do produto 
+            
+            1 - Nacional<br>
+            2 - Estrangeira - Importacao Direta<br>
+            3 - Estrangeira - Adquirida no Mercado Interno<br>
+            4 - Nacional (Superior a 40%)<br>
+            5 - Nacional (Zona Franca Manaus)<br>
+            6 - Nacional (Inferior a 40%)<br>
+            7 - Estrangeira - Importacao direta (Camex)<br>
+            8 - Estrangeira - Adquirida no mercado interno (Camex)<br>
+            9 - Nacional (Superior a 70%)<br>
 
+          type: integer
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
+            - 8
+            - 9
+            
+        CEST:
+          description: Código especificador da substituição tributária - conforme tabela de CEST
+          type: integer
+          
+        NCM:
+          description: NCM - conforme tabela de NCM
+          type: integer  
+          
+        CodigoANP:
+          description: Código de produto da ANP - conforme tabela de ANP
+          type: integer
+          
+        ProdutoPerigoso:
+          description: Produto perigoso - conforme tabela de tipos de produto perigoso
+          type: integer
+          
+        NaturezaMercadoria:
+          description: Natureza da mercadoria - conforme tabela de naturezas de mercadoria
+          type: integer
+          
+        Marca:
+          description: Marca do produto - conforme tabela de marcas
+          type: integer
+          
+        GrupoRotulagem:
+          description: Grupo de rotulagem - conforme tabela de grupos de rotulagem
+          type: integer
+          
+        CurvaABC:
+          description: | 
+            Curva ABC
+            
             1 - A<br>
             2 - B<br>
             3 - C<br>
-          enum:
-          - 1
-          - 2
-          - 3
-        UnidadeVolume:
-          type: string
-          description: Sigla da unidade de volume - Conforme tabela de unidades de medida
-        UnidadeEstoque:
-          type: string
-          description: Sigla da unidade de estoque - Conforme tabela de unidades de medida
-        Altura:
-          multipleOf: 0.001
-          type: number
-          description: Altura
-          example: 1
-        Largura:
-          multipleOf: 0.001
-          type: number
-          description: Largura
-          example: 1
-        Comprimento:
-          multipleOf: 0.001
-          type: number
-          description: Comprimento
-          example: 1
-        M2:
-          multipleOf: 0.0001
-          type: number
-          description: Dimensão do produto em metros quadrados
-          example: 1
-        M3:
-          multipleOf: 0.0000000001
-          type: number
-          description: Dimensão do produto em metros cúbicos
-          example: 1
-        PesoLiquidoKG:
-          multipleOf: 0.0001
-          type: number
-          description: Peso líquido em KG
-          example: 10
-        PesoBrutoKG:
-          multipleOf: 0.0001
-          type: number
-          description: Peso bruto em KG
-          example: 1.0001
-        TaraKG:
-          multipleOf: 0.0001
-          type: number
-          description: Tara em KG
-          example: 1.0001
-        Fabricante:
+
           type: integer
+          enum:
+            - 1
+            - 2
+            - 3
+
+        UnidadeVolume:
+          description: Sigla da unidade de volume - Conforme tabela de unidades de medida
+          type: string
+          
+        UnidadeEstoque:
+          description: Sigla da unidade de estoque - Conforme tabela de unidades de medida
+          type: string
+          
+        Altura:
+          description: Altura
+          type: number
+          multipleOf: 0.001
+          example: 1.000
+          
+        Largura:
+          description: Largura
+          type: number
+          multipleOf: 0.001
+          example: 1.000
+          
+        Comprimento:
+          description: Comprimento
+          type: number
+          multipleOf: 0.001
+          example: 1.000
+        
+        M2:
+          description: Dimensão do produto em metros quadrados
+          type: number
+          multipleOf: 0.0001
+          example: 1.0000
+          
+        M3:
+          description: Dimensão do produto em metros cúbicos
+          type: number
+          multipleOf: 0.0000000001
+          example: 1.0000000000
+          
+        PesoLiquidoKG:
+          description: Peso líquido em KG
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
+          
+        PesoBrutoKG:
+          description: Peso bruto em KG
+          type: number
+          multipleOf: 0.0001
+          example: 1.0001
+          
+        TaraKG: 
+          description: Tara em KG
+          type: number
+          multipleOf: 0.0001
+          example: 1.0001
+          
+        Fabricante:
           description: CNPJ do fabricante sem caracteres especiais
+          type: integer
+          
         Proprio:
-          $ref: '#/components/schemas/MaterialSuprimentoDadosProdutoProprioPost'
+          $ref: "#/components/schemas/MaterialSuprimentoDadosProdutoProprioPost"
+          
         Armazenagem:
-          $ref: '#/components/schemas/MaterialSuprimentoDadosProdutoArmazemPost'
+          $ref: "#/components/schemas/MaterialSuprimentoDadosProdutoArmazemPost"
+          
         CodigoBarra:
           type: array
           items:
-            $ref: '#/components/schemas/MaterialSuprimentoDadosProdutoCodigoBarraPost'
+            $ref: "#/components/schemas/MaterialSuprimentoDadosProdutoCodigoBarraPost"
+            
         FatorConversao:
           type: array
           items:
-            $ref: '#/components/schemas/MaterialSuprimentoDadosProdutoFatorConversaoPost'
-      description: Somente informar estes dados quando for item do tipo produto ou produto de terceiro
+            $ref: "#/components/schemas/MaterialSuprimentoDadosProdutoFatorConversaoPost"
+            
     MaterialSuprimentoDadosProdutoProprioPost:
+      description: Somente informar estes dados quando for um item do tipo produto
       type: object
       properties:
         TipoReposicaoEstoque:
-          type: integer
           description: Tipo de reposição no estoque - conforme tabela de tipos de reposição no estoque
+          type: integer
         RoteiroProducao:
-          type: integer
           description: Roteiro de produção - conforme tabela de roteiros de produção
-        EstoqueMinimo:
-          multipleOf: 0.0001
-          type: number
-          description: Estoque mínimo
-          example: 10
-        EstoqueMaximo:
-          multipleOf: 0.0001
-          type: number
-          description: Estoque máximo
-          example: 10
-        EstoqueSeguranca:
-          multipleOf: 0.0001
-          type: number
-          description: Estoque de segurança
-          example: 10
-        PontoReposicao:
-          multipleOf: 0.0001
-          type: number
-          description: Ponto de reposição
-          example: 10
-        LoteReposicao:
-          multipleOf: 0.0001
-          type: number
-          description: Lote de reposição
-          example: 10
-        TempoReposicao:
           type: integer
+        EstoqueMinimo:
+          description: Estoque mínimo
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
+        EstoqueMaximo:
+          description: Estoque máximo
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
+        EstoqueSeguranca:
+          description: Estoque de segurança
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
+        PontoReposicao:
+          description: Ponto de reposição
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
+        LoteReposicao:
+          description: Lote de reposição
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
+        TempoReposicao:
           description: Tempo de reposição
-      description: Somente informar estes dados quando for um item do tipo produto
+          type: integer
+          
     MaterialSuprimentoDadosProdutoArmazemPost:
+      description: Somente informar estes dados quando for um item do tipo produto de terceiro
       type: object
       properties:
         NaoPermiteMovimentarQuantidadeVolumeFracionada:
-          type: string
           description: Indica que não pode ser feita a separação de volume fracionado
-          example: S
+          type: string
+          example: "S"
+        
         GerarProgramacaoSaidaAutomaticamente:
-          type: string
           description: Indica que a programação de saída é gerada automaticamente
-          example: S
+          type: string
+          example: "S"
+          
         CancelarSaldosInsuficientesProgramacaoSaida:
-          type: string
           description: Indica que ao separar a quantidade da programação, caso tenha quantidade insuficiente, o saldo faltante será cancelado automaticamente
-          example: S
+          type: string
+          example: "S"
+          
         EfetuarSeparacaoMercadoriasApenasPeloPicking:
-          type: string
           description: Indica que a separação da mercadoria pode ser efetuada apenas pelos endereços de picking
-          example: S
+          type: string
+          example: "S"
+          
         EfetuarLeituraLoteSepararMercadoria:
-          type: string
           description: Indica que deve ser efetuada a leitura em lote no processo de separação de mercadoria
-          example: S
+          type: string
+          example: "S" 
+          
         NaoPermiteSepararAutomaticamenteValidadeVencida:
-          type: string
           description: Indica que não irá sugerir mercadorias vencidas quando o metódo de seleção for automático
-          example: S
+          type: string
+          example: "S"
+          
         PermiteSepararQuantidadeDiferenteQuantidadeProgramada:
-          type: string
           description: Indica que poderá separar uma quantidade diferente da programada
-          example: S
+          type: string
+          example: "S"
+          
         NaoPermitirEfetuarTrocaReservaPicking:
-          type: string
           description: Indica que não poderá ser feita a troca da mercadoria que foi reservada no picking
-          example: S
+          type: string
+          example: "S"
+          
         GerarEmbalagensAutomaticamenteSepararMercadoria:
-          type: string
           description: Indica que as embalagens das mercadorias serão geradas automaticamente após a confirmação da separação
-          example: S
+          type: string
+          example: "S"
+          
         GerarUnicaEmbalagemUnitizadorSepararPulmao:
-          type: string
           description: Indica que ao separar um unitizador do pulmão, toda a mercadoria dele será embalada em uma mesma embalagem
-          example: S
+          type: string
+          example: "S"
+          
         EmbalarMercadoriasLotesDiferentes:
-          type: string
           description: Permite embalar produtos de lotes diferentes em uma mesma embalagem
-          example: S
+          type: string
+          example: "S"
+          
         EmbalarMercadoriasValidadesDiferentes:
-          type: string
           description: Permite embalar produtos de validades diferentes em uma mesma embalagem
-          example: S
+          type: string
+          example: "S"
+          
         EmbalarMercadoriasProdutosDiferentes:
-          type: string
           description: Permite embalar produtos diferentes em uma mesma embalagem
-          example: S
+          type: string
+          example: "S"
+          
         SomenteGerarEmbalagensCompletas:
-          type: string
           description: Indica que somente serão geradas embalagens que completarem a norma de embalagem
-          example: S
+          type: string
+          example: "S"
+          
         GerarEmbalagensPorVolume:
-          type: string
           description: Indica que será gerada uma embalagem por volume
-          example: S
+          type: string
+          example: "S"
+          
         PossuiCodigoBarrasComposto:
-          type: string
           description: Indica que o produto possui código de barras composto
-          example: S
+          type: string
+          example: "S"
+          
         PesoVariavel:
-          type: string
           description: Indica que o produto possui peso variável no recebimento da mercadoria
-          example: S
+          type: string
+          example: "S"
+          
         NormaUnitizacaoVariavel:
-          type: string
           description: Indica que o produto possui norma de unitização variável no recebimento da mercadoria
-          example: S
+          type: string
+          example: "S"
+          
         NormaVolumeVariavel:
-          type: string
           description: Indica que o produto possui norma de volume variável no recebimento da mercadoria
-          example: S
+          type: string
+          example: "S"
+          
         QuantidadeEstoqueVariavel:
-          type: string
           description: Indica que o produto possui quantidade de estoque variável no recebimento da mercadoria
-          example: S
+          type: string
+          example: "S"
+          
         QuantidadeVolumeVariavel:
-          type: string
           description: Indica que o produto possui quantidade de volume variável no recebimento da mercadoria
-          example: S
+          type: string
+          example: "S"
+          
         UtilizarFatorConversaoCadastradoVolumeVariavel:
-          type: string
           description: Indica que será utilizado o fator de conversão quando o produto possuir volume variável
-          example: S
+          type: string
+          example: "S"
+          
         UtilizaControleLote:
-          type: string
           description: Indica que o produto controla lote
-          example: S
+          type: string
+          example: "S"
+          
         UtilizaControleDescarga:
-          type: string
           description: Indica que o produto controla carga e descarga
-          example: S
+          type: string
+          example: "S"
+          
         UtilizaControleNumeroSerie:
-          type: string
           description: Indica que o produto controla número de série
-          example: S
+          type: string
+          example: "S"
+          
         UtilizaControleReferenciaLote:
-          type: string
           description: Indica que o produto controla referência de lote
-          example: S
+          type: string
+          example: "S"
+          
         UtilizaControleFabricacaoValidade:
-          type: string
           description: Indica que o produto controla data de fabricação e data de validade
-          example: S
+          type: string
+          example: "S"
+          
         UtilizaControlePicking:
-          type: string
           description: Indica que o produto utiliza controle de picking na separação de mercadorias
-          example: S
+          type: string
+          example: "S"
+          
         UtilizaControlePrePickingRessuprirPulmao:
-          type: string
           description: Indica que o produto utiliza controle de pré-picking ao ressuprir o pulmão
-          example: S
-        UtilizaControleUnitizacaoVolume:
           type: string
+          example: "S"
+          
+        UtilizaControleUnitizacaoVolume:
           description: Indica que o produto efetua controle de unitização de volume
-          example: S
+          type: string
+          example: "S"
+        
         Recebimento:
-          $ref: '#/components/schemas/MaterialSuprimentoDadosProdutoArmazemPost_Recebimento'
+          type: object
+          properties:
+          
+            GrupoEtiquetagemRecebimento:
+              description: Grupo de etiquetagem utilizado no recebimento da mercadoria - conforme tabela de grupos de etiquetagem
+              type: integer
+            
+            TipoCarga:
+              description: |
+                Tipo da carga
+              type: integer
+              
+            TipoUnitizador:
+              description: Tipo de unitizador - conforme tabela de tipos de unitizador
+              type: integer
+              
+            NormaUnitizacao:
+              description: Norma de unitização - conforme tabela de normas de unitização
+              type: integer
+              
+            ItemFiscal:
+              description: ID do item fiscal vinculado ao produto
+              type: integer
+              
+            TipoVolume:
+              description: aaaaaa
+              type: integer
+              
+            NormaVolume:
+              description: aaaaaa
+              type: integer
+              
+            ConfiguracaoRelatorio:
+              description: aaaaaa
+              type: integer
+              
+            FormatoCodigoBarras:
+              description: |
+                Formato do código de barras
+                
+                1 - Codigo de barras simples<br>;
+                2 - Codigo de referencia do item +lote<br>;
+                3 - Codigo referencia do item + quantidade + lote<br>;
+
+              type: integer
+              enum:
+                - 1
+                - 2
+                - 3
+                
+            GerarUnitizacaoVolumeAutomaticamenteLiberarLote:
+              description: Indica que a unitização de volume será gerada automaticamente ao liberar o lote
+              type: string
+              example: "S"
+            GerarLoteEntradaPelaQuantidadeIndividual:
+              description: Indica que os lotes serão gerados conforme a quantidade individual
+              type: string
+              example: "S" 
+            GerarLoteEntradaPelaQuantidadeVolume:
+              description: Indica que os lotes serão gerados conforme a quantidade de volumes
+              type: string
+              example: "S" 
+            PermiteIncluirProdutosDiferentesMesmoUnitizador:
+              description: Indica que produtos diferentes podem ser colocados em um mesmo unitizador
+              type: string
+              example: "S" 
+            PermiteIncluirLotesDiferentesMesmoUnitizador:
+              description: Indica que produtos de lotes diferentes podem ser colocados em uma mesmo unitizador
+              type: string
+              example: "S" 
+            PermiteIncluirValidadesDiferentesMesmoUnitizador:
+              description: Indica que produtos de validades diferentes podem ser colocados em um mesmo unitizador
+              type: string
+              example: "S"
+            EfetuarConferenciaRecebimento:
+              description: Indica que o produto exige conferência no recebimento de mercadoria
+              type: string
+              example: "S"
+            EfetuarSegundaConferenciaCasoDivergencia:
+              description: Indica que o produto exige segunda conferência no recebimento de mercadoria caso haja divergência
+              type: string
+              example: "S"
+            EfetuarRetencaoAmostra:
+              description: Indica que o produto efetua retenção de amostra no recebimento de mercadoria
+              type: string
+              example: "S"
+            EfetuarAnaliseQuarentenaQualidade:
+              description: Indica que o produto efetua análise de quarentena no recebimento de mercadoria
+              type: string
+              example: "S"
+              
         Expedicao:
-          $ref: '#/components/schemas/MaterialSuprimentoDadosProdutoArmazemPost_Expedicao'
+          type: object
+          required:
+            - TipoExpedicao
+          properties:
+            GrupoEtiquetagemExpedicao:
+              description: Grupo de etiquetagem utilizado na expedição da mercadoria - conforme tabela de grupos de etiquetagem
+              type: integer
+            
+            TipoExpedicao:
+              description: |
+                Tipo da expedição
+                
+                1 - Embalada<br>
+                2 - Sem Embalagem<br>
+              type: integer
+              enum:
+                - 1
+                - 2
+                
+            TipoEmbalagem:
+              description: Tipo de embalagem - conforme tabela de tipos de embalagem
+              type: integer
+              
+            NormaEmbalagem:
+              description: Norma de embalagem - conforme tabela de normas de embalagem
+              type: integer
+              
+            GrupoMetodoSeparacao:
+              description: Grupo de método de separação - conforme tabela de métodos de separação
+              type: integer
+            
+            GrupoMetodoRessuprimento:
+              description: Grupo de método de resusprimento - conforme tabela de métodos de resusprimento
+              type: integer
+              
+            FormaRessuprimento:
+              description: |
+                Forma de ressuprimento
+                
+                1 - Endereco vago<br>
+                2 - Quantidade maxima<br>
+                3 - Quantidade solicitada (pre-picking)<br>
+                4 - Quantidade solicitada (picking)<br>
+              type: integer
+              enum:
+                - 1
+                - 2
+                - 3
+                - 4
+              
+            PickingMinimo:
+              description: Picking mínimo
+              type: number
+              multipleOf: 0.0001
+              example: 10.0000
+              
+            PickingMaximo:
+              description: Picking máximo
+              type: number
+              multipleOf: 0.0001
+              example: 10.0000
+              
+            AmostragemMinima:
+              description: Amostragem mínima
+              type: number
+              multipleOf: 0.0001
+              example: 10.0000
+              
+            QuantidadeEnderecoPicking:
+              description: Quantidade de endereços de picking
+              type: integer
+              
+            RessuprirMultiplos:
+              description: Ressuprimento múltiplo
+              type: integer
+            
         ColetorDados:
-          $ref: '#/components/schemas/MaterialSuprimentoDadosProdutoArmazemPost_ColetorDados'
-      description: Somente informar estes dados quando for um item do tipo produto de terceiro
+          type: object
+          properties:
+            LeituraIndividualSeparacaoPeloColetor:
+              description: Indica que a leitura pelo coletor de dados durante a separação das mercadorias deve ser feita individualmente
+              type: string
+              example: "S"
+            LeituraIndividualEmbalagemPeloColetor:
+              description: Indica que a leitura pelo coletor de dados durante a embalagem das mercadorias deve ser feita individualmente
+              type: string
+              example: "S"
+            LeituraIndividualRecebimentoPeloColetor:
+              description: Indica que a leitura pelo coletor de dados durante o recebimento das mercadorias deve ser feita individualmente
+              type: string
+              example: "S"
+            LeituraIndividualInventarioPorEnderecoPeloColetor:
+              description: Indica que a leitura pelo coletor de dados durante o inventário por endereço deve ser feita individualmente
+              type: string
+              example: "S"
+            EfetuaConferenciaComLeituraParcial:
+              description: Indica que na conferência do recebimento pode ser feita a leiura parcial das quantidades
+              type: string
+              example: "S"
+            ObrigatorioConfirmarNumeroSerieEnderecamentoPeloColetor:
+              description: Indica que é obrigatório efetuar a confirmação por número de série no coletor de dados
+              type: string
+              example: "S"
+            ObrigatorioInformarQuantidadeSeparacaoPeloColetor:
+              description: Indica que é obrigatório informar a quantidade ao efetuar a separação pelo coletor de dados
+              type: string
+              example: "S"
+            ObrigatorioInformarCodigoBarrasSeparacaoPeloColetor:
+              description: Indica que é obrigatório informar o código de barras na separação pelo coletor de dados
+              type: string
+              example: "S"
+              
     MaterialSuprimentoDadosProdutoCodigoBarraPost:
-      required:
-      - CodigoBarras
-      - Tipo
-      - Un
       type: object
+      required:
+        - Un
+        - Tipo
+        - CodigoBarras
       properties:
         Un:
-          type: string
           description: Sigla da unidade de medida relacionada ao código de barras - conforme tabela de unidades de medida
-        Tipo:
-          type: integer
-          description: Tipo do código de barras - conforme tabela de tipos de código de barras
-        GrupoRotulagem:
-          type: integer
-          description: Grupo de rotulagem - conforme tabela de grupos de rotulagem
-        CodigoBarras:
           type: string
+        Tipo:
+          description: Tipo do código de barras - conforme tabela de tipos de código de barras
+          type: integer
+        GrupoRotulagem:
+          description: Grupo de rotulagem - conforme tabela de grupos de rotulagem
+          type: integer
+        CodigoBarras:
           description: Código de barras
+          type: string
+          
     MaterialSuprimentoDadosProdutoFatorConversaoPost:
-      required:
-      - De
-      - Operacao
-      - Para
-      - Quantidade
       type: object
+      required:
+        - De
+        - Para
+        - Operacao
+        - Quantidade
       properties:
         De:
-          type: string
           description: Sigla da unidade de medida de origem - conforme tabela de unidades de medida
-        Para:
           type: string
+        Para:
           description: Sigla da unidade de medida de destino - conforme tabela de unidades de medida
+          type: string
         Operacao:
-          type: integer
           description: |
             Operação de conversão
-
+            
             1 - Multiplicação<br>
             2 - Divisão<br>
+          type: integer  
         Quantidade:
-          multipleOf: 0.0001
-          type: number
           description: Quantidade usada para conversão
-          example: 10
+          type: number
+          multipleOf: 0.0001
+          example: 10.0000
+          
     MaterialSuprimentoDadosComplementoPost:
-      required:
-      - Tipo
       type: object
+      required:
+        - Tipo
       properties:
         Tipo:
-          type: integer
           description: Tipo do campo complementar - conforme tabela de tipos de campo complementar
+          type: integer
         Conteudo:
-          type: string
           description: Conteúdo do campo - informar somente quando o tipo do campo complementar for texto
+          type: string
         Valor:
-          type: number
           description: Valor do campo - informar somente quando o tipo do campo complementar for numérico
-    Entrada de mercadoria_Recebimento:
-      type: object
-      properties:
-        TipoDescarga:
-          type: integer
-          description: Conforme tabela de tipos de descarga
-        Placa:
-          type: string
-          description: Placa do veículo
-          example: ABC-1234
-        UFPlaca:
-          type: integer
-          description: Estado do veículo - conforme tabela de estados
-        Carreta:
-          type: string
-          description: Placa da carreta do veículo
-          example: DEF-5678
-        Motorista:
-          type: string
-          description: Motorista (quando a pessoa não for cadastrada no sistema)
-          example: Pedro da Silva
-        NumeroDocumento:
-          type: string
-          description: Número do documento do motorista (quando a pessoa não for cadastrada no sistema). Pode ser CPF, RG..
-          example: 874.554.955-85
-        DI:
-          type: string
-          description: DI
-          example: AC12
-        Processo:
-          type: string
-          description: Processo
-          example: ERD123
-        Numero:
-          type: string
-          description: Número do documento de entrada
-          example: "111111"
-        Serie:
-          type: string
-          description: Série do documento de entrada
-          example: "1"
-        Emissao:
-          type: string
-          description: Data de emissão do documento (dd/mm/yyyy)
-          example: 06/12/1990
-      description: Dados para recebimento da mercadoria
-    Entrada de mercadoria:
-      title: Entrada de mercadoria
-      type: object
-      properties:
-        ChaveDocumentoEletronico:
-          type: string
-          description: Chave do documento eletrônico
-          example: "24130401211699999126550010001026811138186206"
-        Recebimento:
-          $ref: '#/components/schemas/Entrada de mercadoria_Recebimento'
-      description: Somente informar estes dados quando for uma entrada de mercadoria
-    Sada de mercadoria:
-      title: Saída de mercadoria
-      type: object
-      properties:
-        TipoTransporte:
-          type: integer
-          description: |
-            Tipo de transporte
-
-            1 -  Transportadora<br>
-            2  - Pac<br>
-            3  - Sedex<br>
-            4  - Sedex 10<br>
-            5  - E-sedex<br>
-            6  - Cliente retira<br>
-          enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-        Transportadora:
-          type: integer
-          description: CNPJ da transportadora sem caracteres especiais
-        Ordem:
-          type: integer
-          description: Indica a ordem em que a saída será considerada como prioridade
-          example: 1
-        ClienteFinal:
-          type: integer
-          description: Cliente final (pessoa cadastrada na base)
-        NomeClienteFinal:
-          type: string
-          description: Nome do cliente final (para quando a pessoa não for cadastrada no sistema)
-          example: João da Silva
-      description: Somente informar estes dados quando for uma saída de mercadoria
-    ServicoItemLoteGet_Parametro:
-      type: object
-      properties:
-        NaoCobrarCliente:
-          type: string
-          description: Indica que o serviço não será cobrado do cliente
-          example: S
-        ExibirTodosServicos:
-          type: string
-          description: Indica que todos os serviços serão exibidos para consulta
-          example: "N"
-        GeradoPeloFaturamento:
-          type: string
-          description: Indica que o serviço foi gerado pelo cálculo de faturamento
-          example: "N"
-    ServicoItemLoteGet_TabelaPreco:
-      type: object
-      properties:
-        Tabela:
-          type: string
-          description: Descrição da tabela de preço
-        Lista:
-          type: string
-          description: Descrição da lista de preço
-        Faturado:
-          type: string
-          description: Indica se o registro já foi faturado ou não
-          example: "N"
-        Quantidade:
-          multipleOf: 0.0001
           type: number
-          description: Quantidade
-          example: 10
-        ValorUnitario:
-          multipleOf: 0.0001
-          type: number
-          description: Valor
-          example: 10
-        ValorTotal:
-          multipleOf: 0.01
-          type: number
-          description: Valor
-          example: 10
-    RemoverPedidoFila_inner:
-      properties:
-        NumeroPedido:
-          type: integer
-          description: Número do pedido
-    MaterialSuprimentoDadosProdutoArmazemPost_Recebimento:
-      type: object
-      properties:
-        GrupoEtiquetagemRecebimento:
-          type: integer
-          description: Grupo de etiquetagem utilizado no recebimento da mercadoria - conforme tabela de grupos de etiquetagem
-        TipoCarga:
-          type: integer
-          description: |
-            Tipo da carga
-        TipoUnitizador:
-          type: integer
-          description: Tipo de unitizador - conforme tabela de tipos de unitizador
-        NormaUnitizacao:
-          type: integer
-          description: Norma de unitização - conforme tabela de normas de unitização
-        ItemFiscal:
-          type: integer
-          description: ID do item fiscal vinculado ao produto
-        TipoVolume:
-          type: integer
-          description: aaaaaa
-        NormaVolume:
-          type: integer
-          description: aaaaaa
-        ConfiguracaoRelatorio:
-          type: integer
-          description: aaaaaa
-        FormatoCodigoBarras:
-          type: integer
-          description: |
-            Formato do código de barras
-
-            1 - Codigo de barras simples<br>;
-            2 - Codigo de referencia do item +lote<br>;
-            3 - Codigo referencia do item + quantidade + lote<br>;
-          enum:
-          - 1
-          - 2
-          - 3
-        GerarUnitizacaoVolumeAutomaticamenteLiberarLote:
-          type: string
-          description: Indica que a unitização de volume será gerada automaticamente ao liberar o lote
-          example: S
-        GerarLoteEntradaPelaQuantidadeIndividual:
-          type: string
-          description: Indica que os lotes serão gerados conforme a quantidade individual
-          example: S
-        GerarLoteEntradaPelaQuantidadeVolume:
-          type: string
-          description: Indica que os lotes serão gerados conforme a quantidade de volumes
-          example: S
-        PermiteIncluirProdutosDiferentesMesmoUnitizador:
-          type: string
-          description: Indica que produtos diferentes podem ser colocados em um mesmo unitizador
-          example: S
-        PermiteIncluirLotesDiferentesMesmoUnitizador:
-          type: string
-          description: Indica que produtos de lotes diferentes podem ser colocados em uma mesmo unitizador
-          example: S
-        PermiteIncluirValidadesDiferentesMesmoUnitizador:
-          type: string
-          description: Indica que produtos de validades diferentes podem ser colocados em um mesmo unitizador
-          example: S
-        EfetuarConferenciaRecebimento:
-          type: string
-          description: Indica que o produto exige conferência no recebimento de mercadoria
-          example: S
-        EfetuarSegundaConferenciaCasoDivergencia:
-          type: string
-          description: Indica que o produto exige segunda conferência no recebimento de mercadoria caso haja divergência
-          example: S
-        EfetuarRetencaoAmostra:
-          type: string
-          description: Indica que o produto efetua retenção de amostra no recebimento de mercadoria
-          example: S
-        EfetuarAnaliseQuarentenaQualidade:
-          type: string
-          description: Indica que o produto efetua análise de quarentena no recebimento de mercadoria
-          example: S
-    MaterialSuprimentoDadosProdutoArmazemPost_Expedicao:
-      required:
-      - TipoExpedicao
-      type: object
-      properties:
-        GrupoEtiquetagemExpedicao:
-          type: integer
-          description: Grupo de etiquetagem utilizado na expedição da mercadoria - conforme tabela de grupos de etiquetagem
-        TipoExpedicao:
-          type: integer
-          description: |
-            Tipo da expedição
-
-            1 - Embalada<br>
-            2 - Sem Embalagem<br>
-          enum:
-          - 1
-          - 2
-        TipoEmbalagem:
-          type: integer
-          description: Tipo de embalagem - conforme tabela de tipos de embalagem
-        NormaEmbalagem:
-          type: integer
-          description: Norma de embalagem - conforme tabela de normas de embalagem
-        GrupoMetodoSeparacao:
-          type: integer
-          description: Grupo de método de separação - conforme tabela de métodos de separação
-        GrupoMetodoRessuprimento:
-          type: integer
-          description: Grupo de método de resusprimento - conforme tabela de métodos de resusprimento
-        FormaRessuprimento:
-          type: integer
-          description: |
-            Forma de ressuprimento
-
-            1 - Endereco vago<br>
-            2 - Quantidade maxima<br>
-            3 - Quantidade solicitada (pre-picking)<br>
-            4 - Quantidade solicitada (picking)<br>
-          enum:
-          - 1
-          - 2
-          - 3
-          - 4
-        PickingMinimo:
-          multipleOf: 0.0001
-          type: number
-          description: Picking mínimo
-          example: 10
-        PickingMaximo:
-          multipleOf: 0.0001
-          type: number
-          description: Picking máximo
-          example: 10
-        AmostragemMinima:
-          multipleOf: 0.0001
-          type: number
-          description: Amostragem mínima
-          example: 10
-        QuantidadeEnderecoPicking:
-          type: integer
-          description: Quantidade de endereços de picking
-        RessuprirMultiplos:
-          type: integer
-          description: Ressuprimento múltiplo
-    MaterialSuprimentoDadosProdutoArmazemPost_ColetorDados:
-      type: object
-      properties:
-        LeituraIndividualSeparacaoPeloColetor:
-          type: string
-          description: Indica que a leitura pelo coletor de dados durante a separação das mercadorias deve ser feita individualmente
-          example: S
-        LeituraIndividualEmbalagemPeloColetor:
-          type: string
-          description: Indica que a leitura pelo coletor de dados durante a embalagem das mercadorias deve ser feita individualmente
-          example: S
-        LeituraIndividualRecebimentoPeloColetor:
-          type: string
-          description: Indica que a leitura pelo coletor de dados durante o recebimento das mercadorias deve ser feita individualmente
-          example: S
-        LeituraIndividualInventarioPorEnderecoPeloColetor:
-          type: string
-          description: Indica que a leitura pelo coletor de dados durante o inventário por endereço deve ser feita individualmente
-          example: S
-        EfetuaConferenciaComLeituraParcial:
-          type: string
-          description: Indica que na conferência do recebimento pode ser feita a leiura parcial das quantidades
-          example: S
-        ObrigatorioConfirmarNumeroSerieEnderecamentoPeloColetor:
-          type: string
-          description: Indica que é obrigatório efetuar a confirmação por número de série no coletor de dados
-          example: S
-        ObrigatorioInformarQuantidadeSeparacaoPeloColetor:
-          type: string
-          description: Indica que é obrigatório informar a quantidade ao efetuar a separação pelo coletor de dados
-          example: S
-        ObrigatorioInformarCodigoBarrasSeparacaoPeloColetor:
-          type: string
-          description: Indica que é obrigatório informar o código de barras na separação pelo coletor de dados
-          example: S
+          
   requestBodies:
+
+ ####GET TOKEN ####  
+    gettoken:
+      content:
+        application/json:
+          schema:
+              Lista:
+                $ref: "#/components/schemas/gettoken"
+
+
+    #### POST ORDEM ####  
     PostOrdemArmazenagem:
       content:
         application/json:
           schema:
+            description: Ordem de Armazenagem
             title: Nova Ordem de Armazenagem
             type: object
             properties:
               Lista:
-                $ref: '#/components/schemas/Lista'
-            description: Ordem de Armazenagem
+                $ref: "#/components/schemas/Lista"
+                
+    #### PUT ORDEM ####  
     PutOrdemArmazenagem:
       content:
         application/json:
           schema:
+            description: Ordem de Armazenagem
             title: Alterar Ordem de Armazenagem
             type: object
             properties:
               Ordem:
-                $ref: '#/components/schemas/OrdemPut'
-            description: Ordem de Armazenagem
+                $ref: "#/components/schemas/OrdemPut"
+                
+    #### DELETE ORDEM ####            
     DeleteOrdemArmazenagem:
       content:
         application/json:
           schema:
+            description: Ordem
             title: Cancelar ordem
-            required:
-            - Motivo
             type: object
+            required:
+             - Motivo
             properties:
               Motivo:
                 type: string
-            description: Ordem
+    
+    #### POST ITEM ORDEM ####             
     PostItemOrdemArmazenagem:
       content:
         application/json:
           schema:
+            description: Item da ordem de Armazenagem
             title: Novo item da ardem de Armazenagem
             type: object
             properties:
               Lista:
-                $ref: '#/components/schemas/ListaItem'
-            description: Item da ordem de Armazenagem
+                $ref: "#/components/schemas/ListaItem"
+
+    #### POST ITEM LOTE ORDEM #### 
     PostItemLoteOrdemArmazenagem:
       content:
         application/json:
           schema:
+            description: Item lote da ordem de Armazenagem
             title: Novo item lote da ardem de Armazenagem
             type: object
             properties:
               Lista:
-                $ref: '#/components/schemas/ListaItemLote'
-            description: Item lote da ordem de Armazenagem
+                $ref: "#/components/schemas/ListaItemLote"
+    
+    #### POST PROGRAMACAO ORDEM ####            
     PostProgramacaoOrdemArmazenagem:
       content:
         application/json:
           schema:
+            description: Programação da ordem de Armazenagem
             title: Nova programação da ardem de Armazenagem
             type: object
             properties:
               Lista:
-                $ref: '#/components/schemas/ListaProgramacao'
-            description: Programação da ordem de Armazenagem
+                $ref: "#/components/schemas/ListaProgramacao"
+            
+    #### POST ADICIONAR QUANTIDADE PROGRAMACAO ####
     PostAdicionarQuantidadeProgramacaoOrdemArmazenagem:
       content:
         application/json:
           schema:
+            description: Adicionar quantidade na programação da ordem de Armazenagem
             title: Adicionar quantidade na programação da ordem de Armazenagem
             type: object
             properties:
               AdicionarQuantidade:
-                $ref: '#/components/schemas/AdicionarQuantidadeProgramacao'
-            description: Adicionar quantidade na programação da ordem de Armazenagem
+                $ref: "#/components/schemas/AdicionarQuantidadeProgramacao"
+                            
+    #### POST CANCELAR QUANTIDADE PROGRAMACAO ####            
     PostCancelarQuantidadeProgramacaoOrdemArmazenagem:
       content:
         application/json:
           schema:
+            description: Cancelar quantidade na programação da ordem de Armazenagem
             title: Cancelar quantidade na programação da ordem de Armazenagem
             type: object
             properties:
               CancelarQuantidade:
-                $ref: '#/components/schemas/CancelarQuantidadeProgramacao'
-            description: Cancelar quantidade na programação da ordem de Armazenagem
+                $ref: "#/components/schemas/CancelarQuantidadeProgramacao"
+                
+    #### POST ATRELAR ORDEM ARMAZENAGEM ####                        
     PostAtrelarOrdemArmazenagem:
       content:
         application/json:
           schema:
+            description: Atrelar ordem de Armazenagem
             title: Atrela a ordem de armazenagem com outra ordem. Utilizado para casos onde os pedidos tenham dependência
             type: object
             properties:
               AtrelarOrdem:
-                $ref: '#/components/schemas/AtrelarOrdemArmazenagem'
-            description: Atrelar ordem de Armazenagem
+                $ref: "#/components/schemas/AtrelarOrdemArmazenagem"
+                
+    #### POST ATRELAR ORDEM ARMAZENAGEM ####                        
     PostRemoverPedidoFila:
       content:
         application/json:
           schema:
+            description: Remover pedido da fila
             title: Remove o pedido da fila de pedidos pendentes
             type: object
             properties:
               Pedidos:
-                $ref: '#/components/schemas/RemoverPedidoFila'
-            description: Remover pedido da fila
+                $ref: "#/components/schemas/RemoverPedidoFila"
+                
+    #### POST PESSOA ####  
     PostPessoa:
       content:
         application/json:
           schema:
+            description: Pessoa
             title: Nova Pessoa
             type: object
             properties:
               Lista:
-                $ref: '#/components/schemas/ListaPessoa'
-            description: Pessoa
+                $ref: "#/components/schemas/ListaPessoa"
+                
+    #### POST PRODUTO ####
     PostProduto:
       content:
         application/json:
           schema:
+            description: Produto
             title: Novo produto
             type: object
             properties:
               Lista:
-                $ref: '#/components/schemas/ListaProduto'
-            description: Produto
+                $ref: "#/components/schemas/ListaProduto"
+    
+    #### DELETE PRODUTO ####            
     DeleteProduto:
       content:
         application/json:
           schema:
+            description: Produto
             title: Cancelar produto
-            required:
-            - Motivo
             type: object
+            required:
+             - Motivo
             properties:
               Motivo:
                 type: string
-            description: Produto
+    
+    #### PUT PRODUTO ####            
     PutProduto:
       content:
         application/json:
           schema:
+            description: Produto
             title: Alterar produto
             type: object
             properties:
               Item:
-                $ref: '#/components/schemas/MaterialSuprimentoProdutoPut'
-            description: Produto
-  securitySchemes:
-    BasicAuth:
-      type: http
-      description: "A autenticação inicial com as APIs REST da Escalasoft deve ser realizada por uma requisição GET utilizando Basic Auth.\n\nPara autenticar, você deve informar o usuário e senha fornecidos pelo cliente.\n\nEsta requisição irá retornar um token que deverá ser utilizado para autenticação nas demais rotas. \n\nEste token tem uma validade de 24 horas, e após este intervalo, deverá ser requisitado um novo token.\n"
-      scheme: basic
-    BearerAuth:
-      type: http
-      description: "A autenticação com as APIs REST da Escalasoft deve ser realizadas por token utilizando Bearer Token.\n\nPara autenticar, você deve utilizar o token recebido na rota de Login e adicioná-lo no header da requisição. \n\nO header de autenticação deve ser enviado para todos os endpoints disponíveis na API.\n"
-      scheme: bearer
+                $ref: "#/components/schemas/MaterialSuprimentoProdutoPut"
