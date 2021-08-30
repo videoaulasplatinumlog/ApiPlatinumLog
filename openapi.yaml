@@ -20,7 +20,7 @@ security:
 
 tags:
 
-  - name: SEGURANÇA
+  - name: Segurança
   - name: WMS - Ordem de armazenagem
   - name: ERP - Fiscal
   - name: ERP - Materiais e suprimentos  
@@ -35,7 +35,7 @@ paths:
     #### POST ####
     post:
       tags:
-        - SEGURANÇA
+        - Segurança
       summary: Gerar novo token
       description: BASIC, deve ser enviado no cabeçalho da requisição o usuário e a senha gerados pela Platinum Log. O token grerado e que permite o consumo da API Webservice possui validade de 24 horas.
       
